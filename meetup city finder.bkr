@@ -19,8 +19,3242 @@
                     "background": "#FFE0F0"
                 }
             }
+        },
+        {
+            "name": "Python3",
+            "plugin": "Python3",
+            "setup": "%matplotlib inline\nimport numpy\nimport matplotlib\nfrom matplotlib import pylab, mlab, pyplot\nnp = numpy\nplt = pyplot\nfrom IPython.display import display\nfrom IPython.core.pylabtools import figsize, getfigs\nfrom pylab import *\nfrom numpy import *\n",
+            "view": {
+                "cm": {
+                    "mode": "python"
+                }
+            }
         }
     ],
-    "cells": [],
+    "cells": [
+        {
+            "id": "codeBGDVf5",
+            "type": "code",
+            "evaluator": "Python3",
+            "input": {
+                "body": [
+                    "import os",
+                    "import configparser",
+                    "import meetup.api",
+                    "import csv",
+                    "import googlemaps",
+                    "import time",
+                    "os.chdir(\"C:/Users/macle/Desktop/Data Journalism/meetup city finder\")"
+                ]
+            },
+            "output": {
+                "state": {},
+                "selectedType": "Hidden",
+                "pluginName": "Python3",
+                "shellId": "D81B69DB96C84B728C6A6E82D426B061",
+                "elapsedTime": 347
+            },
+            "evaluatorReader": true,
+            "lineCount": 7
+        },
+        {
+            "id": "code6pDBG3",
+            "type": "code",
+            "evaluator": "Python3",
+            "input": {
+                "body": [
+                    "config = configparser.ConfigParser()",
+                    "config.read('secrets.ini')",
+                    "",
+                    "meetup_api_key = config.get('meetup', 'api_key')",
+                    "gmaps_api_key = config.get('google', 'api_key')",
+                    "",
+                    "gmaps = googlemaps.Client(key=gmaps_api_key)",
+                    "",
+                    "client = meetup.api.Client(meetup_api_key)"
+                ]
+            },
+            "output": {
+                "state": {},
+                "selectedType": "Hidden",
+                "pluginName": "Python3",
+                "shellId": "D81B69DB96C84B728C6A6E82D426B061",
+                "elapsedTime": 324
+            },
+            "evaluatorReader": true,
+            "lineCount": 9
+        },
+        {
+            "id": "code1pruF6",
+            "type": "code",
+            "evaluator": "Python3",
+            "input": {
+                "body": [
+                    "city_country_list = []",
+                    "with open('cities.csv', 'r') as csvfile:",
+                    "    reader = csv.reader(csvfile, delimiter=',', quotechar='|')",
+                    "    for row in reader:",
+                    "        city_country_list.append(', '.join([row[1],row[2]]))"
+                ]
+            },
+            "output": {
+                "state": {},
+                "selectedType": "Hidden",
+                "pluginName": "Python3",
+                "shellId": "D81B69DB96C84B728C6A6E82D426B061",
+                "elapsedTime": 324
+            },
+            "evaluatorReader": true,
+            "lineCount": 5
+        },
+        {
+            "id": "codeUnFwZm",
+            "type": "code",
+            "evaluator": "Python3",
+            "input": {
+                "body": [
+                    "city_country_list = [\"Calgary, Canada\"]",
+                    "for city_country in city_country_list:",
+                    "    geo = gmaps.geocode(city_country)",
+                    "    lat = geo[0]['geometry']['location'][\"lat\"]",
+                    "    lon = geo[0]['geometry']['location'][\"lng\"]",
+                    "    for i in range(1,36):",
+                    "        print(i)",
+                    "        groups = client.GetGroups(lat=lat, lon=lon,category_id=i,radius=500)",
+                    "        print(len(groups.results))",
+                    "        time.sleep(1)",
+                    "    time.sleep(1)"
+                ]
+            },
+            "output": {
+                "state": {},
+                "result": {
+                    "type": "BeakerDisplay",
+                    "innertype": "Text",
+                    "object": "pending"
+                },
+                "selectedType": "BeakerDisplay",
+                "height": 56
+            },
+            "evaluatorReader": true,
+            "lineCount": 11
+        },
+        {
+            "id": "codezHVxFi",
+            "type": "code",
+            "evaluator": "Python3",
+            "input": {
+                "body": [
+                    "categories = client.GetCategories()",
+                    "categories.results"
+                ]
+            },
+            "output": {
+                "state": {},
+                "result": {
+                    "type": "Results",
+                    "outputdata": [
+                        {
+                            "type": "out",
+                            "value": "29/30 (10 seconds remaining)\n"
+                        }
+                    ],
+                    "payload": {
+                        "values": [
+                            [
+                                "Arts & Culture",
+                                1,
+                                "Arts",
+                                "Arts & Culture"
+                            ],
+                            [
+                                "Book Clubs",
+                                18,
+                                "Book Clubs",
+                                "Book Clubs"
+                            ],
+                            [
+                                "Career & Business",
+                                2,
+                                "Business",
+                                "Career & Business"
+                            ],
+                            [
+                                "Cars & Motorcycles",
+                                3,
+                                "Auto",
+                                "Cars & Motorcycles"
+                            ],
+                            [
+                                "Community & Environment",
+                                4,
+                                "Community",
+                                "Community & Environment"
+                            ],
+                            [
+                                "Dancing",
+                                5,
+                                "Dancing",
+                                "Dancing"
+                            ],
+                            [
+                                "Education & Learning",
+                                6,
+                                "Education",
+                                "Education & Learning"
+                            ],
+                            [
+                                "Fashion & Beauty",
+                                8,
+                                "Fashion",
+                                "Fashion & Beauty"
+                            ],
+                            [
+                                "Fitness",
+                                9,
+                                "Fitness",
+                                "Fitness"
+                            ],
+                            [
+                                "Food & Drink",
+                                10,
+                                "Food & Drink",
+                                "Food & Drink"
+                            ],
+                            [
+                                "Games",
+                                11,
+                                "Games",
+                                "Games"
+                            ],
+                            [
+                                "Movements & Politics",
+                                13,
+                                "Movements",
+                                "Movements & Politics"
+                            ],
+                            [
+                                "Health & Wellbeing",
+                                14,
+                                "Well-being",
+                                "Health & Wellbeing"
+                            ],
+                            [
+                                "Hobbies & Crafts",
+                                15,
+                                "Crafts",
+                                "Hobbies & Crafts"
+                            ],
+                            [
+                                "Language & Ethnic Identity",
+                                16,
+                                "Languages",
+                                "Language & Ethnic Identity"
+                            ],
+                            [
+                                "LGBT",
+                                12,
+                                "LGBT",
+                                "LGBT"
+                            ],
+                            [
+                                "Lifestyle",
+                                17,
+                                "Lifestyle",
+                                "Lifestyle"
+                            ],
+                            [
+                                "Movies & Film",
+                                20,
+                                "Films",
+                                "Movies & Film"
+                            ],
+                            [
+                                "Music",
+                                21,
+                                "Music",
+                                "Music"
+                            ],
+                            [
+                                "New Age & Spirituality",
+                                22,
+                                "Spirituality",
+                                "New Age & Spirituality"
+                            ],
+                            [
+                                "Outdoors & Adventure",
+                                23,
+                                "Outdoors",
+                                "Outdoors & Adventure"
+                            ],
+                            [
+                                "Paranormal",
+                                24,
+                                "Paranormal",
+                                "Paranormal"
+                            ],
+                            [
+                                "Parents & Family",
+                                25,
+                                "Moms & Dads",
+                                "Parents & Family"
+                            ],
+                            [
+                                "Pets & Animals",
+                                26,
+                                "Pets",
+                                "Pets & Animals"
+                            ],
+                            [
+                                "Photography",
+                                27,
+                                "Photography",
+                                "Photography"
+                            ],
+                            [
+                                "Religion & Beliefs",
+                                28,
+                                "Beliefs",
+                                "Religion & Beliefs"
+                            ],
+                            [
+                                "Sci-Fi & Fantasy",
+                                29,
+                                "Sci fi",
+                                "Sci-Fi & Fantasy"
+                            ],
+                            [
+                                "Singles",
+                                30,
+                                "Singles",
+                                "Singles"
+                            ],
+                            [
+                                "Socializing",
+                                31,
+                                "Social",
+                                "Socializing"
+                            ],
+                            [
+                                "Sports & Recreation",
+                                32,
+                                "Sports",
+                                "Sports & Recreation"
+                            ],
+                            [
+                                "Support",
+                                33,
+                                "Support",
+                                "Support"
+                            ],
+                            [
+                                "Tech",
+                                34,
+                                "Tech",
+                                "Tech"
+                            ],
+                            [
+                                "Writing",
+                                36,
+                                "Writing",
+                                "Writing"
+                            ]
+                        ],
+                        "columnNames": [
+                            "sort_name",
+                            "id",
+                            "shortname",
+                            "name"
+                        ],
+                        "subtype": "ListOfMaps",
+                        "type": "TableDisplay"
+                    }
+                },
+                "selectedType": "Results",
+                "pluginName": "Python3",
+                "shellId": "D81B69DB96C84B728C6A6E82D426B061",
+                "elapsedTime": 431,
+                "height": 335
+            },
+            "evaluatorReader": true,
+            "lineCount": 2
+        },
+        {
+            "id": "codeQY80ok",
+            "type": "code",
+            "evaluator": "Python3",
+            "input": {
+                "body": [
+                    "geo = gmaps.geocode(\"Calgary, Canada\")"
+                ]
+            },
+            "output": {
+                "state": {},
+                "selectedType": "Hidden",
+                "pluginName": "Python3",
+                "shellId": "D81B69DB96C84B728C6A6E82D426B061",
+                "elapsedTime": 1633
+            },
+            "evaluatorReader": true,
+            "lineCount": 1
+        },
+        {
+            "id": "codefzaMuN",
+            "type": "code",
+            "evaluator": "Python3",
+            "input": {
+                "body": [
+                    "geo[0]['geometry']['location']"
+                ]
+            },
+            "output": {
+                "state": {
+                    "datatablestate": {
+                        "pagination": {
+                            "use": true,
+                            "rowsToDisplay": 50,
+                            "fixLeft": 0,
+                            "fixRight": 0
+                        },
+                        "columnNames": [
+                            "Key",
+                            "Value"
+                        ],
+                        "actualalign": [
+                            "L",
+                            "L"
+                        ],
+                        "colorder": [
+                            0,
+                            1,
+                            2
+                        ],
+                        "getCellSho": [
+                            true,
+                            true
+                        ]
+                    }
+                },
+                "result": {
+                    "values": [
+                        [
+                            "lat",
+                            51.0486151
+                        ],
+                        [
+                            "lng",
+                            -114.0708459
+                        ]
+                    ],
+                    "columnNames": [
+                        "Key",
+                        "Value"
+                    ],
+                    "subtype": "Dictionary",
+                    "type": "TableDisplay"
+                },
+                "selectedType": "Table",
+                "pluginName": "Python3",
+                "shellId": "D81B69DB96C84B728C6A6E82D426B061",
+                "elapsedTime": 209,
+                "dataresult": [
+                    {
+                        "geometry": {
+                            "location": {
+                                "lat": 51.0486151,
+                                "lng": -114.0708459
+                            },
+                            "viewport": {
+                                "northeast": {
+                                    "lat": 51.18383009999999,
+                                    "lng": -113.876951
+                                },
+                                "southwest": {
+                                    "lat": 50.84240399999999,
+                                    "lng": -114.2713599
+                                }
+                            },
+                            "bounds": {
+                                "northeast": {
+                                    "lat": 51.18383009999999,
+                                    "lng": -113.876951
+                                },
+                                "southwest": {
+                                    "lat": 50.84240399999999,
+                                    "lng": -114.2713599
+                                }
+                            },
+                            "location_type": "APPROXIMATE"
+                        },
+                        "place_id": "ChIJ1T-EnwNwcVMROrZStrE7bSY",
+                        "types": [
+                            "locality",
+                            "political"
+                        ],
+                        "formatted_address": "Calgary, AB, Canada",
+                        "address_components": [
+                            {
+                                "long_name": "Calgary",
+                                "types": [
+                                    "locality",
+                                    "political"
+                                ],
+                                "short_name": "Calgary"
+                            },
+                            {
+                                "long_name": "Division No. 6",
+                                "types": [
+                                    "administrative_area_level_2",
+                                    "political"
+                                ],
+                                "short_name": "Division No. 6"
+                            },
+                            {
+                                "long_name": "Alberta",
+                                "types": [
+                                    "administrative_area_level_1",
+                                    "political"
+                                ],
+                                "short_name": "AB"
+                            },
+                            {
+                                "long_name": "Canada",
+                                "types": [
+                                    "country",
+                                    "political"
+                                ],
+                                "short_name": "CA"
+                            }
+                        ]
+                    }
+                ],
+                "height": 129
+            },
+            "evaluatorReader": true,
+            "lineCount": 1
+        },
+        {
+            "id": "codemqI2DS",
+            "type": "code",
+            "evaluator": "Python3",
+            "input": {
+                "body": [
+                    "cat_groups = client.GetGroups(country=\"CA\", city=\"Calgary\",category_id=1,radius=2000,page=1000)",
+                    "print(len(cat_groups.results))",
+                    "cat_groups.meta",
+                    ""
+                ]
+            },
+            "output": {
+                "state": {},
+                "result": {
+                    "type": "Results",
+                    "outputdata": [
+                        {
+                            "type": "out",
+                            "value": "29/30 (10 seconds remaining)\n"
+                        }
+                    ],
+                    "payload": {
+                        "type": "BeakerDisplay",
+                        "innertype": "Error",
+                        "object": [
+                            "&apos;MeetupObject&apos; object has no attribute &apos;results&apos;",
+                            "&apos;MeetupObject&apos; object has no attribute &apos;results&apos;<br><span  class=\"ansired\">---------------------------------------------------------------------------</span><br><span  class=\"ansired\">AttributeError</span>                            Traceback (most recent call last)<br><span  class=\"ansigreen\">&lt;ipython-input-1-5bc8430aa469&gt;</span> in <span  class=\"ansicyan\">&lt;module&gt;<span  class=\"ansiblue\">()</span>\n<span  class=\"ansigreen\">      1</span> cat_groups <span  class=\"ansiyellow\">=</span> client<span  class=\"ansiyellow\">.</span>GetGroups<span  class=\"ansiyellow\">(</span>country<span  class=\"ansiyellow\">=</span><span  class=\"ansiblue\">&quot;US&quot;</span><span  class=\"ansiyellow\">,</span> city<span  class=\"ansiyellow\">=</span><span  class=\"ansiblue\">&quot;New York&quot;</span><span  class=\"ansiyellow\">,</span>category_id<span  class=\"ansiyellow\">=</span><span  class=\"ansicyan\">1</span><span  class=\"ansiyellow\">,</span>radius<span  class=\"ansiyellow\">=</span><span  class=\"ansicyan\">2000</span><span  class=\"ansiyellow\">)</span><span  class=\"ansiyellow\"></span>\n<span  class=\"ansigreen\">----&gt; 2<span  class=\"ansiyellow\"> </span>print<span  class=\"ansiyellow\">(</span>len<span  class=\"ansiyellow\">(</span>cat_groups<span  class=\"ansiyellow\">.</span>results<span  class=\"ansiyellow\">)</span><span  class=\"ansiyellow\">)</span><span  class=\"ansiyellow\"></span>\n<span  class=\"ansigreen\">      3</span> cat_groups<span  class=\"ansiyellow\">.</span>meta<span  class=\"ansiyellow\"></span>\n<br><span  class=\"ansired\">AttributeError</span>: &apos;MeetupObject&apos; object has no attribute &apos;results&apos;"
+                        ]
+                    }
+                },
+                "selectedType": "Results",
+                "pluginName": "Python3",
+                "shellId": "D81B69DB96C84B728C6A6E82D426B061",
+                "elapsedTime": 549,
+                "dataresult": 0,
+                "height": 99
+            },
+            "evaluatorReader": true,
+            "lineCount": 4
+        },
+        {
+            "id": "codenvzXBe",
+            "type": "code",
+            "evaluator": "Python3",
+            "input": {
+                "body": [
+                    "group_info = client.GetGroup({'urlname': 'Meetup-API-Testing'})",
+                    "group_info.__dict__.keys()"
+                ]
+            },
+            "output": {
+                "state": {},
+                "result": {
+                    "type": "Results",
+                    "outputdata": [
+                        {
+                            "type": "out",
+                            "value": "29/30 (10 seconds remaining)\n"
+                        }
+                    ],
+                    "payload": "<div class=\"output_subarea output_text\"><pre>dict_keys(['city', 'visibility', 'urlname', 'description', 'key_photo', 'state', 'created', 'link', 'localized_country_name', 'lon', 'members', 'join_mode', 'who', 'country', 'timezone', 'organizer', 'id', 'name', 'group_photo', 'next_event', 'lat', 'category'])</pre></div>"
+                },
+                "selectedType": "Results",
+                "pluginName": "Python3",
+                "shellId": "D81B69DB96C84B728C6A6E82D426B061",
+                "elapsedTime": 462,
+                "dataresult": "Brooklyn",
+                "height": 71
+            },
+            "evaluatorReader": true,
+            "lineCount": 2
+        },
+        {
+            "id": "codeB30ghU",
+            "type": "code",
+            "evaluator": "Python3",
+            "input": {
+                "body": [
+                    "cities = client.GetCities(city=\"London\",radius=200)",
+                    "cities.results"
+                ]
+            },
+            "output": {
+                "state": {},
+                "result": {
+                    "type": "Results",
+                    "outputdata": [
+                        {
+                            "type": "out",
+                            "value": "29/30 (10 seconds remaining)\n"
+                        }
+                    ],
+                    "payload": {
+                        "values": [
+                            [
+                                "Calgary",
+                                "ca",
+                                22615,
+                                0,
+                                9.18264819788305,
+                                51.040000915527344,
+                                "AB",
+                                726029,
+                                "T2P 1J9",
+                                "Canada",
+                                -114.05999755859375
+                            ],
+                            [
+                                "Edmonton",
+                                "ca",
+                                12010,
+                                1,
+                                172.9187764534409,
+                                53.599998474121094,
+                                "AB",
+                                758567,
+                                "T5A 0A1",
+                                "Canada",
+                                -113.44000244140625
+                            ],
+                            [
+                                "Sherwood Park",
+                                "ca",
+                                583,
+                                2,
+                                169.42746100557903,
+                                53.529998779296875,
+                                "AB",
+                                784753,
+                                "T8A 0A1",
+                                "Canada",
+                                -113.29000091552734
+                            ],
+                            [
+                                "Red Deer",
+                                "ca",
+                                579,
+                                3,
+                                78.73945767416798,
+                                52.25,
+                                "AB",
+                                754733,
+                                "T4N 0A1",
+                                "Canada",
+                                -113.79000091552734
+                            ],
+                            [
+                                "Airdrie",
+                                "ca",
+                                508,
+                                4,
+                                13.333926605707349,
+                                51.290000915527344,
+                                "AB",
+                                752902,
+                                "T4A 0A1",
+                                "Canada",
+                                -114.01000213623047
+                            ],
+                            [
+                                "St Albert",
+                                "ca",
+                                456,
+                                5,
+                                174.4738432558748,
+                                53.63999938964844,
+                                "AB",
+                                787253,
+                                "T8N 0G2",
+                                "Canada",
+                                -113.62000274658203
+                            ],
+                            [
+                                "Lethbridge",
+                                "ca",
+                                395,
+                                6,
+                                117.0301234500805,
+                                49.70000076293945,
+                                "AB",
+                                720889,
+                                "T1H 0A1",
+                                "Canada",
+                                -112.81999969482422
+                            ],
+                            [
+                                "Leduc",
+                                "ca",
+                                205,
+                                7,
+                                149.03513988062747,
+                                53.2599983215332,
+                                "AB",
+                                791382,
+                                "T9E 0A1",
+                                "Canada",
+                                -113.55000305175781
+                            ],
+                            [
+                                "Okotoks",
+                                "ca",
+                                160,
+                                8,
+                                30.001925960677877,
+                                50.72999954223633,
+                                "AB",
+                                724996,
+                                "T1S 0A1",
+                                "Canada",
+                                -113.97000122070312
+                            ],
+                            [
+                                "Spruce Grove",
+                                "ca",
+                                150,
+                                9,
+                                167.11073777943344,
+                                53.54999923706055,
+                                "AB",
+                                783796,
+                                "T7X 0A1",
+                                "Canada",
+                                -113.88999938964844
+                            ],
+                            [
+                                "Medicine Hat",
+                                "ca",
+                                146,
+                                10,
+                                173.359245938605,
+                                50.040000915527344,
+                                "AB",
+                                718235,
+                                "T1A 0A1",
+                                "Canada",
+                                -110.69000244140625
+                            ],
+                            [
+                                "Canmore",
+                                "ca",
+                                141,
+                                11,
+                                50.891919679402584,
+                                51.08000183105469,
+                                "AB",
+                                725510,
+                                "T1W 0A1",
+                                "Canada",
+                                -115.37000274658203
+                            ],
+                            [
+                                "Sandpoint",
+                                "us",
+                                116,
+                                12,
+                                223.68124149394637,
+                                48.29999923706055,
+                                "ID",
+                                83864,
+                                "83864",
+                                "USA",
+                                -116.54000091552734
+                            ],
+                            [
+                                "Stony Plain",
+                                "ca",
+                                93,
+                                13,
+                                166.2018596066942,
+                                53.540000915527344,
+                                "AB",
+                                784464,
+                                "T7Z 0A1",
+                                "Canada",
+                                -113.97000122070312
+                            ],
+                            [
+                                "Beaumont",
+                                "ca",
+                                93,
+                                14,
+                                156.24996541061665,
+                                53.349998474121094,
+                                "AB",
+                                758403,
+                                "T4X 0A1",
+                                "Canada",
+                                -113.41000366210938
+                            ],
+                            [
+                                "Cochrane",
+                                "ca",
+                                89,
+                                15,
+                                11.976596795732737,
+                                51.18000030517578,
+                                "AB",
+                                753669,
+                                "T4C 0A2",
+                                "Canada",
+                                -114.47000122070312
+                            ],
+                            [
+                                "Chestermere",
+                                "ca",
+                                75,
+                                16,
+                                17.670507715027146,
+                                51.04999923706055,
+                                "AB",
+                                725969,
+                                "T1X 0A2",
+                                "Canada",
+                                -113.81999969482422
+                            ],
+                            [
+                                "Nelson",
+                                "ca",
+                                72,
+                                17,
+                                180.2520562170807,
+                                49.47999954223633,
+                                "BC",
+                                800440,
+                                "V1L 1A1",
+                                "Canada",
+                                -117.30000305175781
+                            ],
+                            [
+                                "Fort Saskatchewan",
+                                "ca",
+                                58,
+                                18,
+                                181.48380271812448,
+                                53.70000076293945,
+                                "AB",
+                                786608,
+                                "T8L 0A1",
+                                "Canada",
+                                -113.22000122070312
+                            ],
+                            [
+                                "Camrose",
+                                "ca",
+                                57,
+                                19,
+                                141.32296076077301,
+                                53.0099983215332,
+                                "AB",
+                                757506,
+                                "T4V 0A2",
+                                "Canada",
+                                -112.83000183105469
+                            ],
+                            [
+                                "High River",
+                                "ca",
+                                50,
+                                20,
+                                40.156439959750124,
+                                50.59000015258789,
+                                "AB",
+                                725299,
+                                "T1V 0A1",
+                                "Canada",
+                                -113.9000015258789
+                            ],
+                            [
+                                "Morinville",
+                                "ca",
+                                49,
+                                21,
+                                185.3181239126865,
+                                53.79999923706055,
+                                "AB",
+                                788499,
+                                "T8R 0A1",
+                                "Canada",
+                                -113.63999938964844
+                            ],
+                            [
+                                "Strathmore",
+                                "ca",
+                                48,
+                                22,
+                                35.78263965158469,
+                                51.04999923706055,
+                                "AB",
+                                724558,
+                                "T1P 0A1",
+                                "Canada",
+                                -113.38999938964844
+                            ],
+                            [
+                                "Edson",
+                                "ca",
+                                48,
+                                23,
+                                192.27091635208777,
+                                53.58000183105469,
+                                "AB",
+                                782829,
+                                "T7E 0A1",
+                                "Canada",
+                                -116.44999694824219
+                            ],
+                            [
+                                "Cranbrook",
+                                "ca",
+                                44,
+                                24,
+                                132.7380230350699,
+                                49.5099983215332,
+                                "BC",
+                                796781,
+                                "V1C 0A1",
+                                "Canada",
+                                -115.7699966430664
+                            ],
+                            [
+                                "Lacombe",
+                                "ca",
+                                42,
+                                25,
+                                94.29097438001101,
+                                52.470001220703125,
+                                "AB",
+                                754445,
+                                "T4L 0A1",
+                                "Canada",
+                                -113.70999908447266
+                            ],
+                            [
+                                "Lloydminster",
+                                "ca",
+                                38,
+                                26,
+                                227.47450100496042,
+                                53.279998779296875,
+                                "AB",
+                                794328,
+                                "T9V 0A2",
+                                "Canada",
+                                -110.0199966430664
+                            ],
+                            [
+                                "Whitefish",
+                                "us",
+                                37,
+                                27,
+                                188.67635130999878,
+                                48.40999984741211,
+                                "MT",
+                                59937,
+                                "59937",
+                                "USA",
+                                -114.3499984741211
+                            ],
+                            [
+                                "Wetaskiwin",
+                                "ca",
+                                34,
+                                28,
+                                130.52473586082726,
+                                52.959999084472656,
+                                "AB",
+                                790626,
+                                "T9A 0A1",
+                                "Canada",
+                                -113.37000274658203
+                            ],
+                            [
+                                "Colville",
+                                "us",
+                                31,
+                                29,
+                                242.23174461161173,
+                                48.59000015258789,
+                                "WA",
+                                99114,
+                                "99114",
+                                "USA",
+                                -117.83999633789062
+                            ],
+                            [
+                                "Banff",
+                                "ca",
+                                31,
+                                30,
+                                59.352955489949245,
+                                51.18000030517578,
+                                "AB",
+                                724374,
+                                "T1L 1A1",
+                                "Canada",
+                                -115.56999969482422
+                            ],
+                            [
+                                "Olds",
+                                "ca",
+                                31,
+                                31,
+                                45.82814732661217,
+                                51.79999923706055,
+                                "AB",
+                                754137,
+                                "T4H 0A2",
+                                "Canada",
+                                -114.12000274658203
+                            ],
+                            [
+                                "Brooks",
+                                "ca",
+                                28,
+                                32,
+                                108.25449195524047,
+                                50.560001373291016,
+                                "AB",
+                                724743,
+                                "T1R 0A1",
+                                "Canada",
+                                -111.91000366210938
+                            ],
+                            [
+                                "Bonners Ferry",
+                                "us",
+                                26,
+                                33,
+                                194.25022571647557,
+                                48.70000076293945,
+                                "ID",
+                                83805,
+                                "83805",
+                                "USA",
+                                -116.31999969482422
+                            ],
+                            [
+                                "Ponoka",
+                                "ca",
+                                26,
+                                34,
+                                109.64054972688706,
+                                52.68000030517578,
+                                "AB",
+                                754303,
+                                "T4J 0A1",
+                                "Canada",
+                                -113.58000183105469
+                            ],
+                            [
+                                "Ardrossan",
+                                "ca",
+                                26,
+                                35,
+                                176.0777974612602,
+                                53.599998474121094,
+                                "AB",
+                                786095,
+                                "T8E 1J3",
+                                "Canada",
+                                -113.08999633789062
+                            ],
+                            [
+                                "Devon",
+                                "ca",
+                                26,
+                                36,
+                                154.03346434202982,
+                                53.349998474121094,
+                                "AB",
+                                792256,
+                                "T9G 0A1",
+                                "Canada",
+                                -113.7300033569336
+                            ],
+                            [
+                                "Chewelah",
+                                "us",
+                                23,
+                                37,
+                                255.6413942759347,
+                                48.279998779296875,
+                                "WA",
+                                99109,
+                                "99109",
+                                "USA",
+                                -117.7300033569336
+                            ],
+                            [
+                                "Drayton Valley",
+                                "ca",
+                                23,
+                                38,
+                                147.29112450246936,
+                                53.220001220703125,
+                                "AB",
+                                782670,
+                                "T7A 0A1",
+                                "Canada",
+                                -114.97000122070312
+                            ],
+                            [
+                                "Columbia Falls",
+                                "us",
+                                22,
+                                39,
+                                191.31813723188566,
+                                48.369998931884766,
+                                "MT",
+                                59912,
+                                "59912",
+                                "USA",
+                                -114.19000244140625
+                            ],
+                            [
+                                "Vegreville",
+                                "ca",
+                                21,
+                                40,
+                                184.99541681555746,
+                                53.4900016784668,
+                                "AB",
+                                791222,
+                                "T9C 0A1",
+                                "Canada",
+                                -112.05000305175781
+                            ],
+                            [
+                                "Sylvan Lake",
+                                "ca",
+                                20,
+                                41,
+                                79.1962151907688,
+                                52.279998779296875,
+                                "AB",
+                                757045,
+                                "T4S 0A1",
+                                "Canada",
+                                -114.02999877929688
+                            ],
+                            [
+                                "Tofield",
+                                "ca",
+                                20,
+                                42,
+                                167.24690889825672,
+                                53.380001068115234,
+                                "AB",
+                                717814,
+                                "T0B 4J0",
+                                "Canada",
+                                -112.66999816894531
+                            ],
+                            [
+                                "De Winton",
+                                "ca",
+                                19,
+                                43,
+                                24.710527024224312,
+                                50.79999923706055,
+                                "AB",
+                                718167,
+                                "T0L 0X0",
+                                "Canada",
+                                -114.0199966430664
+                            ],
+                            [
+                                "Gibbons",
+                                "ca",
+                                19,
+                                44,
+                                189.33515860424438,
+                                53.83000183105469,
+                                "AB",
+                                717699,
+                                "T0A 1N0",
+                                "Canada",
+                                -113.33000183105469
+                            ],
+                            [
+                                "Langdon",
+                                "ca",
+                                19,
+                                45,
+                                24.809653979004125,
+                                50.97999954223633,
+                                "AB",
+                                718071,
+                                "T0J 1X0",
+                                "Canada",
+                                -113.69000244140625
+                            ],
+                            [
+                                "Hinton",
+                                "ca",
+                                17,
+                                46,
+                                209.2182560116573,
+                                53.40999984741211,
+                                "AB",
+                                783575,
+                                "T7V 0A1",
+                                "Canada",
+                                -117.55999755859375
+                            ],
+                            [
+                                "Innisfail",
+                                "ca",
+                                16,
+                                47,
+                                61.829813696533634,
+                                52.02000045776367,
+                                "AB",
+                                753958,
+                                "T4G 0A1",
+                                "Canada",
+                                -113.94999694824219
+                            ],
+                            [
+                                "Rocky Mountain House",
+                                "ca",
+                                16,
+                                48,
+                                90.18152971815393,
+                                52.369998931884766,
+                                "AB",
+                                757346,
+                                "T4T 0A1",
+                                "Canada",
+                                -114.91000366210938
+                            ],
+                            [
+                                "Eureka",
+                                "us",
+                                15,
+                                49,
+                                160.76927720772034,
+                                48.880001068115234,
+                                "MT",
+                                59917,
+                                "59917",
+                                "USA",
+                                -115.05000305175781
+                            ],
+                            [
+                                "Libby",
+                                "us",
+                                15,
+                                50,
+                                201.98937662808447,
+                                48.349998474121094,
+                                "MT",
+                                59923,
+                                "59923",
+                                "USA",
+                                -115.5199966430664
+                            ],
+                            [
+                                "Lloydminster",
+                                "ca",
+                                15,
+                                51,
+                                227.6861105502915,
+                                53.27000045776367,
+                                "SK",
+                                717146,
+                                "S9V 0A1",
+                                "Canada",
+                                -110
+                            ],
+                            [
+                                "Didsbury",
+                                "ca",
+                                15,
+                                52,
+                                35.46354256115822,
+                                51.650001525878906,
+                                "AB",
+                                718203,
+                                "T0M 0W0",
+                                "Canada",
+                                -114.12999725341797
+                            ],
+                            [
+                                "Black Diamond",
+                                "ca",
+                                14,
+                                53,
+                                31.030531201676194,
+                                50.689998626708984,
+                                "AB",
+                                718158,
+                                "T0L 0H0",
+                                "Canada",
+                                -114.2300033569336
+                            ],
+                            [
+                                "Bragg Creek",
+                                "ca",
+                                14,
+                                54,
+                                21.013506647385032,
+                                50.95000076293945,
+                                "AB",
+                                718160,
+                                "T0L 0K0",
+                                "Canada",
+                                -114.58000183105469
+                            ],
+                            [
+                                "Castlegar",
+                                "ca",
+                                13,
+                                55,
+                                200.0522303949826,
+                                49.33000183105469,
+                                "BC",
+                                801925,
+                                "V1N 1A1",
+                                "Canada",
+                                -117.66999816894531
+                            ],
+                            [
+                                "Calmar",
+                                "ca",
+                                12,
+                                56,
+                                146.74097566324207,
+                                53.25,
+                                "AB",
+                                717831,
+                                "T0C 0V0",
+                                "Canada",
+                                -113.81999969482422
+                            ],
+                            [
+                                "Crossfield",
+                                "ca",
+                                12,
+                                57,
+                                20.795238223681583,
+                                51.41999816894531,
+                                "AB",
+                                718200,
+                                "T0M 0S0",
+                                "Canada",
+                                -114.02999877929688
+                            ],
+                            [
+                                "Kimberley",
+                                "ca",
+                                12,
+                                58,
+                                128.39091585238285,
+                                49.68000030517578,
+                                "BC",
+                                795810,
+                                "V1A 0A1",
+                                "Canada",
+                                -115.9800033569336
+                            ],
+                            [
+                                "Coaldale",
+                                "ca",
+                                12,
+                                59,
+                                120.27422712284957,
+                                49.72999954223633,
+                                "AB",
+                                724440,
+                                "T1M 0A1",
+                                "Canada",
+                                -112.62000274658203
+                            ],
+                            [
+                                "Drumheller",
+                                "ca",
+                                12,
+                                60,
+                                67.54220104203583,
+                                51.459999084472656,
+                                "AB",
+                                718045,
+                                "T0J 0Y0",
+                                "Canada",
+                                -112.72000122070312
+                            ],
+                            [
+                                "Revelstoke",
+                                "ca",
+                                12,
+                                61,
+                                174.15680069738622,
+                                51,
+                                "BC",
+                                795389,
+                                "V0E 2S0",
+                                "Canada",
+                                -118.19999694824219
+                            ],
+                            [
+                                "Taber",
+                                "ca",
+                                11,
+                                62,
+                                130.62227074512333,
+                                49.790000915527344,
+                                "AB",
+                                720644,
+                                "T1G 0A1",
+                                "Canada",
+                                -112.1500015258789
+                            ],
+                            [
+                                "Millet",
+                                "ca",
+                                11,
+                                63,
+                                138.88274676693894,
+                                53.099998474121094,
+                                "AB",
+                                717847,
+                                "T0C 1Z0",
+                                "Canada",
+                                -113.47000122070312
+                            ],
+                            [
+                                "Nanton",
+                                "ca",
+                                11,
+                                64,
+                                58.37954230803425,
+                                50.34000015258789,
+                                "AB",
+                                718178,
+                                "T0L 1R0",
+                                "Canada",
+                                -113.7699966430664
+                            ],
+                            [
+                                "Blackfalds",
+                                "ca",
+                                11,
+                                65,
+                                86.9214457469778,
+                                52.369998931884766,
+                                "AB",
+                                718193,
+                                "T0M 0J0",
+                                "Canada",
+                                -113.77999877929688
+                            ],
+                            [
+                                "Creston",
+                                "ca",
+                                11,
+                                66,
+                                175.37234422490693,
+                                49.099998474121094,
+                                "BC",
+                                795256,
+                                "V0B 1G0",
+                                "Canada",
+                                -116.51000213623047
+                            ],
+                            [
+                                "Stettler",
+                                "ca",
+                                10,
+                                67,
+                                103.65289929777119,
+                                52.33000183105469,
+                                "AB",
+                                717853,
+                                "T0C 2L0",
+                                "Canada",
+                                -112.70999908447266
+                            ],
+                            [
+                                "Redcliff",
+                                "ca",
+                                9,
+                                68,
+                                168.4454657141215,
+                                50.08000183105469,
+                                "AB",
+                                718086,
+                                "T0J 2P0",
+                                "Canada",
+                                -110.77999877929688
+                            ],
+                            [
+                                "Carvel",
+                                "ca",
+                                9,
+                                69,
+                                164.54945213129045,
+                                53.52000045776367,
+                                "AB",
+                                717871,
+                                "T0E 0H0",
+                                "Canada",
+                                -114.22000122070312
+                            ],
+                            [
+                                "Havre",
+                                "us",
+                                9,
+                                70,
+                                273.9410530494084,
+                                48.540000915527344,
+                                "MT",
+                                59501,
+                                "59501",
+                                "USA",
+                                -109.68000030517578
+                            ],
+                            [
+                                "Lancaster Park",
+                                "ca",
+                                9,
+                                71,
+                                176.64123472112286,
+                                53.65999984741211,
+                                "AB",
+                                717713,
+                                "T0A 2H0",
+                                "Canada",
+                                -113.48999786376953
+                            ],
+                            [
+                                "Redwater",
+                                "ca",
+                                9,
+                                72,
+                                199.35886019086084,
+                                53.95000076293945,
+                                "AB",
+                                717723,
+                                "T0A 2W0",
+                                "Canada",
+                                -113.0999984741211
+                            ],
+                            [
+                                "New Sarepta",
+                                "ca",
+                                9,
+                                73,
+                                153.78654846290704,
+                                53.27000045776367,
+                                "AB",
+                                717799,
+                                "T0B 3M0",
+                                "Canada",
+                                -113.12999725341797
+                            ],
+                            [
+                                "Wainwright",
+                                "ca",
+                                8,
+                                74,
+                                182.41770169396548,
+                                52.84000015258789,
+                                "AB",
+                                794900,
+                                "T9W 0A1",
+                                "Canada",
+                                -110.86000061035156
+                            ],
+                            [
+                                "Grand Forks",
+                                "ca",
+                                8,
+                                75,
+                                241.78907644017713,
+                                49.029998779296875,
+                                "BC",
+                                795439,
+                                "V0H 1H0",
+                                "Canada",
+                                -118.45999908447266
+                            ],
+                            [
+                                "Onoway",
+                                "ca",
+                                8,
+                                76,
+                                176.29458050722488,
+                                53.689998626708984,
+                                "AB",
+                                717888,
+                                "T0E 1V0",
+                                "Canada",
+                                -114.19999694824219
+                            ],
+                            [
+                                "Republic",
+                                "us",
+                                8,
+                                77,
+                                265.6247089282478,
+                                48.689998626708984,
+                                "WA",
+                                99166,
+                                "99166",
+                                "USA",
+                                -118.69000244140625
+                            ],
+                            [
+                                "Priddis",
+                                "ca",
+                                8,
+                                78,
+                                19.394715059436983,
+                                50.869998931884766,
+                                "AB",
+                                718181,
+                                "T0L 1W0",
+                                "Canada",
+                                -114.33000183105469
+                            ],
+                            [
+                                "Carstairs",
+                                "ca",
+                                8,
+                                79,
+                                28.75336357990751,
+                                51.54999923706055,
+                                "AB",
+                                718197,
+                                "T0M 0N0",
+                                "Canada",
+                                -114.0999984741211
+                            ],
+                            [
+                                "Red Deer County",
+                                "ca",
+                                7,
+                                80,
+                                79.00356380099478,
+                                52.2400016784668,
+                                "AB",
+                                753935,
+                                "T4E 0A1",
+                                "Canada",
+                                -113.69999694824219
+                            ],
+                            [
+                                "Trail",
+                                "ca",
+                                7,
+                                81,
+                                212.09680719948776,
+                                49.11000061035156,
+                                "BC",
+                                802671,
+                                "V1R 1A1",
+                                "Canada",
+                                -117.72000122070312
+                            ],
+                            [
+                                "Troy",
+                                "us",
+                                6,
+                                82,
+                                200.2692472346013,
+                                48.459999084472656,
+                                "MT",
+                                59935,
+                                "59935",
+                                "USA",
+                                -115.87000274658203
+                            ],
+                            [
+                                "Rossland",
+                                "ca",
+                                6,
+                                83,
+                                215.30243032777875,
+                                49.099998474121094,
+                                "BC",
+                                795425,
+                                "V0G 1Y0",
+                                "Canada",
+                                -117.80000305175781
+                            ],
+                            [
+                                "Coleman",
+                                "ca",
+                                6,
+                                84,
+                                105.10397343381645,
+                                49.630001068115234,
+                                "AB",
+                                718114,
+                                "T0K 0M0",
+                                "Canada",
+                                -114.5
+                            ],
+                            [
+                                "Kettle Falls",
+                                "us",
+                                6,
+                                85,
+                                247.19836248431906,
+                                48.630001068115234,
+                                "WA",
+                                99141,
+                                "99141",
+                                "USA",
+                                -118.05999755859375
+                            ],
+                            [
+                                "Turner Valley",
+                                "ca",
+                                6,
+                                86,
+                                33.2566163067938,
+                                50.65999984741211,
+                                "AB",
+                                718184,
+                                "T0L 2A0",
+                                "Canada",
+                                -114.27999877929688
+                            ],
+                            [
+                                "Naples",
+                                "us",
+                                6,
+                                87,
+                                194.4088177151519,
+                                48.689998626708984,
+                                "ID",
+                                83847,
+                                "83847",
+                                "USA",
+                                -116.30000305175781
+                            ],
+                            [
+                                "Sundre",
+                                "ca",
+                                6,
+                                88,
+                                49.22826590061824,
+                                51.79999923706055,
+                                "AB",
+                                718220,
+                                "T0M 1X0",
+                                "Canada",
+                                -114.62999725341797
+                            ],
+                            [
+                                "Fruitvale",
+                                "ca",
+                                5,
+                                89,
+                                204.91840957492522,
+                                49.13999938964844,
+                                "BC",
+                                795417,
+                                "V0G 1L0",
+                                "Canada",
+                                -117.55000305175781
+                            ],
+                            [
+                                "Cut Bank",
+                                "us",
+                                5,
+                                90,
+                                191.6211775679942,
+                                48.650001525878906,
+                                "MT",
+                                59427,
+                                "59427",
+                                "USA",
+                                -112.3499984741211
+                            ],
+                            [
+                                "Thorsby",
+                                "ca",
+                                5,
+                                91,
+                                143.9542943384863,
+                                53.220001220703125,
+                                "AB",
+                                717859,
+                                "T0C 2P0",
+                                "Canada",
+                                -114.05000305175781
+                            ],
+                            [
+                                "Jasper",
+                                "ca",
+                                5,
+                                92,
+                                202.36535866066274,
+                                52.900001525878906,
+                                "AB",
+                                717883,
+                                "T0E 1E0",
+                                "Canada",
+                                -118.08000183105469
+                            ],
+                            [
+                                "Ione",
+                                "us",
+                                5,
+                                93,
+                                220.72781741759846,
+                                48.7400016784668,
+                                "WA",
+                                99139,
+                                "99139",
+                                "USA",
+                                -117.4000015258789
+                            ],
+                            [
+                                "Millarville",
+                                "ca",
+                                5,
+                                94,
+                                28.033391646005292,
+                                50.7400016784668,
+                                "AB",
+                                718173,
+                                "T0L 1K0",
+                                "Canada",
+                                -114.31999969482422
+                            ],
+                            [
+                                "Legal",
+                                "ca",
+                                5,
+                                95,
+                                195.21355903037755,
+                                53.939998626708984,
+                                "AB",
+                                717924,
+                                "T0G 1L0",
+                                "Canada",
+                                -113.58000183105469
+                            ],
+                            [
+                                "Invermere",
+                                "ca",
+                                5,
+                                96,
+                                91.69446736390498,
+                                50.5,
+                                "BC",
+                                795239,
+                                "V0A 1K0",
+                                "Canada",
+                                -116.02999877929688
+                            ],
+                            [
+                                "Three Hills",
+                                "ca",
+                                5,
+                                97,
+                                55.64234339675048,
+                                51.70000076293945,
+                                "AB",
+                                718222,
+                                "T0M 2A0",
+                                "Canada",
+                                -113.2699966430664
+                            ],
+                            [
+                                "St Paul",
+                                "ca",
+                                5,
+                                98,
+                                229.59970582533595,
+                                53.9900016784668,
+                                "AB",
+                                717726,
+                                "T0A 3A0",
+                                "Canada",
+                                -111.30000305175781
+                            ],
+                            [
+                                "Lamont",
+                                "ca",
+                                5,
+                                99,
+                                190.62058430353005,
+                                53.77000045776367,
+                                "AB",
+                                717785,
+                                "T0B 2R0",
+                                "Canada",
+                                -112.80000305175781
+                            ],
+                            [
+                                "Kaslo",
+                                "ca",
+                                4,
+                                100,
+                                146.5579442736577,
+                                49.939998626708984,
+                                "BC",
+                                795418,
+                                "V0G 1M0",
+                                "Canada",
+                                -116.91999816894531
+                            ],
+                            [
+                                "Blairmore",
+                                "ca",
+                                4,
+                                101,
+                                107.50377215492922,
+                                49.59000015258789,
+                                "AB",
+                                718109,
+                                "T0K 0E0",
+                                "Canada",
+                                -114.43000030517578
+                            ],
+                            [
+                                "Winlaw",
+                                "ca",
+                                4,
+                                102,
+                                182.89104141045888,
+                                49.63999938964844,
+                                "BC",
+                                795431,
+                                "V0G 2J0",
+                                "Canada",
+                                -117.56999969482422
+                            ],
+                            [
+                                "Magrath",
+                                "ca",
+                                4,
+                                103,
+                                132.9932370916951,
+                                49.41999816894531,
+                                "AB",
+                                718129,
+                                "T0K 1J0",
+                                "Canada",
+                                -112.87000274658203
+                            ],
+                            [
+                                "Pincher Creek",
+                                "ca",
+                                4,
+                                104,
+                                115.85907861639193,
+                                49.470001220703125,
+                                "AB",
+                                718138,
+                                "T0K 1W0",
+                                "Canada",
+                                -113.94999694824219
+                            ],
+                            [
+                                "Raymond",
+                                "ca",
+                                4,
+                                105,
+                                135.32224214701844,
+                                49.459999084472656,
+                                "AB",
+                                718154,
+                                "T0K 2S0",
+                                "Canada",
+                                -112.6500015258789
+                            ],
+                            [
+                                "Stavely",
+                                "ca",
+                                4,
+                                106,
+                                72.20639860256254,
+                                50.15999984741211,
+                                "AB",
+                                718183,
+                                "T0L 1Z0",
+                                "Canada",
+                                -113.62999725341797
+                            ],
+                            [
+                                "Usk",
+                                "us",
+                                4,
+                                107,
+                                243.83790113378856,
+                                48.279998779296875,
+                                "WA",
+                                99180,
+                                "99180",
+                                "USA",
+                                -117.30999755859375
+                            ],
+                            [
+                                "Redwood Meadows",
+                                "ca",
+                                4,
+                                108,
+                                17.671575701742206,
+                                50.97999954223633,
+                                "AB",
+                                752494,
+                                "T3Z 1A1",
+                                "Canada",
+                                -114.5199966430664
+                            ],
+                            [
+                                "Balzac",
+                                "ca",
+                                4,
+                                109,
+                                8.928155846698598,
+                                51.20000076293945,
+                                "AB",
+                                718190,
+                                "T0M 0E0",
+                                "Canada",
+                                -114.0199966430664
+                            ],
+                            [
+                                "Penhold",
+                                "ca",
+                                4,
+                                110,
+                                69.25114936664866,
+                                52.119998931884766,
+                                "AB",
+                                718216,
+                                "T0M 1R0",
+                                "Canada",
+                                -113.87000274658203
+                            ],
+                            [
+                                "Enoch",
+                                "ca",
+                                4,
+                                111,
+                                167.28038489191562,
+                                53.54999923706055,
+                                "AB",
+                                784296,
+                                "T7X 3Y3",
+                                "Canada",
+                                -113.83999633789062
+                            ],
+                            [
+                                "Kingman",
+                                "ca",
+                                4,
+                                112,
+                                156.48677373588922,
+                                53.22999954223633,
+                                "AB",
+                                717782,
+                                "T0B 2M0",
+                                "Canada",
+                                -112.75
+                            ],
+                            [
+                                "Mundare",
+                                "ca",
+                                4,
+                                113,
+                                187.21324325986828,
+                                53.61000061035156,
+                                "AB",
+                                717795,
+                                "T0B 3H0",
+                                "Canada",
+                                -112.33000183105469
+                            ],
+                            [
+                                "Hanna",
+                                "ca",
+                                4,
+                                114,
+                                103.60669617364576,
+                                51.650001525878906,
+                                "AB",
+                                718065,
+                                "T0J 1P0",
+                                "Canada",
+                                -111.93000030517578
+                            ],
+                            [
+                                "Bluffton",
+                                "ca",
+                                3,
+                                115,
+                                110.69851283280151,
+                                52.7400016784668,
+                                "AB",
+                                717825,
+                                "T0C 0M0",
+                                "Canada",
+                                -114.27999877929688
+                            ],
+                            [
+                                "Rimbey",
+                                "ca",
+                                3,
+                                116,
+                                102.36457609024905,
+                                52.619998931884766,
+                                "AB",
+                                717851,
+                                "T0C 2J0",
+                                "Canada",
+                                -114.2300033569336
+                            ],
+                            [
+                                "Montrose",
+                                "ca",
+                                3,
+                                117,
+                                207.87689235968222,
+                                49.099998474121094,
+                                "BC",
+                                795420,
+                                "V0G 1P0",
+                                "Canada",
+                                -117.58000183105469
+                            ],
+                            [
+                                "Addy",
+                                "us",
+                                3,
+                                118,
+                                259.47457851237897,
+                                48.33000183105469,
+                                "WA",
+                                99101,
+                                "99101",
+                                "USA",
+                                -117.94999694824219
+                            ],
+                            [
+                                "Alberta Beach",
+                                "ca",
+                                3,
+                                119,
+                                175.03287012801857,
+                                53.66999816894531,
+                                "AB",
+                                717865,
+                                "T0E 0A0",
+                                "Canada",
+                                -114.36000061035156
+                            ],
+                            [
+                                "Duffield",
+                                "ca",
+                                3,
+                                120,
+                                165.35113206549534,
+                                53.529998779296875,
+                                "AB",
+                                717875,
+                                "T0E 0N0",
+                                "Canada",
+                                -114.3499984741211
+                            ],
+                            [
+                                "Fallis",
+                                "ca",
+                                3,
+                                121,
+                                169.6074070688302,
+                                53.58000183105469,
+                                "AB",
+                                717878,
+                                "T0E 0V0",
+                                "Canada",
+                                -114.62999725341797
+                            ],
+                            [
+                                "Inchelium",
+                                "us",
+                                3,
+                                122,
+                                279.9251932167878,
+                                48.290000915527344,
+                                "WA",
+                                99138,
+                                "99138",
+                                "USA",
+                                -118.52999877929688
+                            ],
+                            [
+                                "Seba Beach",
+                                "ca",
+                                3,
+                                123,
+                                168.02761175053018,
+                                53.54999923706055,
+                                "AB",
+                                717894,
+                                "T0E 2B0",
+                                "Canada",
+                                -114.7300033569336
+                            ],
+                            [
+                                "Northport",
+                                "us",
+                                3,
+                                124,
+                                223.24037492292243,
+                                48.93000030517578,
+                                "WA",
+                                99157,
+                                "99157",
+                                "USA",
+                                -117.79000091552734
+                            ],
+                            [
+                                "Claresholm",
+                                "ca",
+                                3,
+                                125,
+                                82.08018377252831,
+                                50.02000045776367,
+                                "AB",
+                                718165,
+                                "T0L 0T0",
+                                "Canada",
+                                -113.58000183105469
+                            ],
+                            [
+                                "Harvie Heights",
+                                "ca",
+                                3,
+                                126,
+                                50.73590200729605,
+                                51.11000061035156,
+                                "AB",
+                                725848,
+                                "T1W 2W2",
+                                "Canada",
+                                -115.37000274658203
+                            ],
+                            [
+                                "Fort Macleod",
+                                "ca",
+                                3,
+                                127,
+                                104.71839389655523,
+                                49.709999084472656,
+                                "AB",
+                                718168,
+                                "T0L 0Z0",
+                                "Canada",
+                                -113.41999816894531
+                            ],
+                            [
+                                "Golden",
+                                "ca",
+                                3,
+                                128,
+                                120.13903880842118,
+                                51.29999923706055,
+                                "BC",
+                                795231,
+                                "V0A 1H0",
+                                "Canada",
+                                -116.97000122070312
+                            ],
+                            [
+                                "Caroline",
+                                "ca",
+                                3,
+                                129,
+                                69.08933989726978,
+                                52.08000183105469,
+                                "AB",
+                                718196,
+                                "T0M 0M0",
+                                "Canada",
+                                -114.75
+                            ],
+                            [
+                                "Delburne",
+                                "ca",
+                                3,
+                                130,
+                                84.09106361262772,
+                                52.20000076293945,
+                                "AB",
+                                718202,
+                                "T0M 0V0",
+                                "Canada",
+                                -113.2300033569336
+                            ],
+                            [
+                                "Vermilion",
+                                "ca",
+                                3,
+                                131,
+                                206.06347755945447,
+                                53.349998474121094,
+                                "AB",
+                                795054,
+                                "T9X 0A1",
+                                "Canada",
+                                -110.8499984741211
+                            ],
+                            [
+                                "Chipman",
+                                "ca",
+                                3,
+                                132,
+                                188.94611072108816,
+                                53.709999084472656,
+                                "AB",
+                                717756,
+                                "T0B 0W0",
+                                "Canada",
+                                -112.62999725341797
+                            ],
+                            [
+                                "Denwood",
+                                "ca",
+                                3,
+                                133,
+                                182.31817138357926,
+                                52.83000183105469,
+                                "AB",
+                                717760,
+                                "T0B 1B0",
+                                "Canada",
+                                -110.8499984741211
+                            ],
+                            [
+                                "Dunmore",
+                                "ca",
+                                3,
+                                134,
+                                180.08950402367444,
+                                49.970001220703125,
+                                "AB",
+                                718054,
+                                "T0J 1A0",
+                                "Canada",
+                                -110.58000183105469
+                            ],
+                            [
+                                "Provost",
+                                "ca",
+                                3,
+                                135,
+                                186.43054577609732,
+                                52.369998931884766,
+                                "AB",
+                                717802,
+                                "T0B 3S0",
+                                "Canada",
+                                -110.2699966430664
+                            ],
+                            [
+                                "Gleichen",
+                                "ca",
+                                3,
+                                136,
+                                53.540836938965015,
+                                50.869998931884766,
+                                "AB",
+                                718064,
+                                "T0J 1N0",
+                                "Canada",
+                                -113.05000305175781
+                            ],
+                            [
+                                "Breton",
+                                "ca",
+                                2,
+                                137,
+                                136.6713304716105,
+                                53.11000061035156,
+                                "AB",
+                                717827,
+                                "T0C 0P0",
+                                "Canada",
+                                -114.47000122070312
+                            ],
+                            [
+                                "Falun",
+                                "ca",
+                                2,
+                                138,
+                                108.97072432116035,
+                                52.66999816894531,
+                                "AB",
+                                717839,
+                                "T0C 1H0",
+                                "Canada",
+                                -113.58000183105469
+                            ],
+                            [
+                                "Lindale",
+                                "ca",
+                                2,
+                                139,
+                                147.06457825370734,
+                                53.25,
+                                "AB",
+                                717845,
+                                "T0C 1W0",
+                                "Canada",
+                                -114.6500015258789
+                            ],
+                            [
+                                "Browning",
+                                "us",
+                                2,
+                                140,
+                                183.1962882266542,
+                                48.56999969482422,
+                                "MT",
+                                59417,
+                                "59417",
+                                "USA",
+                                -113.20999908447266
+                            ],
+                            [
+                                "Bellevue",
+                                "ca",
+                                2,
+                                141,
+                                108.66008388181649,
+                                49.56999969482422,
+                                "AB",
+                                718108,
+                                "T0K 0C0",
+                                "Canada",
+                                -114.37000274658203
+                            ],
+                            [
+                                "Trego",
+                                "us",
+                                2,
+                                142,
+                                171.2504097050991,
+                                48.70000076293945,
+                                "MT",
+                                59934,
+                                "59934",
+                                "USA",
+                                -114.87000274658203
+                            ],
+                            [
+                                "Cowley",
+                                "ca",
+                                2,
+                                143,
+                                109.9144530097412,
+                                49.54999923706055,
+                                "AB",
+                                718116,
+                                "T0K 0P0",
+                                "Canada",
+                                -114.08000183105469
+                            ],
+                            [
+                                "Warburg",
+                                "ca",
+                                2,
+                                144,
+                                140.4483508995071,
+                                53.16999816894531,
+                                "AB",
+                                717861,
+                                "T0C 2T0",
+                                "Canada",
+                                -114.31999969482422
+                            ],
+                            [
+                                "South Slocan",
+                                "ca",
+                                2,
+                                145,
+                                187.53558378305652,
+                                49.4900016784668,
+                                "BC",
+                                795430,
+                                "V0G 2G0",
+                                "Canada",
+                                -117.5199966430664
+                            ],
+                            [
+                                "Curlew",
+                                "us",
+                                2,
+                                146,
+                                252.87280774726204,
+                                48.91999816894531,
+                                "WA",
+                                99118,
+                                "99118",
+                                "USA",
+                                -118.62999725341797
+                            ],
+                            [
+                                "Greenwood",
+                                "ca",
+                                2,
+                                147,
+                                246.3640335397983,
+                                49.11000061035156,
+                                "BC",
+                                795446,
+                                "V0H 1J0",
+                                "Canada",
+                                -118.68000030517578
+                            ],
+                            [
+                                "Picture Butte",
+                                "ca",
+                                2,
+                                148,
+                                107.00685532905035,
+                                49.88999938964844,
+                                "AB",
+                                718137,
+                                "T0K 1V0",
+                                "Canada",
+                                -112.77999877929688
+                            ],
+                            [
+                                "Stirling",
+                                "ca",
+                                2,
+                                149,
+                                135.4948361966637,
+                                49.5099983215332,
+                                "AB",
+                                718145,
+                                "T0K 2E0",
+                                "Canada",
+                                -112.5199966430664
+                            ],
+                            [
+                                "Busby",
+                                "ca",
+                                2,
+                                150,
+                                177.6772237671932,
+                                53.709999084472656,
+                                "AB",
+                                717902,
+                                "T0G 0H0",
+                                "Canada",
+                                -114.19000244140625
+                            ],
+                            [
+                                "Calahoo",
+                                "ca",
+                                2,
+                                151,
+                                177.23894953561287,
+                                53.70000076293945,
+                                "AB",
+                                717903,
+                                "T0G 0J0",
+                                "Canada",
+                                -113.97000122070312
+                            ],
+                            [
+                                "Metaline Falls",
+                                "us",
+                                2,
+                                152,
+                                213.32994130208772,
+                                48.849998474121094,
+                                "WA",
+                                99153,
+                                "99153",
+                                "USA",
+                                -117.3499984741211
+                            ],
+                            [
+                                "Shelby",
+                                "us",
+                                2,
+                                153,
+                                211.61714472755213,
+                                48.5099983215332,
+                                "MT",
+                                59474,
+                                "59474",
+                                "USA",
+                                -111.83000183105469
+                            ],
+                            [
+                                "Vulcan",
+                                "ca",
+                                2,
+                                154,
+                                66.04707977758227,
+                                50.400001525878906,
+                                "AB",
+                                718185,
+                                "T0L 2B0",
+                                "Canada",
+                                -113.25
+                            ],
+                            [
+                                "Bowden",
+                                "ca",
+                                2,
+                                155,
+                                53.111639509064986,
+                                51.900001525878906,
+                                "AB",
+                                718194,
+                                "T0M 0K0",
+                                "Canada",
+                                -114.02999877929688
+                            ],
+                            [
+                                "Bon Accord",
+                                "ca",
+                                2,
+                                156,
+                                188.68052304267684,
+                                53.83000183105469,
+                                "AB",
+                                717686,
+                                "T0A 0K0",
+                                "Canada",
+                                -113.41999816894531
+                            ],
+                            [
+                                "Cremona",
+                                "ca",
+                                2,
+                                157,
+                                30.20316366911088,
+                                51.540000915527344,
+                                "AB",
+                                718199,
+                                "T0M 0R0",
+                                "Canada",
+                                -114.4800033569336
+                            ],
+                            [
+                                "Eckville",
+                                "ca",
+                                2,
+                                158,
+                                83.31400062156519,
+                                52.34000015258789,
+                                "AB",
+                                718204,
+                                "T0M 0X0",
+                                "Canada",
+                                -114.37000274658203
+                            ],
+                            [
+                                "Elnora",
+                                "ca",
+                                2,
+                                159,
+                                72.08839028501623,
+                                51.97999954223633,
+                                "AB",
+                                718205,
+                                "T0M 0Y0",
+                                "Canada",
+                                -113.19999694824219
+                            ],
+                            [
+                                "Moyie Springs",
+                                "us",
+                                2,
+                                160,
+                                194.023711979397,
+                                48.70000076293945,
+                                "ID",
+                                83845,
+                                "83845",
+                                "USA",
+                                -116.30999755859375
+                            ],
+                            [
+                                "Fernie",
+                                "ca",
+                                2,
+                                161,
+                                119.60995262104306,
+                                49.5,
+                                "BC",
+                                795271,
+                                "V0B 1M0",
+                                "Canada",
+                                -115.05999755859375
+                            ],
+                            [
+                                "Hingham",
+                                "us",
+                                2,
+                                162,
+                                245.92826208002177,
+                                48.599998474121094,
+                                "MT",
+                                59528,
+                                "59528",
+                                "USA",
+                                -110.43000030517578
+                            ],
+                            [
+                                "Torrington",
+                                "ca",
+                                2,
+                                163,
+                                52.26067537135091,
+                                51.790000915527344,
+                                "AB",
+                                718223,
+                                "T0M 2B0",
+                                "Canada",
+                                -113.58000183105469
+                            ],
+                            [
+                                "Sparwood",
+                                "ca",
+                                2,
+                                164,
+                                102.08419903562745,
+                                49.72999954223633,
+                                "BC",
+                                795292,
+                                "V0B 2G0",
+                                "Canada",
+                                -114.88999938964844
+                            ],
+                            [
+                                "Bruderheim",
+                                "ca",
+                                2,
+                                165,
+                                191.189218397197,
+                                53.79999923706055,
+                                "AB",
+                                717753,
+                                "T0B 0S0",
+                                "Canada",
+                                -112.91999816894531
+                            ],
+                            [
+                                "Hay Lakes",
+                                "ca",
+                                2,
+                                166,
+                                150.20035202968705,
+                                53.20000076293945,
+                                "AB",
+                                717771,
+                                "T0B 1W0",
+                                "Canada",
+                                -113.05000305175781
+                            ],
+                            [
+                                "Myrnam",
+                                "ca",
+                                2,
+                                167,
+                                214.16348544146288,
+                                53.689998626708984,
+                                "AB",
+                                717797,
+                                "T0B 3K0",
+                                "Canada",
+                                -111.2300033569336
+                            ],
+                            [
+                                "New Norway",
+                                "ca",
+                                2,
+                                168,
+                                130.527293565648,
+                                52.869998931884766,
+                                "AB",
+                                717798,
+                                "T0B 3L0",
+                                "Canada",
+                                -112.94999694824219
+                            ],
+                            [
+                                "Paradise Valley",
+                                "ca",
+                                2,
+                                169,
+                                209.71426532792157,
+                                53.04999923706055,
+                                "AB",
+                                717801,
+                                "T0B 3R0",
+                                "Canada",
+                                -110.27999877929688
+                            ],
+                            [
+                                "Rosalind",
+                                "ca",
+                                2,
+                                170,
+                                136.13748857449676,
+                                52.79999923706055,
+                                "AB",
+                                717806,
+                                "T0B 3Y0",
+                                "Canada",
+                                -112.44999694824219
+                            ],
+                            [
+                                "Alix",
+                                "ca",
+                                2,
+                                171,
+                                97.21759228537078,
+                                52.400001525878906,
+                                "AB",
+                                717820,
+                                "T0C 0B0",
+                                "Canada",
+                                -113.18000030517578
+                            ],
+                            [
+                                "Oyen",
+                                "ca",
+                                1,
+                                172,
+                                161.8479087757818,
+                                51.38999938964844,
+                                "AB",
+                                718081,
+                                "T0J 2J0",
+                                "Canada",
+                                -110.47000122070312
+                            ],
+                            [
+                                "Botha",
+                                "ca",
+                                1,
+                                173,
+                                107.41614261766541,
+                                52.310001373291016,
+                                "AB",
+                                717826,
+                                "T0C 0N0",
+                                "Canada",
+                                -112.52999877929688
+                            ],
+                            [
+                                "Brownfield",
+                                "ca",
+                                1,
+                                174,
+                                143.470872649721,
+                                52.34000015258789,
+                                "AB",
+                                717828,
+                                "T0C 0R0",
+                                "Canada",
+                                -111.43000030517578
+                            ],
+                            [
+                                "Buck Lake",
+                                "ca",
+                                1,
+                                175,
+                                127.45742579135401,
+                                52.95000076293945,
+                                "AB",
+                                717830,
+                                "T0C 0T0",
+                                "Canada",
+                                -114.77999877929688
+                            ],
+                            [
+                                "Rockyford",
+                                "ca",
+                                1,
+                                176,
+                                46.79504878159348,
+                                51.22999954223633,
+                                "AB",
+                                718088,
+                                "T0J 2R0",
+                                "Canada",
+                                -113.12999725341797
+                            ],
+                            [
+                                "Clive",
+                                "ca",
+                                1,
+                                177,
+                                96.62977559467872,
+                                52.459999084472656,
+                                "AB",
+                                717834,
+                                "T0C 0Y0",
+                                "Canada",
+                                -113.44999694824219
+                            ],
+                            [
+                                "Essex",
+                                "us",
+                                1,
+                                178,
+                                174.55107558172094,
+                                48.619998931884766,
+                                "MT",
+                                59916,
+                                "59916",
+                                "USA",
+                                -113.91000366210938
+                            ],
+                            [
+                                "Consort",
+                                "ca",
+                                1,
+                                179,
+                                158.60511062008294,
+                                52.040000915527344,
+                                "AB",
+                                717836,
+                                "T0C 1B0",
+                                "Canada",
+                                -110.7699966430664
+                            ],
+                            [
+                                "Fortine",
+                                "us",
+                                1,
+                                180,
+                                165.29463851265422,
+                                48.790000915527344,
+                                "MT",
+                                59918,
+                                "59918",
+                                "USA",
+                                -114.88999938964844
+                            ],
+                            [
+                                "Erskine",
+                                "ca",
+                                1,
+                                181,
+                                100.01928274052347,
+                                52.34000015258789,
+                                "AB",
+                                717838,
+                                "T0C 1G0",
+                                "Canada",
+                                -112.87999725341797
+                            ],
+                            [
+                                "Hungry Horse",
+                                "us",
+                                1,
+                                182,
+                                190.04634404961385,
+                                48.38999938964844,
+                                "MT",
+                                59919,
+                                "59919",
+                                "USA",
+                                -114.05999755859375
+                            ],
+                            [
+                                "Halkirk",
+                                "ca",
+                                1,
+                                183,
+                                118.13416109705904,
+                                52.29999923706055,
+                                "AB",
+                                717842,
+                                "T0C 1M0",
+                                "Canada",
+                                -112.1500015258789
+                            ],
+                            [
+                                "Hobbema",
+                                "ca",
+                                1,
+                                184,
+                                121.00763837717402,
+                                52.83000183105469,
+                                "AB",
+                                717843,
+                                "T0C 1N0",
+                                "Canada",
+                                -113.44999694824219
+                            ],
+                            [
+                                "Standard",
+                                "ca",
+                                1,
+                                185,
+                                53.00062812936855,
+                                51.119998931884766,
+                                "AB",
+                                718099,
+                                "T0J 3G0",
+                                "Canada",
+                                -112.9800033569336
+                            ],
+                            [
+                                "Burton",
+                                "ca",
+                                1,
+                                186,
+                                181.35721788117462,
+                                50,
+                                "BC",
+                                795412,
+                                "V0G 1E0",
+                                "Canada",
+                                -117.87999725341797
+                            ],
+                            [
+                                "Genelle",
+                                "ca",
+                                1,
+                                187,
+                                206.18800943529615,
+                                49.220001220703125,
+                                "BC",
+                                795413,
+                                "V0G 1G0",
+                                "Canada",
+                                -117.69999694824219
+                            ],
+                            [
+                                "Crescent Valley",
+                                "ca",
+                                1,
+                                188,
+                                189.4940066225271,
+                                49.470001220703125,
+                                "BC",
+                                795414,
+                                "V0G 1H0",
+                                "Canada",
+                                -117.55000305175781
+                            ],
+                            [
+                                "Martin City",
+                                "us",
+                                1,
+                                189,
+                                190.07991017067621,
+                                48.38999938964844,
+                                "MT",
+                                59926,
+                                "59926",
+                                "USA",
+                                -114.04000091552734
+                            ],
+                            [
+                                "Olney",
+                                "us",
+                                1,
+                                190,
+                                180.3600711638179,
+                                48.540000915527344,
+                                "MT",
+                                59927,
+                                "59927",
+                                "USA",
+                                -114.56999969482422
+                            ],
+                            [
+                                "Siksika",
+                                "ca",
+                                1,
+                                191,
+                                53.387543387024,
+                                50.86000061035156,
+                                "AB",
+                                718105,
+                                "T0J 3W0",
+                                "Canada",
+                                -113.05999755859375
+                            ],
+                            [
+                                "Rexford",
+                                "us",
+                                1,
+                                192,
+                                159.49571965574344,
+                                48.91999816894531,
+                                "MT",
+                                59930,
+                                "59930",
+                                "USA",
+                                -115.16999816894531
+                            ],
+                            [
+                                "Barnwell",
+                                "ca",
+                                1,
+                                193,
+                                128.0541711002985,
+                                49.779998779296875,
+                                "AB",
+                                718107,
+                                "T0K 0B0",
+                                "Canada",
+                                -112.25
+                            ],
+                            [
+                                "Nakusp",
+                                "ca",
+                                1,
+                                194,
+                                169.90352998923427,
+                                50.27000045776367,
+                                "BC",
+                                795421,
+                                "V0G 1R0",
+                                "Canada",
+                                -117.80000305175781
+                            ],
+                            [
+                                "New Denver",
+                                "ca",
+                                1,
+                                195,
+                                161.2463126394594,
+                                50,
+                                "BC",
+                                795422,
+                                "V0G 1S0",
+                                "Canada",
+                                -117.37000274658203
+                            ],
+                            [
+                                "Salmo",
+                                "ca",
+                                1,
+                                196,
+                                191.73043799200968,
+                                49.220001220703125,
+                                "BC",
+                                795426,
+                                "V0G 1Z0",
+                                "Canada",
+                                -117.2699966430664
+                            ],
+                            [
+                                "Boyds",
+                                "us",
+                                1,
+                                197,
+                                245.4711313257709,
+                                48.709999084472656,
+                                "WA",
+                                99107,
+                                "99107",
+                                "USA",
+                                -118.12999725341797
+                            ],
+                            [
+                                "Senlac",
+                                "ca",
+                                1,
+                                198,
+                                211.44964864934246,
+                                52.5,
+                                "SK",
+                                696611,
+                                "S0L 2Y0",
+                                "Canada",
+                                -109.69999694824219
+                            ],
+                            [
+                                "Winfield",
+                                "ca",
+                                1,
+                                199,
+                                126.21054880413786,
+                                52.959999084472656,
+                                "AB",
+                                717863,
+                                "T0C 2X0",
+                                "Canada",
+                                -114.43000030517578
+                            ]
+                        ],
+                        "columnNames": [
+                            "city",
+                            "country",
+                            "member_count",
+                            "ranking",
+                            "distance",
+                            "lat",
+                            "state",
+                            "id",
+                            "zip",
+                            "localized_country_name",
+                            "lon"
+                        ],
+                        "subtype": "ListOfMaps",
+                        "type": "TableDisplay"
+                    }
+                },
+                "selectedType": "Results",
+                "pluginName": "Python3",
+                "shellId": "D81B69DB96C84B728C6A6E82D426B061",
+                "elapsedTime": 792,
+                "height": 794
+            },
+            "evaluatorReader": true,
+            "lineCount": 2
+        }
+    ],
     "namespace": {}
 }

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+#globe{
+  background: #fcfcfa;
+  width: 900px;
+  height: 500px;
+  margin-left: 50px;
+}
+
+.water {
+  fill: #00248F;
+}
+
+.land {
+  fill: #A98B6F;
+  stroke: #FFF;
+  stroke-width: 0.7px;
+}
+
+.stroke {
+  fill: none;
+  stroke: #000;
+  stroke-width: 3px;
+}
+
+.fill {
+  fill: #00248F;
+}
+
+.graticule {
+  fill: none;
+  stroke: #777;
+  stroke-width: .5px;
+  stroke-opacity: .5;
+}
+
+.boundary {
+  fill: none;
+  stroke: #fff;
+  stroke-width: .5px;
+}
+
+.overlay {
+  fill: none;
+  pointer-events: all;
+}
+
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/topojson.v1.min.js"></script>
+<script src="d3.geo.zoom.js"></script>
+
+
+<div id="globe"></div>
+
+<script>
+
+var width = 680,
+    height = 680;
+
+var projection = d3.geo.orthographic()
+    .scale(270)
+    .translate([width / 2, height / 2])
+    .clipAngle(90)
+    .precision(.1)
+
+
+var zoom = d3.behavior.zoom()
+        .scaleExtent([1,6])
+        .on("zoom",zoomed);
+
+var zoomEnhanced = d3.geo.zoom().projection(projection)
+        .on("zoom",zoomedEnhanced);
+
+var drag = d3.behavior.drag()
+          .origin(function() { var r = projection.rotate(); return {x: r[0], y: -r[1]}; })
+          .on("drag", dragged)
+          .on("dragstart", dragstarted)
+          .on("dragend", dragended);
+
+var path = d3.geo.path()
+    .projection(projection)
+    .pointRadius(function(d) { return d.radius; });
+
+var graticule = d3.geo.graticule();
+
+var svg = d3.select("#globe").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+var pathG = svg.append("g");
+
+svg.append("rect")
+        .attr("class", "overlay")
+        .attr("width", width)
+        .attr("height", height)
+        .call(zoomEnhanced)
+
+pathG.append("defs").append("path")
+    .datum({type: "Sphere"})
+    .attr("id", "sphere")
+    .attr("d", path);
+
+pathG.append("use")
+    .attr("class", "stroke")
+    .attr("xlink:href", "#sphere");
+
+pathG.append("use")
+    .attr("class", "fill")
+    .attr("xlink:href", "#sphere");
+
+pathG.append("path")
+    .datum(graticule)
+    .attr("class", "graticule")
+    .attr("d", path);
+
+data = [{'Lat':5.94,'Lon':21.22,'Magnitude':5}]
+
+pathG.selectAll("path.point")
+    .data(data)
+  .enter().append("path")
+    .datum(function(d) {
+       return {type: "Point", coordinates: [d.Lon, d.Lat], radius: 5};
+    })
+    .attr("class", "point")
+    .attr("d", path);
+
+d3.json("worldTopo.json", function(error, world) {
+  // to render meridians/graticules on top of lands, use insert which adds new path before graticule in the selection
+  pathG.insert("path", ".graticule")
+      .datum(topojson.feature(world, world.objects.land))
+      .attr("class", "land")
+      .attr("d", path)
+
+  pathG.insert("path", ".graticule")
+      .datum(topojson.mesh(world, world.objects.countries, function(a, b) { return a !== b; }))
+      .attr("class", "boundary")
+      .attr("d", path);
+});
+
+// apply transformations to map and all elements on it 
+  function zoomed()
+  {
+    pathG.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+    //grids.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+    //geofeatures.select("path.graticule").style("stroke-width", 0.5 / d3.event.scale);
+    pathG.selectAll("path.boundary").style("stroke-width", 0.5 / d3.event.scale);
+  }
+
+  function zoomedEnhanced()
+  {
+    pathG.selectAll("path").attr("d",path);
+  }
+
+  function dragstarted(d) 
+  {
+    //stopPropagation prevents dragging to "bubble up" which triggers same event for all elements below this object
+    d3.event.sourceEvent.stopPropagation();
+    d3.select(this).classed("dragging", true);
+  }
+
+  function dragged() {
+          projection.rotate([d3.event.x, -d3.event.y]);
+          pathG.selectAll("path").attr("d", path);
+  }
+
+  function dragended(d) 
+  {
+    d3.select(this).classed("dragging", false);
+  }
+
+d3.select(self.frameElement).style("height", height + "px");
+
+</script>

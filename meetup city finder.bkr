@@ -44,6 +44,7 @@
                     "import csv",
                     "import googlemaps",
                     "import time",
+                    "import json",
                     "os.chdir(\"C:/Users/macle/Desktop/Data Journalism/meetup city finder\")"
                 ]
             },
@@ -51,11 +52,11 @@
                 "state": {},
                 "selectedType": "Hidden",
                 "pluginName": "Python3",
-                "shellId": "D81B69DB96C84B728C6A6E82D426B061",
-                "elapsedTime": 347
+                "shellId": "4A113148F93F47018B7F2E0C6FCBEB30",
+                "elapsedTime": 320
             },
             "evaluatorReader": true,
-            "lineCount": 7
+            "lineCount": 8
         },
         {
             "id": "code6pDBG3",
@@ -78,8 +79,8 @@
                 "state": {},
                 "selectedType": "Hidden",
                 "pluginName": "Python3",
-                "shellId": "D81B69DB96C84B728C6A6E82D426B061",
-                "elapsedTime": 324
+                "shellId": "4A113148F93F47018B7F2E0C6FCBEB30",
+                "elapsedTime": 328
             },
             "evaluatorReader": true,
             "lineCount": 9
@@ -101,8 +102,8 @@
                 "state": {},
                 "selectedType": "Hidden",
                 "pluginName": "Python3",
-                "shellId": "D81B69DB96C84B728C6A6E82D426B061",
-                "elapsedTime": 324
+                "shellId": "4A113148F93F47018B7F2E0C6FCBEB30",
+                "elapsedTime": 412
             },
             "evaluatorReader": true,
             "lineCount": 5
@@ -113,31 +114,151 @@
             "evaluator": "Python3",
             "input": {
                 "body": [
-                    "city_country_list = [\"Calgary, Canada\"]",
-                    "for city_country in city_country_list:",
-                    "    geo = gmaps.geocode(city_country)",
-                    "    lat = geo[0]['geometry']['location'][\"lat\"]",
-                    "    lon = geo[0]['geometry']['location'][\"lng\"]",
-                    "    for i in range(1,36):",
-                    "        print(i)",
-                    "        groups = client.GetGroups(lat=lat, lon=lon,category_id=i,radius=500)",
-                    "        print(len(groups.results))",
+                    "group_list = []",
+                    "tag_dict = {}",
+                    "groups_per_page = 200",
+                    "lat_lons = [(39.8282,-98.5795),(-16.04,-58.84),(8.85,19.55),(48.87,17.80),(36.50,73.98),(0,125.97),(64.70,121.55)]",
+                    "for lat,lon in lat_lons:",
+                    "    groups = client.GetGroups(lat=lat, lon=lon,radius=200000,fields=['primary_topic'])",
+                    "    time.sleep(1)",
+                    "    pages = int(groups.meta['total_count']/groups_per_page)",
+                    "    print(groups.meta['total_count'])",
+                    "    for i in range(0,pages + 1):",
+                    "        print(\"page \" + str(i))",
+                    "        groups = client.GetGroups(lat=lat, lon=lon,radius=200000,fields=['primary_topic'],pages=groups_per_page,offset=i)",
                     "        time.sleep(1)",
-                    "    time.sleep(1)"
+                    "        if \"results\" in groups.__dict__.keys():",
+                    "            for group in groups.results:",
+                    "                if group[\"id\"] not in group_list and \"primary_topic\" in group.keys():",
+                    "                    group_list.append(group[\"id\"])",
+                    "                    if group[\"primary_topic\"][\"name\"] in tag_dict.keys():",
+                    "                        tag_dict[group[\"primary_topic\"][\"name\"]].append([group[\"id\"],group[\"city\"],group[\"country\"],group[\"members\"]])",
+                    "                    else:",
+                    "                        print(group[\"primary_topic\"][\"name\"])",
+                    "                        tag_dict[group[\"primary_topic\"][\"name\"]] = [[group[\"id\"],group[\"city\"],group[\"country\"],group[\"members\"]]]",
+                    "                            ",
+                    "with open('meetup_data.json', 'w') as outfile:",
+                    "    json.dump(tag_dict, outfile)"
                 ]
             },
             "output": {
                 "state": {},
                 "result": {
-                    "type": "BeakerDisplay",
-                    "innertype": "Text",
-                    "object": "pending"
+                    "type": "Results",
+                    "outputdata": [
+                        {
+                            "type": "out",
+                            "value": "29/30 (10 seconds remaining)\n256809"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 0\n29/30 (10 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\nFilm Industry"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\nSlashdot\nScrabble\nPhotography\nRepublican Party\nPoker\nSci-Fi/Fantasy\nBuffy\nSmall Business\nActing\nStar Trek\nPhotoshop\nFrench Language\nJava\nEnglish as a Second Language\nAnime\nWeb Design\nVegetarian\nPHP\nHarry Potter\nAtheist\nBookcrossing\nWitches\nVampire\nGoth\nPrince\nLinux\nGame Development\nItalian Language\nGerman Language\nSingles\nEarth-Based Spirituality\nWiccan\nStar Wars\nFeminism\nFarscape\nAstrology\nMac\nDachshund\nBeagle\nSocial Networking\nSpanish Language\nDungeons & Dragons\nRock and Mineral Collecting\nKnitting\nInnovation\nPagan\nDigital Photography\nExpat British\nShih Tzu\nAmerican Sign Language\nExpat Canadian\nDemocratic Party\nVegan\nScrapbooking\nChihuahua\nKen Wilber\nPug\nGhost Tracking\nExpat American\nDeaf & Hard of Hearing\nIndie Films\nChess\nPython\nHumanism\nMetaphysics\npage 1\n29/30 (10 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\nGraphic Design"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\nAustralian Culture\nJapanese Pop\nGetting together and having fun\nEnglish Bulldog\nNew In Town\nScooter\nMoms\nBoxer\nPortuguese Language\nLibertarian\nEnvironment\nPoetry\nTechTV\nElectronic Music\nPittsburgh Steelers\nGeorge W. Bush\nCoffee\nMusicians\nInvesting\nMySQL\nScience Fiction Writing\nWine\nDreams\nFerret\nFitness\nSpirituality\npage 2\n29/30 (10 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\nBipolar Disorder"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\nWatching Movies\nDemocracy for America\n.NET\nScreenwriting\nPhilosophy\nTarot\nJewelry Making\nDennis Prager\nStay-at-Home Moms\nMagic: The Gathering\nWomen's Social\nJohn Edwards / One America\nPolitical Cafe\nHomeschooling\nComic Books\nInterior Design\nFotolog\nBackgammon\nExpat\nExpat German\n2600\nEvent Planning\nHomebirth\n20 Million Loud\nGolden Retriever\nDepression\nHindu\nFlash\npage 3\n29/30 (10 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\nApache"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\nCocker Spaniel\nMastiff\nReiki\nThe NEW Underground Railroad\nSean Hannity\nAdvertising\nTravel\nKorean Language\nCribbage\nTea\nConsulting\nJazz\nYorkshire Terrier\nAutism\nGoddess\nBasset Hound\nDelphi\nMeditation\nAyn Rand\nLooking for a Roommate\nElvis\nDumpster Diving\nExpat Brazilian\nDining Out\nKorean Food\nDutch Language\nEuchre\nGrassroots Progressives\nWikipedia\nMassage Therapy\nNonprofit\nBoston Terrier\nExpat Indian\nWeb Standards\nBoston Red Sox\nGreen Party\nRat\nXML\nAlternative Energy\nRussian Language\nFrench Bulldog\nArabic Language\npage 4\n29/30 (10 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\nBig Beautiful Women"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\nDrum Circle\nDucati\nShamanism\nKaraoke\nParanormal\nSpades\nInvestor's Business Daily\nFashion Industry\nSatanism\nPolish Language\nFibromyalgia\nFreemasons\nWashington Redskins\nAsatru\nComedy\nVoice Acting\nExpat French\nTheater Industry\nToyota Prius\nAmharic Language\nCzech Language\nRaw Food\nMaltese\nHebrew Language\nSelf-Improvement\nAmerican Pit Bull Terrier\nBrights\nACLU\nSeparation of Church and State\nFormula 1\nMarketing\nGreek Language\nRomanian Language\nDay Traders\nDiplomacy\nDiscordians\nThai Language and Culture\nDivorce Support\nTranshumanism\nWork At Home\nAyurveda\nCeliac Disease\nDreamweaver\nUltimate Frisbee\nSalsa\npage 5\n29/30 (10 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\nSkeptics"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\nFroud\nSettlers of Catan\nBicycling\nBreast Cancer Survivors\nGreat Dane\nIrish Language\nPolyamory\nYoung Republicans\nOccult\nSka\nA Course In Miracles\nInformation Architecture\nHindi Language\nBeer\nCSS\nDads\nThe Enneagram of Personality\nBill O'Reilly\nIntentional Communities\nLacrosse\nTaoist\nMystery Shoppers\nTownhall\nRuby\n9/11 Questions\nHypnosis\nAbraham Hicks\nCantonese Language\nMiniature Pinscher\nBlack Professionals\nVisual Basic\nNeal Stephenson\nGay Rights\nSpiritualism\nTennis\nPhysics\nBig Data\nFirefly\nConservatives\nConversations With God\nVietnamese Language\nEastEnders\nDanish Language\nChronic Fatigue Syndrome\nMarch for Women\nBook Club\nSoftware Development\nRepublican Liberty Caucus\nHiking\nShiba Inu\nCasino Games\nGay Professionals\nCashflow\nNightlife\nNew Urbanism\nArtist Trading Cards\nFaeries\nWebmasters\nImpeach Bush\nWorld Music\npage 6\n29/30 (10 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\nNetwork Marketing"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\nDio in 2008\nTaphophile\nLaw of Attraction\nVolleyball\nProfessional Development\nRed Hat\nOpen Source\nProduct Design\nPomeranian\nProgressive Muslim\nC#\nMakeup\nFathers' Rights\nNaturism\nQuantum-Touch Healing\nTai Chi\nSailing\nAnimal Rights\nPeak Oil\nMazda RX7\nToastmasters\nHungarian Language\nI Ching\nProchoice\nPet Chicken\nSpace Exploration\nAssociation Executives\nColdFusion\nShow Hillary she has great support if she runs\nDodgeball\nNOW\nPeace\nMythology\nPirates\nModeling\nSwahili\nHarmonica\nEthics\nPet Goat\nUrban Exploration\nPhilosophy Now\nHillary Clinton\nTechnical Writers\nCapoeira\nMichael Moore\nEcology\nCamping, Hiking and Backpacking\nNatural Building\nHealthcare Reform\nScience\nWhole Food Nutrition\nForeign Service\nExpat Swedish\nPonds\nFour Wheelers\nBasenji\nExtreme Programming\n8-Bit\nBengali Language\nTransgender\nPoodle\nEmergence\nNew Technology\nFair Tax\nArchery\nMonopoly\nPrivate Group\nFree Software Foundation\nCocoa Programming Language\npage 7\n29/30 (10 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\nTheology"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\nSocrates Cafe\nFight Human Trafficking\nAsian Professionals\nNeighbors\nWar Games\nPodcasting\nExpat Chinese\nSwing Dancing\nWhat the Bleep do we Know?\nSnowboarding\nRepetitive Strain Injury\nWhiskey\neBay Seller\nSoftball\nLGBT\nOffice Manager\nFreelance\nGo\nSushi\nActive Dogs\nDog Agility\nCurrent TV\nNutrition\nStuff\nComposers\nIDEA Cafe\nInternational and Exchange Students\nBeppe Grillo\nLocal Politics\nFlickr Fan\nExpat Argentinian\nPlaydates\nThelema\nPlone\nDallas Cowboys\npage 8\n29/30 (10 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\nEnglish Premier League"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\nLiberta' di Informazione\nForex Trading\nHorror Films\nReporters and Journalists\nRosary Makers\nJeep\nLive Action Role Playing\nMassage Party\nKickball\nPermaculture\nTurkish Language\nKabbalah\nKayaking\nSpecial Education\nPet Therapy\nEpilepsy\nBallroom Dancing\nInternational Relations\nWalking\nOpera\nLeisure\nFarsi Language\nDisney\npage 9\n29/30 (10 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\nRock Climbing"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\nAviation\nYoga\nTango\nAdult Indigo\nWeb Technology\nSmall Breed Dogs\nExpat Spanish\nNetSquared\nBluegrass\nLandlords\nPolish Social Networking\nNear-Death Experience\nBowling\nMeetup Organizer\nGay Couples\nAttachment Parenting\nCavalier Spaniel\nMedical Marijuana\nScale Models\nOpen Society\nChocolate\npage 10\n29/30 (10 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\nVampire: The Masquerade"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\nNintendo DS\nImmigration Control\nPagan Parenting\nWork at Home Moms\nClassical Music\nPostgreSQL\nEpiscopalian\nMartial Arts\nItalian Greyhound\nExpat Irish\nPuggles\nFire Performers\nGay Christians\nAxis and Allies\nRunning\nIndian Music\nMuseum\nCamping\nWi-Fi\nWeight Loss\nGraffiti\nRoller Skating\nChronic Pain\nOh Hell\nBeekeeping\nGraphology\nPick-Up Soccer\nWomen's Book Club\nLabrador Retriever\nKnowledge\npage 11\n"
+                        }
+                    ],
+                    "payload": {
+                        "type": "BeakerDisplay",
+                        "innertype": "Error",
+                        "object": [
+                            "Interrupted"
+                        ]
+                    }
                 },
-                "selectedType": "BeakerDisplay",
-                "height": 56
+                "selectedType": "Results",
+                "height": 8127,
+                "pluginName": "Python3",
+                "shellId": "4A113148F93F47018B7F2E0C6FCBEB30",
+                "elapsedTime": 238299
             },
             "evaluatorReader": true,
-            "lineCount": 11
+            "lineCount": 25
         },
         {
             "id": "codezHVxFi",
@@ -145,8 +266,8 @@
             "evaluator": "Python3",
             "input": {
                 "body": [
-                    "categories = client.GetCategories()",
-                    "categories.results"
+                    "groups = client.GetGroups(lat=lat, lon=lon,radius=50,fields=['primary_topic'])",
+                    "groups.results[5]"
                 ]
             },
             "output": {
@@ -159,222 +280,66 @@
                             "value": "29/30 (10 seconds remaining)\n"
                         }
                     ],
-                    "payload": {
-                        "values": [
-                            [
-                                "Arts & Culture",
-                                1,
-                                "Arts",
-                                "Arts & Culture"
-                            ],
-                            [
-                                "Book Clubs",
-                                18,
-                                "Book Clubs",
-                                "Book Clubs"
-                            ],
-                            [
-                                "Career & Business",
-                                2,
-                                "Business",
-                                "Career & Business"
-                            ],
-                            [
-                                "Cars & Motorcycles",
-                                3,
-                                "Auto",
-                                "Cars & Motorcycles"
-                            ],
-                            [
-                                "Community & Environment",
-                                4,
-                                "Community",
-                                "Community & Environment"
-                            ],
-                            [
-                                "Dancing",
-                                5,
-                                "Dancing",
-                                "Dancing"
-                            ],
-                            [
-                                "Education & Learning",
-                                6,
-                                "Education",
-                                "Education & Learning"
-                            ],
-                            [
-                                "Fashion & Beauty",
-                                8,
-                                "Fashion",
-                                "Fashion & Beauty"
-                            ],
-                            [
-                                "Fitness",
-                                9,
-                                "Fitness",
-                                "Fitness"
-                            ],
-                            [
-                                "Food & Drink",
-                                10,
-                                "Food & Drink",
-                                "Food & Drink"
-                            ],
-                            [
-                                "Games",
-                                11,
-                                "Games",
-                                "Games"
-                            ],
-                            [
-                                "Movements & Politics",
-                                13,
-                                "Movements",
-                                "Movements & Politics"
-                            ],
-                            [
-                                "Health & Wellbeing",
-                                14,
-                                "Well-being",
-                                "Health & Wellbeing"
-                            ],
-                            [
-                                "Hobbies & Crafts",
-                                15,
-                                "Crafts",
-                                "Hobbies & Crafts"
-                            ],
-                            [
-                                "Language & Ethnic Identity",
-                                16,
-                                "Languages",
-                                "Language & Ethnic Identity"
-                            ],
-                            [
-                                "LGBT",
-                                12,
-                                "LGBT",
-                                "LGBT"
-                            ],
-                            [
-                                "Lifestyle",
-                                17,
-                                "Lifestyle",
-                                "Lifestyle"
-                            ],
-                            [
-                                "Movies & Film",
-                                20,
-                                "Films",
-                                "Movies & Film"
-                            ],
-                            [
-                                "Music",
-                                21,
-                                "Music",
-                                "Music"
-                            ],
-                            [
-                                "New Age & Spirituality",
-                                22,
-                                "Spirituality",
-                                "New Age & Spirituality"
-                            ],
-                            [
-                                "Outdoors & Adventure",
-                                23,
-                                "Outdoors",
-                                "Outdoors & Adventure"
-                            ],
-                            [
-                                "Paranormal",
-                                24,
-                                "Paranormal",
-                                "Paranormal"
-                            ],
-                            [
-                                "Parents & Family",
-                                25,
-                                "Moms & Dads",
-                                "Parents & Family"
-                            ],
-                            [
-                                "Pets & Animals",
-                                26,
-                                "Pets",
-                                "Pets & Animals"
-                            ],
-                            [
-                                "Photography",
-                                27,
-                                "Photography",
-                                "Photography"
-                            ],
-                            [
-                                "Religion & Beliefs",
-                                28,
-                                "Beliefs",
-                                "Religion & Beliefs"
-                            ],
-                            [
-                                "Sci-Fi & Fantasy",
-                                29,
-                                "Sci fi",
-                                "Sci-Fi & Fantasy"
-                            ],
-                            [
-                                "Singles",
-                                30,
-                                "Singles",
-                                "Singles"
-                            ],
-                            [
-                                "Socializing",
-                                31,
-                                "Social",
-                                "Socializing"
-                            ],
-                            [
-                                "Sports & Recreation",
-                                32,
-                                "Sports",
-                                "Sports & Recreation"
-                            ],
-                            [
-                                "Support",
-                                33,
-                                "Support",
-                                "Support"
-                            ],
-                            [
-                                "Tech",
-                                34,
-                                "Tech",
-                                "Tech"
-                            ],
-                            [
-                                "Writing",
-                                36,
-                                "Writing",
-                                "Writing"
-                            ]
-                        ],
-                        "columnNames": [
-                            "sort_name",
-                            "id",
-                            "shortname",
-                            "name"
-                        ],
-                        "subtype": "ListOfMaps",
-                        "type": "TableDisplay"
-                    }
+                    "payload": "<div class=\"output_subarea output_text\"><pre>{'category': {'id': 16,\n  'name': 'language/ethnic identity',\n  'shortname': 'language'},\n 'city': 'Calgary',\n 'country': 'CA',\n 'created': 1042963201000,\n 'description': '&lt;p&gt;This is a very friendly and welcoming group.&lt;/p&gt;\\n&lt;br&gt;\\n&lt;p&gt;We meet about 15 times a month to speak Spanish. &amp;nbsp;We mostly meet in coffee shops but we occasional have special events and social events.&lt;/p&gt;\\n&lt;br&gt;\\n&lt;p&gt;This group has every level of speaker from pure beginners to native speakers. &amp;nbsp;Beginners are welcome. &amp;nbsp;The only reason there seem to be so many advanced speakers is that the group has been in existence for many years. &amp;nbsp;Many of these people were beginners when they joined the group, so they will have sympathy for you. &amp;nbsp;I like to compare it to a one-room school house. &amp;nbsp;The advanced speakers help the beginners.&lt;/p&gt;\\n&lt;br&gt;\\n&lt;p&gt;Although the advanced speakers and native speakers do help the beginners, the meetings are not classes as such, so if you have no method of learning grammar and vocabulary outside of the meetings, this group will probably not help you.&lt;/p&gt;\\n&lt;br&gt;\\n&lt;p&gt;However, even if you don\\'t speak any Spanish at all, but you have a book, or a piece of software, or you are taking a class, and you study dilligently before coming to the meetings, we will embrace you.&lt;/p&gt;\\n&lt;br&gt;\\n&lt;p&gt;The following rule is called The Rule.&lt;/p&gt;\\n&lt;br&gt;\\n&lt;p&gt;Members that reply \"Yes\" to an event must do one of the following.&lt;/p&gt;\\n&lt;br&gt;\\n&lt;p&gt;1. &amp;nbsp;Show up at the event.2. &amp;nbsp;Change their reply to \"No\" before the event starts.3. &amp;nbsp;Call or text the event host\\'s cell.4. &amp;nbsp;Send me an email message at sekusamu@hotmail.com after the event.&lt;/p&gt;\\n&lt;br&gt;\\n&lt;p&gt;Obviously we might not have the event host\\'s cell number, so we might not be able to do number 3. &amp;nbsp;However, we will always be able to perform number 4, which means that &amp;nbsp;we are always able to comply with The Rule&lt;/p&gt;\\n&lt;br&gt;\\n&lt;p&gt;Some events, especially festival-type events are not subject to The Rule, but festival-type events have their own special instructions, so please read the event descriptions carefully.&lt;/p&gt;\\n&lt;br&gt;\\n&lt;p&gt;Occasionally, as a routine part of the running of this group, I may contact members. &amp;nbsp;This does not mean that you are in trouble. &amp;nbsp;The important thing is to reply to me promptly.&lt;/p&gt;\\n&lt;br&gt;\\n&lt;p&gt;Please note that I only check the internal messages about once every two months, so please email me instead of using this system.&lt;/p&gt;\\n&lt;br&gt;\\n&lt;p&gt;In the profile questions you will be required to acknowledge and affirm the following statement.\"If Kichiji is trying to contact me, I will make a an earnest and committed effort to contact him using all communication methods available to me.\"&lt;/p&gt;\\n&lt;br&gt;\\n&lt;p&gt;An earnest and committed effort may include tapping me on the shoulder at a meeting and saying, \"Hi, my name is ... I understand you are trying to contact me.\" &amp;nbsp;It may also include calling me or texting me. &amp;nbsp;It will certainly include emailing me at sekusamu@hotmail.com . &amp;nbsp;It is important that you do not cease your efforts to contact me until you are successful.&lt;/p&gt;\\n&lt;br&gt;\\n&lt;br&gt;',\n 'group_photo': {'highres_link': 'http://photos3.meetupstatic.com/photos/event/e/5/5/a/highres_418714.jpeg',\n  'photo_id': 418714,\n  'photo_link': 'http://photos3.meetupstatic.com/photos/event/e/5/5/a/600_418714.jpeg',\n  'thumb_link': 'http://photos3.meetupstatic.com/photos/event/e/5/5/a/thumb_418714.jpeg'},\n 'id': 146115,\n 'join_mode': 'open',\n 'lat': 51.029998779296875,\n 'link': 'http://www.meetup.com/spanish-227/',\n 'lon': -114.08000183105469,\n 'members': 1318,\n 'name': 'The Calgary Spanish Language Meetup Group',\n 'organizer': {'member_id': 719511,\n  'name': 'Kichiji',\n  'photo': {'highres_link': 'http://photos1.meetupstatic.com/photos/member/e/0/4/f/highres_2757423.jpeg',\n   'photo_id': 2757423,\n   'photo_link': 'http://photos3.meetupstatic.com/photos/member/e/0/4/f/member_2757423.jpeg',\n   'thumb_link': 'http://photos1.meetupstatic.com/photos/member/e/0/4/f/thumb_2757423.jpeg'}},\n 'primary_topic': {'id': 183, 'name': 'Spanish Language', 'urlkey': 'spanish'},\n 'rating': 4.49,\n 'state': 'AB',\n 'timezone': 'Canada/Mountain',\n 'topics': [{'id': 183, 'name': 'Spanish Language', 'urlkey': 'spanish'}],\n 'urlname': 'spanish-227',\n 'utc_offset': -21600000,\n 'visibility': 'public',\n 'who': 'Spanish Speakers'}</pre></div>"
                 },
                 "selectedType": "Results",
                 "pluginName": "Python3",
-                "shellId": "D81B69DB96C84B728C6A6E82D426B061",
-                "elapsedTime": 431,
-                "height": 335
+                "shellId": "4A113148F93F47018B7F2E0C6FCBEB30",
+                "elapsedTime": 1509,
+                "height": 583,
+                "dataresult": {
+                    "rating": 4.49,
+                    "primary_topic": {
+                        "id": 183,
+                        "name": "Spanish Language",
+                        "urlkey": "spanish"
+                    },
+                    "category": {
+                        "id": 16,
+                        "name": "language/ethnic identity",
+                        "shortname": "language"
+                    },
+                    "id": 146115,
+                    "organizer": {
+                        "member_id": 719511,
+                        "photo": {
+                            "highres_link": "http://photos1.meetupstatic.com/photos/member/e/0/4/f/highres_2757423.jpeg",
+                            "photo_id": 2757423,
+                            "photo_link": "http://photos3.meetupstatic.com/photos/member/e/0/4/f/member_2757423.jpeg",
+                            "thumb_link": "http://photos1.meetupstatic.com/photos/member/e/0/4/f/thumb_2757423.jpeg"
+                        },
+                        "name": "Kichiji"
+                    },
+                    "group_photo": {
+                        "highres_link": "http://photos3.meetupstatic.com/photos/event/e/5/5/a/highres_418714.jpeg",
+                        "photo_id": 418714,
+                        "photo_link": "http://photos3.meetupstatic.com/photos/event/e/5/5/a/600_418714.jpeg",
+                        "thumb_link": "http://photos3.meetupstatic.com/photos/event/e/5/5/a/thumb_418714.jpeg"
+                    },
+                    "created": 1042963201000,
+                    "join_mode": "open",
+                    "utc_offset": -21600000,
+                    "name": "The Calgary Spanish Language Meetup Group",
+                    "link": "http://www.meetup.com/spanish-227/",
+                    "lon": -114.08000183105469,
+                    "description": "<p>This is a very friendly and welcoming group.</p>\n<br>\n<p>We meet about 15 times a month to speak Spanish. &nbsp;We mostly meet in coffee shops but we occasional have special events and social events.</p>\n<br>\n<p>This group has every level of speaker from pure beginners to native speakers. &nbsp;Beginners are welcome. &nbsp;The only reason there seem to be so many advanced speakers is that the group has been in existence for many years. &nbsp;Many of these people were beginners when they joined the group, so they will have sympathy for you. &nbsp;I like to compare it to a one-room school house. &nbsp;The advanced speakers help the beginners.</p>\n<br>\n<p>Although the advanced speakers and native speakers do help the beginners, the meetings are not classes as such, so if you have no method of learning grammar and vocabulary outside of the meetings, this group will probably not help you.</p>\n<br>\n<p>However, even if you don't speak any Spanish at all, but you have a book, or a piece of software, or you are taking a class, and you study dilligently before coming to the meetings, we will embrace you.</p>\n<br>\n<p>The following rule is called The Rule.</p>\n<br>\n<p>Members that reply \"Yes\" to an event must do one of the following.</p>\n<br>\n<p>1. &nbsp;Show up at the event.2. &nbsp;Change their reply to \"No\" before the event starts.3. &nbsp;Call or text the event host's cell.4. &nbsp;Send me an email message at sekusamu@hotmail.com after the event.</p>\n<br>\n<p>Obviously we might not have the event host's cell number, so we might not be able to do number 3. &nbsp;However, we will always be able to perform number 4, which means that &nbsp;we are always able to comply with The Rule</p>\n<br>\n<p>Some events, especially festival-type events are not subject to The Rule, but festival-type events have their own special instructions, so please read the event descriptions carefully.</p>\n<br>\n<p>Occasionally, as a routine part of the running of this group, I may contact members. &nbsp;This does not mean that you are in trouble. &nbsp;The important thing is to reply to me promptly.</p>\n<br>\n<p>Please note that I only check the internal messages about once every two months, so please email me instead of using this system.</p>\n<br>\n<p>In the profile questions you will be required to acknowledge and affirm the following statement.\"If Kichiji is trying to contact me, I will make a an earnest and committed effort to contact him using all communication methods available to me.\"</p>\n<br>\n<p>An earnest and committed effort may include tapping me on the shoulder at a meeting and saying, \"Hi, my name is ... I understand you are trying to contact me.\" &nbsp;It may also include calling me or texting me. &nbsp;It will certainly include emailing me at sekusamu@hotmail.com . &nbsp;It is important that you do not cease your efforts to contact me until you are successful.</p>\n<br>\n<br>",
+                    "members": 1318,
+                    "visibility": "public",
+                    "city": "Calgary",
+                    "topics": [
+                        {
+                            "id": 183,
+                            "name": "Spanish Language",
+                            "urlkey": "spanish"
+                        }
+                    ],
+                    "lat": 51.029998779296875,
+                    "country": "CA",
+                    "timezone": "Canada/Mountain",
+                    "urlname": "spanish-227",
+                    "state": "AB",
+                    "who": "Spanish Speakers"
+                }
             },
             "evaluatorReader": true,
             "lineCount": 2
@@ -580,8 +545,8 @@
             "evaluator": "Python3",
             "input": {
                 "body": [
-                    "group_info = client.GetGroup({'urlname': 'Meetup-API-Testing'})",
-                    "group_info.__dict__.keys()"
+                    "group_info = client.GetGroup({'urlname': 'Meetup-API-Testing','fields':['topics']})",
+                    "group_info.members"
                 ]
             },
             "output": {
@@ -594,13 +559,13 @@
                             "value": "29/30 (10 seconds remaining)\n"
                         }
                     ],
-                    "payload": "<div class=\"output_subarea output_text\"><pre>dict_keys(['city', 'visibility', 'urlname', 'description', 'key_photo', 'state', 'created', 'link', 'localized_country_name', 'lon', 'members', 'join_mode', 'who', 'country', 'timezone', 'organizer', 'id', 'name', 'group_photo', 'next_event', 'lat', 'category'])</pre></div>"
+                    "payload": "<div class=\"output_subarea output_text\"><pre>5679</pre></div>"
                 },
                 "selectedType": "Results",
                 "pluginName": "Python3",
-                "shellId": "D81B69DB96C84B728C6A6E82D426B061",
-                "elapsedTime": 462,
-                "dataresult": "Brooklyn",
+                "shellId": "4A113148F93F47018B7F2E0C6FCBEB30",
+                "elapsedTime": 491,
+                "dataresult": 5679,
                 "height": 71
             },
             "evaluatorReader": true,

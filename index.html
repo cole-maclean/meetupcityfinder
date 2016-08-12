@@ -118,16 +118,31 @@ pathG.append("path")
     .attr("class", "graticule")
     .attr("d", path);
 
+var topic_list = ["Mahayana Buddhism","Python","Art"]
+
+var loaded_topic_data;
+
 d3.json("grouped_topic_data.json",function(topic_data) {
-  pathG.selectAll("path.point")
-      .data(topic_data["Mahayana Buddhism"])
+  loaded_topic_data = topic_data;
+  update_city_points(loaded_topic_data);
+});
+
+
+function update_city_points(topic_data){
+    pathG.selectAll("path.point")
+    .data(topic_data.filter(function(d){
+                         if(topic_list.indexOf(d.topic) != -1) {
+                          return d;
+                         }
+                       }))
     .enter().append("path")
-      .datum(function(d) {debugger;
+      .datum(function(d) {
          return {type: "Point", coordinates: [d.lon, d.lat], radius: 5};
       })
       .attr("class", "point")
       .attr("d", path);
-});
+}
+
 
 d3.json("worldTopo.json", function(error, world) {
   // to render meridians/graticules on top of lands, use insert which adds new path before graticule in the selection

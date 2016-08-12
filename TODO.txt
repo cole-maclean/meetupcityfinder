@@ -1,0 +1,3 @@
+Link final product to and credit https://gist.github.com/serdaradali/11346541
+Need to download all topics, not just primary topic
+Pull data with state if exisits

@@ -45,6 +45,7 @@
                     "import googlemaps",
                     "import time",
                     "import json",
+                    "import geohash",
                     "os.chdir(\"C:/Users/macle/Desktop/Data Journalism/meetup city finder\")"
                 ]
             },
@@ -53,10 +54,10 @@
                 "selectedType": "Hidden",
                 "pluginName": "Python3",
                 "shellId": "4A113148F93F47018B7F2E0C6FCBEB30",
-                "elapsedTime": 320
+                "elapsedTime": 315
             },
             "evaluatorReader": true,
-            "lineCount": 8
+            "lineCount": 9
         },
         {
             "id": "code6pDBG3",
@@ -103,7 +104,7 @@
                 "selectedType": "Hidden",
                 "pluginName": "Python3",
                 "shellId": "4A113148F93F47018B7F2E0C6FCBEB30",
-                "elapsedTime": 412
+                "elapsedTime": 309
             },
             "evaluatorReader": true,
             "lineCount": 5
@@ -117,25 +118,45 @@
                     "group_list = []",
                     "tag_dict = {}",
                     "groups_per_page = 200",
-                    "lat_lons = [(39.8282,-98.5795),(-16.04,-58.84),(8.85,19.55),(48.87,17.80),(36.50,73.98),(0,125.97),(64.70,121.55)]",
-                    "for lat,lon in lat_lons:",
-                    "    groups = client.GetGroups(lat=lat, lon=lon,radius=200000,fields=['primary_topic'])",
+                    "for j,city_country in enumerate(city_country_list):",
+                    "    print(\"city index = \" + str(j))",
+                    "    geo = gmaps.geocode(city_country)",
+                    "    lat = geo[0]['geometry']['location'][\"lat\"]",
+                    "    lon = geo[0]['geometry']['location'][\"lng\"]",
+                    "    groups = client.GetGroups(lat=lat, lon=lon,radius=100,fields=['primary_topic'])",
                     "    time.sleep(1)",
                     "    pages = int(groups.meta['total_count']/groups_per_page)",
                     "    print(groups.meta['total_count'])",
                     "    for i in range(0,pages + 1):",
                     "        print(\"page \" + str(i))",
-                    "        groups = client.GetGroups(lat=lat, lon=lon,radius=200000,fields=['primary_topic'],pages=groups_per_page,offset=i)",
+                    "        groups = client.GetGroups(lat=lat, lon=lon,radius=100,fields=['topisc'],pages=groups_per_page,offset=i)",
                     "        time.sleep(1)",
                     "        if \"results\" in groups.__dict__.keys():",
                     "            for group in groups.results:",
-                    "                if group[\"id\"] not in group_list and \"primary_topic\" in group.keys():",
+                    "                if group[\"id\"] not in group_list:",
                     "                    group_list.append(group[\"id\"])",
-                    "                    if group[\"primary_topic\"][\"name\"] in tag_dict.keys():",
-                    "                        tag_dict[group[\"primary_topic\"][\"name\"]].append([group[\"id\"],group[\"city\"],group[\"country\"],group[\"members\"]])",
+                    "                    if \"state\" in group.keys():",
+                    "                        state = group[\"state\"]",
                     "                    else:",
-                    "                        print(group[\"primary_topic\"][\"name\"])",
-                    "                        tag_dict[group[\"primary_topic\"][\"name\"]] = [[group[\"id\"],group[\"city\"],group[\"country\"],group[\"members\"]]]",
+                    "                        state = \"\"",
+                    "                    for topic in group[\"topics\"]:",
+                    "                        if topic[\"name\"] in tag_dict.keys():",
+                    "                            tag_dict[topic[\"name\"]].append({\"group_id\":group[\"id\"],",
+                    "                                                                             \"city\":group[\"city\"],",
+                    "                                                                             \"state\":state,",
+                    "                                                                             \"country\":group[\"country\"],",
+                    "                                                                             \"members\":group[\"members\"],",
+                    "                                                                             \"lat\":group[\"lat\"],",
+                    "                                                                             \"lon\":group[\"lon\"]})",
+                    "                        else:",
+                    "                            tag_dict[topic[\"name\"]] = [{\"group_id\":group[\"id\"],",
+                    "                                                                             \"city\":group[\"city\"],",
+                    "                                                                             \"state\":state,",
+                    "                                                                             \"country\":group[\"country\"],",
+                    "                                                                             \"members\":group[\"members\"],",
+                    "                                                                             \"lat\":group[\"lat\"],",
+                    "                                                                             \"lon\":group[\"lon\"]}]",
+                    "         ",
                     "                            ",
                     "with open('meetup_data.json', 'w') as outfile:",
                     "    json.dump(tag_dict, outfile)"
@@ -144,121 +165,196 @@
             "output": {
                 "state": {},
                 "result": {
-                    "type": "Results",
-                    "outputdata": [
-                        {
-                            "type": "out",
-                            "value": "29/30 (10 seconds remaining)\n256809"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 0\n29/30 (10 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\nFilm Industry"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\nSlashdot\nScrabble\nPhotography\nRepublican Party\nPoker\nSci-Fi/Fantasy\nBuffy\nSmall Business\nActing\nStar Trek\nPhotoshop\nFrench Language\nJava\nEnglish as a Second Language\nAnime\nWeb Design\nVegetarian\nPHP\nHarry Potter\nAtheist\nBookcrossing\nWitches\nVampire\nGoth\nPrince\nLinux\nGame Development\nItalian Language\nGerman Language\nSingles\nEarth-Based Spirituality\nWiccan\nStar Wars\nFeminism\nFarscape\nAstrology\nMac\nDachshund\nBeagle\nSocial Networking\nSpanish Language\nDungeons & Dragons\nRock and Mineral Collecting\nKnitting\nInnovation\nPagan\nDigital Photography\nExpat British\nShih Tzu\nAmerican Sign Language\nExpat Canadian\nDemocratic Party\nVegan\nScrapbooking\nChihuahua\nKen Wilber\nPug\nGhost Tracking\nExpat American\nDeaf & Hard of Hearing\nIndie Films\nChess\nPython\nHumanism\nMetaphysics\npage 1\n29/30 (10 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\nGraphic Design"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\nAustralian Culture\nJapanese Pop\nGetting together and having fun\nEnglish Bulldog\nNew In Town\nScooter\nMoms\nBoxer\nPortuguese Language\nLibertarian\nEnvironment\nPoetry\nTechTV\nElectronic Music\nPittsburgh Steelers\nGeorge W. Bush\nCoffee\nMusicians\nInvesting\nMySQL\nScience Fiction Writing\nWine\nDreams\nFerret\nFitness\nSpirituality\npage 2\n29/30 (10 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\nBipolar Disorder"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\nWatching Movies\nDemocracy for America\n.NET\nScreenwriting\nPhilosophy\nTarot\nJewelry Making\nDennis Prager\nStay-at-Home Moms\nMagic: The Gathering\nWomen's Social\nJohn Edwards / One America\nPolitical Cafe\nHomeschooling\nComic Books\nInterior Design\nFotolog\nBackgammon\nExpat\nExpat German\n2600\nEvent Planning\nHomebirth\n20 Million Loud\nGolden Retriever\nDepression\nHindu\nFlash\npage 3\n29/30 (10 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\nApache"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\nCocker Spaniel\nMastiff\nReiki\nThe NEW Underground Railroad\nSean Hannity\nAdvertising\nTravel\nKorean Language\nCribbage\nTea\nConsulting\nJazz\nYorkshire Terrier\nAutism\nGoddess\nBasset Hound\nDelphi\nMeditation\nAyn Rand\nLooking for a Roommate\nElvis\nDumpster Diving\nExpat Brazilian\nDining Out\nKorean Food\nDutch Language\nEuchre\nGrassroots Progressives\nWikipedia\nMassage Therapy\nNonprofit\nBoston Terrier\nExpat Indian\nWeb Standards\nBoston Red Sox\nGreen Party\nRat\nXML\nAlternative Energy\nRussian Language\nFrench Bulldog\nArabic Language\npage 4\n29/30 (10 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\nBig Beautiful Women"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\nDrum Circle\nDucati\nShamanism\nKaraoke\nParanormal\nSpades\nInvestor's Business Daily\nFashion Industry\nSatanism\nPolish Language\nFibromyalgia\nFreemasons\nWashington Redskins\nAsatru\nComedy\nVoice Acting\nExpat French\nTheater Industry\nToyota Prius\nAmharic Language\nCzech Language\nRaw Food\nMaltese\nHebrew Language\nSelf-Improvement\nAmerican Pit Bull Terrier\nBrights\nACLU\nSeparation of Church and State\nFormula 1\nMarketing\nGreek Language\nRomanian Language\nDay Traders\nDiplomacy\nDiscordians\nThai Language and Culture\nDivorce Support\nTranshumanism\nWork At Home\nAyurveda\nCeliac Disease\nDreamweaver\nUltimate Frisbee\nSalsa\npage 5\n29/30 (10 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\nSkeptics"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\nFroud\nSettlers of Catan\nBicycling\nBreast Cancer Survivors\nGreat Dane\nIrish Language\nPolyamory\nYoung Republicans\nOccult\nSka\nA Course In Miracles\nInformation Architecture\nHindi Language\nBeer\nCSS\nDads\nThe Enneagram of Personality\nBill O'Reilly\nIntentional Communities\nLacrosse\nTaoist\nMystery Shoppers\nTownhall\nRuby\n9/11 Questions\nHypnosis\nAbraham Hicks\nCantonese Language\nMiniature Pinscher\nBlack Professionals\nVisual Basic\nNeal Stephenson\nGay Rights\nSpiritualism\nTennis\nPhysics\nBig Data\nFirefly\nConservatives\nConversations With God\nVietnamese Language\nEastEnders\nDanish Language\nChronic Fatigue Syndrome\nMarch for Women\nBook Club\nSoftware Development\nRepublican Liberty Caucus\nHiking\nShiba Inu\nCasino Games\nGay Professionals\nCashflow\nNightlife\nNew Urbanism\nArtist Trading Cards\nFaeries\nWebmasters\nImpeach Bush\nWorld Music\npage 6\n29/30 (10 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\nNetwork Marketing"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\nDio in 2008\nTaphophile\nLaw of Attraction\nVolleyball\nProfessional Development\nRed Hat\nOpen Source\nProduct Design\nPomeranian\nProgressive Muslim\nC#\nMakeup\nFathers' Rights\nNaturism\nQuantum-Touch Healing\nTai Chi\nSailing\nAnimal Rights\nPeak Oil\nMazda RX7\nToastmasters\nHungarian Language\nI Ching\nProchoice\nPet Chicken\nSpace Exploration\nAssociation Executives\nColdFusion\nShow Hillary she has great support if she runs\nDodgeball\nNOW\nPeace\nMythology\nPirates\nModeling\nSwahili\nHarmonica\nEthics\nPet Goat\nUrban Exploration\nPhilosophy Now\nHillary Clinton\nTechnical Writers\nCapoeira\nMichael Moore\nEcology\nCamping, Hiking and Backpacking\nNatural Building\nHealthcare Reform\nScience\nWhole Food Nutrition\nForeign Service\nExpat Swedish\nPonds\nFour Wheelers\nBasenji\nExtreme Programming\n8-Bit\nBengali Language\nTransgender\nPoodle\nEmergence\nNew Technology\nFair Tax\nArchery\nMonopoly\nPrivate Group\nFree Software Foundation\nCocoa Programming Language\npage 7\n29/30 (10 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\nTheology"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\nSocrates Cafe\nFight Human Trafficking\nAsian Professionals\nNeighbors\nWar Games\nPodcasting\nExpat Chinese\nSwing Dancing\nWhat the Bleep do we Know?\nSnowboarding\nRepetitive Strain Injury\nWhiskey\neBay Seller\nSoftball\nLGBT\nOffice Manager\nFreelance\nGo\nSushi\nActive Dogs\nDog Agility\nCurrent TV\nNutrition\nStuff\nComposers\nIDEA Cafe\nInternational and Exchange Students\nBeppe Grillo\nLocal Politics\nFlickr Fan\nExpat Argentinian\nPlaydates\nThelema\nPlone\nDallas Cowboys\npage 8\n29/30 (10 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\nEnglish Premier League"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\nLiberta' di Informazione\nForex Trading\nHorror Films\nReporters and Journalists\nRosary Makers\nJeep\nLive Action Role Playing\nMassage Party\nKickball\nPermaculture\nTurkish Language\nKabbalah\nKayaking\nSpecial Education\nPet Therapy\nEpilepsy\nBallroom Dancing\nInternational Relations\nWalking\nOpera\nLeisure\nFarsi Language\nDisney\npage 9\n29/30 (10 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\nRock Climbing"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\nAviation\nYoga\nTango\nAdult Indigo\nWeb Technology\nSmall Breed Dogs\nExpat Spanish\nNetSquared\nBluegrass\nLandlords\nPolish Social Networking\nNear-Death Experience\nBowling\nMeetup Organizer\nGay Couples\nAttachment Parenting\nCavalier Spaniel\nMedical Marijuana\nScale Models\nOpen Society\nChocolate\npage 10\n29/30 (10 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\nVampire: The Masquerade"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\nNintendo DS\nImmigration Control\nPagan Parenting\nWork at Home Moms\nClassical Music\nPostgreSQL\nEpiscopalian\nMartial Arts\nItalian Greyhound\nExpat Irish\nPuggles\nFire Performers\nGay Christians\nAxis and Allies\nRunning\nIndian Music\nMuseum\nCamping\nWi-Fi\nWeight Loss\nGraffiti\nRoller Skating\nChronic Pain\nOh Hell\nBeekeeping\nGraphology\nPick-Up Soccer\nWomen's Book Club\nLabrador Retriever\nKnowledge\npage 11\n"
-                        }
-                    ],
-                    "payload": {
-                        "type": "BeakerDisplay",
-                        "innertype": "Error",
-                        "object": [
-                            "Interrupted"
-                        ]
-                    }
+                    "type": "BeakerDisplay",
+                    "innertype": "Error",
+                    "object": [
+                        "invalid syntax (&lt;ipython-input-1-ff99152daa31&gt;, line 1)",
+                        "invalid syntax (&lt;ipython-input-1-ff99152daa31&gt;, line 1)<br><span  class=\"ansicyan\">  File <span  class=\"ansigreen\">&quot;&lt;ipython-input-1-ff99152daa31&gt;&quot;<span  class=\"ansicyan\">, line <span  class=\"ansigreen\">1</span>\n<span  class=\"ansiyellow\">    errror!!</span>\n<span  class=\"ansigray\">          ^</span>\n<span  class=\"ansired\">SyntaxError</span><span  class=\"ansired\">:</span> invalid syntax\n"
+                    ]
                 },
-                "selectedType": "Results",
-                "height": 8127,
+                "selectedType": "BeakerDisplay",
+                "height": 81,
                 "pluginName": "Python3",
                 "shellId": "4A113148F93F47018B7F2E0C6FCBEB30",
-                "elapsedTime": 238299
+                "elapsedTime": 220
             },
             "evaluatorReader": true,
-            "lineCount": 25
+            "lineCount": 45
+        },
+        {
+            "id": "code1WAXGA",
+            "type": "code",
+            "evaluator": "Python3",
+            "input": {
+                "body": [
+                    "with open('meetup_data.json', 'r') as infile:",
+                    "    meetup_data = json.load(infile)"
+                ]
+            },
+            "output": {
+                "state": {},
+                "selectedType": "Hidden",
+                "pluginName": "Python3",
+                "shellId": "4A113148F93F47018B7F2E0C6FCBEB30",
+                "elapsedTime": 1363
+            },
+            "evaluatorReader": true,
+            "lineCount": 2
+        },
+        {
+            "id": "codeePcD9b",
+            "type": "code",
+            "evaluator": "Python3",
+            "input": {
+                "body": [
+                    "meetup_data[\"Django\"]"
+                ]
+            },
+            "output": {
+                "state": {},
+                "result": "<div class=\"output_subarea output_text\"><pre>[[18766756,\n  'São José dos Campos',\n  'BR',\n  50,\n  [-23.200000762939453, -45.880001068115234],\n  '6gzk5bx4nqrs'],\n [4970672,\n  'Cambridge',\n  'GB',\n  198,\n  [52.20000076293945, 0.14000000059604645],\n  'u120gntzn1rt'],\n [19389388,\n  'Bangalore',\n  'IN',\n  50,\n  [12.970000267028809, 77.55999755859375],\n  'tdr1ucj7wzmc'],\n [18941755,\n  'Baltimore',\n  'US',\n  46,\n  [39.33000183105469, -76.61000061035156],\n  'dqcx8xy3ceep'],\n [1278617,\n  'Miami',\n  'US',\n  429,\n  [25.770000457763672, -80.19000244140625],\n  'dhwfx5r3js22'],\n [19706563,\n  'Madrid',\n  'ES',\n  222,\n  [40.41999816894531, -3.7100000381469727],\n  'ezjmgw4rw9z2'],\n [19442514,\n  'Toronto',\n  'CA',\n  28,\n  [43.66999816894531, -79.38999938964844],\n  'dpz83mvunvty'],\n [1289145,\n  'Cambridge',\n  'US',\n  1968,\n  [42.369998931884766, -71.0999984741211],\n  'drt3n14x1uq8'],\n [1333474,\n  'San Francisco',\n  'US',\n  2544,\n  [37.77000045776367, -122.44000244140625],\n  '9q8yvgcfjnku'],\n [10138932,\n  'Saint Paul',\n  'US',\n  146,\n  [44.970001220703125, -93.08000183105469],\n  '9zvzcft1nzb4'],\n [1201260,\n  'Vancouver',\n  'CA',\n  474,\n  [49.279998779296875, -123.12000274658203],\n  'c2b2q74ub185'],\n [1763855,\n  'Austin',\n  'US',\n  1398,\n  [30.270000457763672, -97.73999786376953],\n  '9v6kpy7zscp6']]</pre></div>",
+                "selectedType": "Html",
+                "pluginName": "Python3",
+                "shellId": "4A113148F93F47018B7F2E0C6FCBEB30",
+                "elapsedTime": 236,
+                "dataresult": [
+                    [
+                        18766756,
+                        "São José dos Campos",
+                        "BR",
+                        50,
+                        [
+                            -23.200000762939453,
+                            -45.880001068115234
+                        ],
+                        "6gzk5bx4nqrs"
+                    ],
+                    [
+                        4970672,
+                        "Cambridge",
+                        "GB",
+                        198,
+                        [
+                            52.20000076293945,
+                            0.14000000059604645
+                        ],
+                        "u120gntzn1rt"
+                    ],
+                    [
+                        19389388,
+                        "Bangalore",
+                        "IN",
+                        50,
+                        [
+                            12.970000267028809,
+                            77.55999755859375
+                        ],
+                        "tdr1ucj7wzmc"
+                    ],
+                    [
+                        18941755,
+                        "Baltimore",
+                        "US",
+                        46,
+                        [
+                            39.33000183105469,
+                            -76.61000061035156
+                        ],
+                        "dqcx8xy3ceep"
+                    ],
+                    [
+                        1278617,
+                        "Miami",
+                        "US",
+                        429,
+                        [
+                            25.770000457763672,
+                            -80.19000244140625
+                        ],
+                        "dhwfx5r3js22"
+                    ],
+                    [
+                        19706563,
+                        "Madrid",
+                        "ES",
+                        222,
+                        [
+                            40.41999816894531,
+                            -3.7100000381469727
+                        ],
+                        "ezjmgw4rw9z2"
+                    ],
+                    [
+                        19442514,
+                        "Toronto",
+                        "CA",
+                        28,
+                        [
+                            43.66999816894531,
+                            -79.38999938964844
+                        ],
+                        "dpz83mvunvty"
+                    ],
+                    [
+                        1289145,
+                        "Cambridge",
+                        "US",
+                        1968,
+                        [
+                            42.369998931884766,
+                            -71.0999984741211
+                        ],
+                        "drt3n14x1uq8"
+                    ],
+                    [
+                        1333474,
+                        "San Francisco",
+                        "US",
+                        2544,
+                        [
+                            37.77000045776367,
+                            -122.44000244140625
+                        ],
+                        "9q8yvgcfjnku"
+                    ],
+                    [
+                        10138932,
+                        "Saint Paul",
+                        "US",
+                        146,
+                        [
+                            44.970001220703125,
+                            -93.08000183105469
+                        ],
+                        "9zvzcft1nzb4"
+                    ],
+                    [
+                        1201260,
+                        "Vancouver",
+                        "CA",
+                        474,
+                        [
+                            49.279998779296875,
+                            -123.12000274658203
+                        ],
+                        "c2b2q74ub185"
+                    ],
+                    [
+                        1763855,
+                        "Austin",
+                        "US",
+                        1398,
+                        [
+                            30.270000457763672,
+                            -97.73999786376953
+                        ],
+                        "9v6kpy7zscp6"
+                    ]
+                ],
+                "height": 1189
+            },
+            "evaluatorReader": true,
+            "lineCount": 1
         },
         {
             "id": "codezHVxFi",

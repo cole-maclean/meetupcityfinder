@@ -87,6 +87,7 @@ var path = d3.geo.path()
 
 var graticule = d3.geo.graticule();
 
+
 var svg = d3.select("#globe").append("svg")
     .attr("width", width)
     .attr("height", height);
@@ -117,16 +118,16 @@ pathG.append("path")
     .attr("class", "graticule")
     .attr("d", path);
 
-data = [{'Lat':5.94,'Lon':21.22,'Magnitude':5}]
-
-pathG.selectAll("path.point")
-    .data(data)
-  .enter().append("path")
-    .datum(function(d) {
-       return {type: "Point", coordinates: [d.Lon, d.Lat], radius: 5};
-    })
-    .attr("class", "point")
-    .attr("d", path);
+d3.json("grouped_topic_data.json",function(topic_data) {
+  pathG.selectAll("path.point")
+      .data(topic_data["Mahayana Buddhism"])
+    .enter().append("path")
+      .datum(function(d) {debugger;
+         return {type: "Point", coordinates: [d.lon, d.lat], radius: 5};
+      })
+      .attr("class", "point")
+      .attr("d", path);
+});
 
 d3.json("worldTopo.json", function(error, world) {
   // to render meridians/graticules on top of lands, use insert which adds new path before graticule in the selection

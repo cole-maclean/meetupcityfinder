@@ -60,9 +60,7 @@
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="http://d3js.org/topojson.v1.min.js"></script>
 <script src="d3.geo.zoom.js"></script>
-
-
-
+<script src="colorbrewer.js"></script>
 
 <script>
 
@@ -139,7 +137,14 @@ function add_topic(val){
     topic_list.push(val);
     var p = d3.select("body").selectAll("li")
     .data(topic_list)
-    .text(function(d,i){return i + ": " + d;})
+    .text(function(d){return d;})
+    .on('click',function(d){
+        d3.select(this).remove();
+        indx = topic_list.indexOf(d);
+        topic_list.splice(indx, 1);
+        update_city_points(loaded_topic_data);
+    });
+
     update_city_points(loaded_topic_data)
 }
 
@@ -152,17 +157,20 @@ d3.json("grouped_topic_data.json",function(topic_data) {
 
 
 function update_city_points(topic_data){
+    var cities = []
     pathG.selectAll("path.point").remove();
     var city_points = pathG.selectAll("path.point")
                         .data(topic_data.filter(function(d){
-                         if(topic_list.indexOf(d.topic) != -1) {
-                             return d;
+                         if (topic_list.indexOf(d.topic) != -1) {
+                              if (cities.indexOf(d.city) === -1) {
+                                cities.push(d.city)
+                              }
+                          return d;
                          }
                        }));
 
     city_points.enter().append("path")
       .datum(function(d) {
-         console.log(loaded_topic_data.indexOf(d))
          return {type: "Point", coordinates: [d.lon, d.lat], radius: 5};
       })
       .attr("class", "point")

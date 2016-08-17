@@ -73,6 +73,8 @@ var projection = d3.geo.orthographic()
     .clipAngle(90)
     .precision(.1)
 
+var colorScale = d3.scale.quantize()
+    .range(colorbrewer.YlGn[8])
 
 var zoom = d3.behavior.zoom()
         .scaleExtent([1,6])
@@ -157,24 +159,35 @@ d3.json("grouped_topic_data.json",function(topic_data) {
 
 
 function update_city_points(topic_data){
-    var cities = []
+    var cities = {};
     pathG.selectAll("path.point").remove();
     var city_points = pathG.selectAll("path.point")
                         .data(topic_data.filter(function(d){
                          if (topic_list.indexOf(d.topic) != -1) {
-                              if (cities.indexOf(d.city) === -1) {
-                                cities.push(d.city)
+                              if (d.city in cities) {
+                                cities[d.city] = cities[d.city] + d.members
+                              }
+                              else {
+                                cities[d.city] = d.members
                               }
                           return d;
                          }
                        }));
+    ordered_cities = []; for(var key in cities) ordered_cities.push(key);
+    ordered_cities.sort(function(a,b){return cities[a]-cities[b]});
+
+    colorScale.domain([0,ordered_cities.length])
 
     city_points.enter().append("path")
+      .attr("fill",function(d){debugger; return colorScale(ordered_cities.indexOf(d.city))})
       .datum(function(d) {
          return {type: "Point", coordinates: [d.lon, d.lat], radius: 5};
       })
       .attr("class", "point")
-      .attr("d", path);
+      .attr("d", path)
+      
+
+
 }
 
 

@@ -54,8 +54,8 @@
                 "state": {},
                 "selectedType": "Hidden",
                 "pluginName": "Python3",
-                "shellId": "AF0A61BA004C49FFACDAA8979C744D17",
-                "elapsedTime": 405
+                "shellId": "CE61E3313DB54087A0B9C32DE021E64C",
+                "elapsedTime": 378
             },
             "evaluatorReader": true,
             "lineCount": 10
@@ -82,8 +82,8 @@
                 "state": {},
                 "selectedType": "Hidden",
                 "pluginName": "Python3",
-                "shellId": "AF0A61BA004C49FFACDAA8979C744D17",
-                "elapsedTime": 331
+                "shellId": "CE61E3313DB54087A0B9C32DE021E64C",
+                "elapsedTime": 342
             },
             "evaluatorReader": true,
             "lineCount": 10
@@ -395,7 +395,7 @@
             "evaluator": "Python3",
             "input": {
                 "body": [
-                    "grouped_topic_data = {}",
+                    "grouped_topic_data = []",
                     "",
                     "with open('meetup_data.json', 'r') as infile:",
                     "    meetup_data = json.load(infile)",
@@ -415,23 +415,18 @@
                     "            lat = city_gps_data[city][0]",
                     "            lon = city_gps_data[city][1]",
                     "        else:",
-                    "            geo = gmaps.geocode(city_country)",
+                    "            geo = gmaps.geocode(city)",
                     "            lat = geo[0]['geometry']['location'][\"lat\"]",
                     "            lon = geo[0]['geometry']['location'][\"lng\"]",
                     "            city_gps_data[city] = [lat,lon]",
                     "            with open('city_gps_cache.json', 'w') as outfile:",
                     "                json.dump(city_gps_data, outfile)",
-                    "        if topic in grouped_topic_data.keys():",
-                    "            grouped_topic_data[topic].append({\"city\":city,",
-                    "                                              \"members\":int(total_members),",
-                    "                                              \"lat\":lat,",
-                    "                                              \"lon\":lon})",
-                    "        else:",
-                    "            grouped_topic_data[topic] = [{\"city\":city,",
-                    "                                              \"members\":int(total_members),",
-                    "                                              \"lat\":lat,",
-                    "                                              \"lon\":lon}]",
-                    "        grouped_topic_data[topic] =sorted(grouped_topic_data[topic], key=lambda k: k['members'],reverse=True)",
+                    "        grouped_topic_data.append({\"topic\":topic,",
+                    "                                   \"city\":city,",
+                    "                                   \"members\":int(total_members),",
+                    "                                   \"lat\":lat,",
+                    "                                   \"lon\":lon})",
+                    "grouped_topic_data =sorted(grouped_topic_data, key=lambda k: k['members'],reverse=True)",
                     "",
                     "with open('grouped_topic_data.json', 'w') as outfile:",
                     "    json.dump(grouped_topic_data, outfile)"
@@ -441,12 +436,12 @@
                 "state": {},
                 "selectedType": "Hidden",
                 "pluginName": "Python3",
-                "shellId": "AF0A61BA004C49FFACDAA8979C744D17",
-                "elapsedTime": 48403,
+                "shellId": "CE61E3313DB54087A0B9C32DE021E64C",
+                "elapsedTime": 27165,
                 "height": 55
             },
             "evaluatorReader": true,
-            "lineCount": 40
+            "lineCount": 35
         },
         {
             "id": "codeePcD9b",

@@ -49,12 +49,20 @@
 
 </style>
 <body>
+
+<form name="topic-list" onSubmit="return handleTopicAdd()">
+  <input type="text" id="topic-list-input" placeholder="Add a topic...">
+</form>
+
+<div id="globe"></div>
+<ul id="topic-list"></ul>
+
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="http://d3js.org/topojson.v1.min.js"></script>
 <script src="d3.geo.zoom.js"></script>
 
 
-<div id="globe"></div>
+
 
 <script>
 
@@ -118,7 +126,22 @@ pathG.append("path")
     .attr("class", "graticule")
     .attr("d", path);
 
-var topic_list = ["Mahayana Buddhism","Python","Art"]
+var topic_list = [];
+
+function handleTopicAdd(event){
+    console.log(document.getElementById("topic-list-input").value)
+    add_topic(document.getElementById("topic-list-input").value)
+    return false;
+}
+
+function add_topic(val){
+    d3.select("body").select("#topic-list").append("li");
+    topic_list.push(val);
+    var p = d3.select("body").selectAll("li")
+    .data(topic_list)
+    .text(function(d,i){return i + ": " + d;})
+    update_city_points(loaded_topic_data)
+}
 
 var loaded_topic_data;
 
@@ -129,14 +152,17 @@ d3.json("grouped_topic_data.json",function(topic_data) {
 
 
 function update_city_points(topic_data){
-    pathG.selectAll("path.point")
-    .data(topic_data.filter(function(d){
+    pathG.selectAll("path.point").remove();
+    var city_points = pathG.selectAll("path.point")
+                        .data(topic_data.filter(function(d){
                          if(topic_list.indexOf(d.topic) != -1) {
-                          return d;
+                             return d;
                          }
-                       }))
-    .enter().append("path")
+                       }));
+
+    city_points.enter().append("path")
       .datum(function(d) {
+         console.log(loaded_topic_data.indexOf(d))
          return {type: "Point", coordinates: [d.lon, d.lat], radius: 5};
       })
       .attr("class", "point")

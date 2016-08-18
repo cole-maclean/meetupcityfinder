@@ -2,13 +2,6 @@
 <meta charset="utf-8">
 <style>
 
-#globe{
-  background: #fcfcfa;
-  width: 900px;
-  height: 500px;
-  margin-left: 50px;
-}
-
 .water {
   fill: #00248F;
 }
@@ -47,6 +40,24 @@
   pointer-events: all;
 }
 
+ul > li {
+    display: inline-block;
+    padding: 10px 40px;
+    /* You can also add some margins here to make it look prettier */
+    zoom:1;
+    *display:inline;
+    /* this fix is needed for IE7- */
+
+}
+
+input[type=text]
+{
+    border:solid 1px #BFBDBD;
+    height: 28px;
+    padding-left:10px;
+    width: 191px;
+    box-shadow: 2px 2px 0 #828181 inset;
+}
 </style>
 <body>
 
@@ -54,8 +65,9 @@
   <input type="text" id="topic-list-input" placeholder="Add a topic...">
 </form>
 
-<ul id="topic-list"></ul>
+Click List Item to Remove:
 
+<ul id="topic-list"></ul>
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="http://d3js.org/topojson.v1.min.js"></script>
 <script src="d3.geo.zoom.js"></script>
@@ -63,28 +75,31 @@
 
 <script>
 
-var width = 680,
+var width = 1300,
     height = 680,
-    globe_height = 650;
+    globe_height = 650,
+    globe_width = 680;
 
 var projection = d3.geo.orthographic()
     .scale(270)
-    .translate([width / 2, globe_height / 2])
+    .translate([globe_width / 2, globe_height / 2])
     .clipAngle(90)
     .precision(.1)
 
-var legend_svg = d3.select("body").append("svg")
-            .attr("width", 90)
-            .attr("height", 500);
+svg = d3.select("body").append("svg")
+        .attr("height",height)
+        .attr("width",width)
 
-var legend = legend_svg.append("g")
+var legend = svg.append("g")
+              .attr("height",500)
+              .attr("width",55)
               .attr("transform", "translate(50,-100) rotate(90)");
 
-legend_svg.append("text")
+legend.append("text")
           .text("Lowest Rank")
           .attr("transform", "translate(0,15)");
 
-legend_svg.append("text")
+legend.append("text")
           .text("Highest Rank")
           .attr("transform", "translate(0,415)");
 
@@ -116,10 +131,12 @@ legend.append("rect")
   .attr("height", 20)
   .style("fill", "url(#linear-gradient)");
 
-var globe_svg = d3.select("body").append("svg")
-    .attr("width", width)
+var globe_svg = svg.append("svg")
+    .attr("width", globe_width)
     .attr("height", globe_height)
-    .attr("transform", "translate(0,30)");
+    .attr("x",55)
+
+d3.select("body").append("ul").append("li").text("test")
 
 var zoom = d3.behavior.zoom()
         .scaleExtent([1,6])
@@ -144,7 +161,7 @@ var pathG = globe_svg.append("g");
 
 globe_svg.append("rect")
         .attr("class", "overlay")
-        .attr("width", width)
+        .attr("width", globe_width)
         .attr("height", globe_height)
         .attr("transform", "translate(0,30)")
         .call(zoomEnhanced)
@@ -181,6 +198,8 @@ function add_topic(val){
     var p = d3.select("body").selectAll("li")
     .data(topic_list)
     .text(function(d){return d;})
+    .style("background-color", "#cccccc")
+    .style("color","#222222;")
     .on('click',function(d){
         d3.select(this).remove();
         indx = topic_list.indexOf(d);

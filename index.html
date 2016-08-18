@@ -54,7 +54,6 @@
   <input type="text" id="topic-list-input" placeholder="Add a topic...">
 </form>
 
-<div id="globe"></div>
 <ul id="topic-list"></ul>
 
 <script src="http://d3js.org/d3.v3.min.js"></script>
@@ -65,16 +64,62 @@
 <script>
 
 var width = 680,
-    height = 680;
+    height = 680,
+    globe_height = 650;
 
 var projection = d3.geo.orthographic()
     .scale(270)
-    .translate([width / 2, height / 2])
+    .translate([width / 2, globe_height / 2])
     .clipAngle(90)
     .precision(.1)
 
+var legend_svg = d3.select("body").append("svg")
+            .attr("width", 90)
+            .attr("height", 500);
+
+var legend = legend_svg.append("g")
+              .attr("transform", "translate(50,-100) rotate(90)");
+
+legend_svg.append("text")
+          .text("Lowest Rank")
+          .attr("transform", "translate(0,15)");
+
+legend_svg.append("text")
+          .text("Highest Rank")
+          .attr("transform", "translate(0,415)");
+
 var colorScale = d3.scale.quantize()
     .range(colorbrewer.YlGn[8])
+
+//Append a defs (for definition) element to your SVG
+var defs = legend.append("defs");
+
+//Append a linearGradient element to the defs and give it a unique id
+var linearGradient = defs.append("linearGradient")
+    .attr("id", "linear-gradient");
+
+//Horizontal gradient
+linearGradient
+    .attr("x1", "0%")
+    .attr("y1", "0%")
+    .attr("x2", "100%")
+    .attr("y2", "0%");
+
+linearGradient.selectAll("stop") 
+    .data( colorScale.range() )                  
+    .enter().append("stop")
+    .attr("offset", function(d,i) { return i/(colorScale.range().length-1); })
+    .attr("stop-color", function(d) { return d; });
+
+legend.append("rect")
+  .attr("width", 500)
+  .attr("height", 20)
+  .style("fill", "url(#linear-gradient)");
+
+var globe_svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", globe_height)
+    .attr("transform", "translate(0,30)");
 
 var zoom = d3.behavior.zoom()
         .scaleExtent([1,6])
@@ -95,17 +140,13 @@ var path = d3.geo.path()
 
 var graticule = d3.geo.graticule();
 
+var pathG = globe_svg.append("g");
 
-var svg = d3.select("#globe").append("svg")
-    .attr("width", width)
-    .attr("height", height);
-
-var pathG = svg.append("g");
-
-svg.append("rect")
+globe_svg.append("rect")
         .attr("class", "overlay")
         .attr("width", width)
-        .attr("height", height)
+        .attr("height", globe_height)
+        .attr("transform", "translate(0,30)")
         .call(zoomEnhanced)
 
 pathG.append("defs").append("path")
@@ -179,15 +220,16 @@ function update_city_points(topic_data){
     colorScale.domain([0,ordered_cities.length])
 
     city_points.enter().append("path")
-      .attr("fill",function(d){debugger; return colorScale(ordered_cities.indexOf(d.city))})
+      .attr("fill",function(d){return colorScale(ordered_cities.indexOf(d.city))})
       .datum(function(d) {
          return {type: "Point", coordinates: [d.lon, d.lat], radius: 5};
       })
       .attr("class", "point")
       .attr("d", path)
-      
 
-
+    var members = Object.keys(cities).map(function(key){
+      return cities[key];
+    });
 }
 
 
@@ -235,6 +277,6 @@ d3.json("worldTopo.json", function(error, world) {
     d3.select(this).classed("dragging", false);
   }
 
-d3.select(self.frameElement).style("height", height + "px");
+d3.select(self.frameElement).style("height", globe_height + "px");
 
 </script>

@@ -5,4 +5,5 @@ re-pull meetup.com data
 need to sort grouped_data --Done
 fix gps coordinates bug --Done
 Build and manage topic list selector
-make topic data keys and inout list topics all lowercase
+make topic data keys and inout list topics all lowercase --Done
+Add title

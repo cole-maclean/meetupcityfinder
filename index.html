@@ -40,6 +40,21 @@
   pointer-events: all;
 }
 
+.svg-container {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%; /* aspect ratio */
+    vertical-align: top;
+    overflow: hidden;
+}
+.svg-content-responsive {
+    display: inline-block;
+    position: absolute;
+    top: 10px;
+    left: 0;
+}
+
 ul > li {
     display: inline-block;
     padding: 10px 40px;
@@ -76,8 +91,8 @@ Click List Item to Remove:
 
 <script>
 
-var width = 1300,
-    height = 600,
+var width = 1350,
+    height = 630,
     globe_height = 650,
     globe_width = 680;
 
@@ -87,9 +102,15 @@ var projection = d3.geo.orthographic()
     .clipAngle(90)
     .precision(.1)
 
-svg = d3.select("body").append("svg")
-        .attr("height",height)
-        .attr("width",width)
+svg = d3.select("body")
+   .append("div")
+   .classed("svg-container", true) //container class to make it responsive
+   .append("svg")
+   //responsive SVG needs these 2 attributes and no width and height attr
+   .attr("preserveAspectRatio", "xMinYMin meet")
+   .attr("viewBox", "0 0 1350 630")
+   //class to make it responsive
+   .classed("svg-content-responsive", true)
 
 var legend = svg.append("g")
               .attr("height",500)
@@ -145,13 +166,13 @@ var globe_svg = svg.append("svg")
 var top_ten_rect = svg.append("rect")
                  .attr("width",200)
                  .attr("height",200)
-                 .attr("transform", "translate(900,75)")
+                 .attr("transform", "translate(900,35)")
                  .style("fill", "#A98B6F")
 
 var top_ten_text = svg.append("g")
                       .attr("width",200)
                       .attr("height",200)
-                      .attr("transform", "translate(900,70)")
+                      .attr("transform", "translate(900,30)")
 
 
 top_ten_text.append("text")
@@ -206,7 +227,7 @@ var topic_list = [];
 
 function handleTopicAdd(event){
     console.log(document.getElementById("topic-list-input").value)
-    add_topic(document.getElementById("topic-list-input").value)
+    add_topic(document.getElementById("topic-list-input").value.toLowerCase())
     return false;
 }
 
@@ -219,20 +240,33 @@ function handleDetailsClick(city){
         city_topic_members[d.topic] = d.members
       }
   });
-  i = 0;
+  rank_order = []; for(var key in city_topic_members) rank_order.push(key);
+  rank_order.sort(function(a,b){
+    normalizer = 1000000
+    a = (loaded_topic_members[a].indexOf(city_topic_members[a])) - city_topic_members[a]/normalizer
+    b = (loaded_topic_members[b].indexOf(city_topic_members[b])) - city_topic_members[b]/normalizer
+
+    return (a-b)
+  })
+  top_three = rank_order.slice(0,3);
+
+  top_three.forEach(function(d){
+      rank = loaded_topic_members[d].indexOf(city_topic_members[d])
+      detail_data.push({"topic":d,"rank":rank,"percentile":(1-rank/loaded_topic_members[d].length),"members":city_topic_members[d]})
+  });
+
   for(var key in city_topic_members) {
-    if ((topic_list.indexOf(key) != -1) || (i < 3)){
-      rank = loaded_topic_members[key].indexOf(city_topic_members[key]) + 1
+    if (topic_list.indexOf(key) != -1){
+      rank = loaded_topic_members[key].indexOf(city_topic_members[key])
       detail_data.push({"topic":key,"rank":rank,"percentile":(1-rank/loaded_topic_members[key].length),"members":city_topic_members[key]})
     }
-    i = i + 1;
   }
 
   svg.selectAll(".detail").remove();
   var detail_plot = svg.append("g")
-                       .attr("width",200)
+                       .attr("width",300)
                        .attr("height",500)
-                       .attr("transform", "translate(800,350)")
+                       .attr("transform", "translate(800,280)")
                        .selectAll(".detail")
                        .data(detail_data).enter()
 
@@ -244,7 +278,14 @@ function handleDetailsClick(city){
   detail_plot.append("text")
              .attr("height",25)
              .attr("y",function(d,i){return (i+1)*30})
-             .text(function(d){return d.topic})
+             .text(function(d){
+                    //trim the string to the maximum length
+                    topic_string = d.topic + " "
+                    var trimmedTopic = topic_string.substr(0,75);
+                    //re-trim if we are in the middle of a word
+                    trimmedTopic = trimmedTopic.substr(0, Math.min(trimmedTopic.length, trimmedTopic.lastIndexOf(" ")))
+                    return trimmedTopic
+                  })
              .attr("class","detail")
              .attr("dominant-baseline", "central")
 
@@ -255,7 +296,7 @@ function handleDetailsClick(city){
            .attr("height",25)
            .style("stroke","black")
            .attr("y",function(d,i){return (i+1)*30})
-           .attr("x",150)
+           .attr("x",200)
            .attr("class","detail")
            .attr("transform", "translate(0,-10)")
 
@@ -264,17 +305,19 @@ function handleDetailsClick(city){
          .attr("width",function(d){return rect_width*d.percentile})
          .attr("height",25)
          .attr("y",function(d,i){return (i+1)*30})
-         .attr("x",150)
+         .attr("x",200)
          .attr("class","detail")
          .attr("transform", "translate(0,-10)")
+
+format = d3.format("0,000");
 
  detail_plot.append("text")
              .attr("height",25)
              .attr("y",function(d,i){return (i+1)*30})
-             .text(function(d){return "#" + d.rank})
+             .text(function(d){return format(d.members) + " members " + "#" + (d.rank+1)})
              .attr("class","detail")
              .attr("dominant-baseline", "central")
-             .attr("x",380)
+             .attr("x",410)
 }
 
 function add_topic(val){

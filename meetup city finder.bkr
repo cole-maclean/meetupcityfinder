@@ -54,8 +54,8 @@
                 "state": {},
                 "selectedType": "Hidden",
                 "pluginName": "Python3",
-                "shellId": "CE61E3313DB54087A0B9C32DE021E64C",
-                "elapsedTime": 378
+                "shellId": "0805E2233C5F40D28BC450D58B81ACC7",
+                "elapsedTime": 406
             },
             "evaluatorReader": true,
             "lineCount": 10
@@ -82,8 +82,8 @@
                 "state": {},
                 "selectedType": "Hidden",
                 "pluginName": "Python3",
-                "shellId": "CE61E3313DB54087A0B9C32DE021E64C",
-                "elapsedTime": 342
+                "shellId": "0805E2233C5F40D28BC450D58B81ACC7",
+                "elapsedTime": 325
             },
             "evaluatorReader": true,
             "lineCount": 10
@@ -105,8 +105,8 @@
                 "state": {},
                 "selectedType": "Hidden",
                 "pluginName": "Python3",
-                "shellId": "4A113148F93F47018B7F2E0C6FCBEB30",
-                "elapsedTime": 309
+                "shellId": "0805E2233C5F40D28BC450D58B81ACC7",
+                "elapsedTime": 306
             },
             "evaluatorReader": true,
             "lineCount": 5
@@ -117,7 +117,6 @@
             "evaluator": "Python3",
             "input": {
                 "body": [
-                    "city_country_list = [\"Calgary, Canada\",\"Bangkok, Thailand\",\"Barcelona, Spain\"]",
                     "group_list = []",
                     "tag_dict = {}",
                     "groups_per_page = 200",
@@ -132,7 +131,7 @@
                     "    print(groups.meta['total_count'])",
                     "    for i in range(0,pages + 1):",
                     "        print(\"page \" + str(i))",
-                    "        groups = client.GetGroups(lat=lat, lon=lon,radius=100,fields=['topisc'],pages=groups_per_page,offset=i)",
+                    "        groups = client.GetGroups(lat=lat, lon=lon,radius=100,fields=['topics'],pages=groups_per_page,offset=i)",
                     "        time.sleep(1)",
                     "        if \"results\" in groups.__dict__.keys():",
                     "            for group in groups.results:",
@@ -142,23 +141,27 @@
                     "                        state = group[\"state\"]",
                     "                    else:",
                     "                        state = \"00\"",
-                    "                    for topic in group[\"topics\"]:",
-                    "                        if topic[\"name\"] in tag_dict.keys():",
-                    "                            tag_dict[topic[\"name\"]].append({\"group_id\":group[\"id\"],",
-                    "                                                                             \"city\":group[\"city\"],",
-                    "                                                                             \"state\":state,",
-                    "                                                                             \"country\":group[\"country\"],",
-                    "                                                                             \"members\":group[\"members\"],",
-                    "                                                                             \"lat\":group[\"lat\"],",
-                    "                                                                             \"lon\":group[\"lon\"]})",
-                    "                        else:",
-                    "                            tag_dict[topic[\"name\"]] = [{\"group_id\":group[\"id\"],",
-                    "                                                                             \"city\":group[\"city\"],",
-                    "                                                                             \"state\":state,",
-                    "                                                                             \"country\":group[\"country\"],",
-                    "                                                                             \"members\":group[\"members\"],",
-                    "                                                                             \"lat\":group[\"lat\"],",
-                    "                                                                             \"lon\":group[\"lon\"]}]",
+                    "                    try:",
+                    "                        for topic in group[\"topics\"]:",
+                    "                            topic_name = topic[\"name\"].lower()",
+                    "                            if topic_name in tag_dict.keys():",
+                    "                                tag_dict[topic_name].append({\"group_id\":group[\"id\"],",
+                    "                                                                                 \"city\":group[\"city\"],",
+                    "                                                                                 \"state\":state,",
+                    "                                                                                 \"country\":group[\"country\"],",
+                    "                                                                                 \"members\":group[\"members\"],",
+                    "                                                                                 \"lat\":group[\"lat\"],",
+                    "                                                                                 \"lon\":group[\"lon\"]})",
+                    "                            else:",
+                    "                                tag_dict[topic_name] = [{\"group_id\":group[\"id\"],",
+                    "                                                                                 \"city\":group[\"city\"],",
+                    "                                                                                 \"state\":state,",
+                    "                                                                                 \"country\":group[\"country\"],",
+                    "                                                                                 \"members\":group[\"members\"],",
+                    "                                                                                 \"lat\":group[\"lat\"],",
+                    "                                                                                 \"lon\":group[\"lon\"]}]",
+                    "                    except KeyError as e:",
+                    "                            print(e)",
                     "         ",
                     "                            ",
                     "with open('meetup_data.json', 'w') as outfile:",
@@ -176,11 +179,11 @@
                         },
                         {
                             "type": "out",
-                            "value": "\n1263"
+                            "value": "\n2203"
                         },
                         {
                             "type": "out",
-                            "value": "\npage 0\n28/30 (7 seconds remaining)"
+                            "value": "\npage 0\n28/30 (8 seconds remaining)"
                         },
                         {
                             "type": "out",
@@ -188,7 +191,7 @@
                         },
                         {
                             "type": "out",
-                            "value": "\n27/30 (4 seconds remaining)"
+                            "value": "\n27/30 (6 seconds remaining)"
                         },
                         {
                             "type": "out",
@@ -196,7 +199,7 @@
                         },
                         {
                             "type": "out",
-                            "value": "\n26/30 (2 seconds remaining)"
+                            "value": "\n26/30 (3 seconds remaining)"
                         },
                         {
                             "type": "out",
@@ -204,7 +207,7 @@
                         },
                         {
                             "type": "out",
-                            "value": "\n29/30 (10 seconds remaining)"
+                            "value": "\n25/30 (1 seconds remaining)"
                         },
                         {
                             "type": "out",
@@ -212,67 +215,11 @@
                         },
                         {
                             "type": "out",
-                            "value": "\n28/30 (7 seconds remaining)"
+                            "value": "\n29/30 (10 seconds remaining)"
                         },
                         {
                             "type": "out",
                             "value": "\npage 5"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n27/30 (5 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 6"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n26/30 (2 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\ncity index = 1"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n29/30 (10 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n659"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 0\n28/30 (7 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 1"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n27/30 (5 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 2"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n26/30 (2 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 3"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n29/30 (10 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\ncity index = 2"
                         },
                         {
                             "type": "out",
@@ -280,59 +227,11 @@
                         },
                         {
                             "type": "out",
-                            "value": "\n2222"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 0\n27/30 (5 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 1"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n26/30 (1 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 2"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n29/30 (10 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 3"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n28/30 (7 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 4"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n27/30 (5 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 5"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n26/30 (2 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
                             "value": "\npage 6"
                         },
                         {
                             "type": "out",
-                            "value": "\n29/30 (10 seconds remaining)"
+                            "value": "\n27/30 (6 seconds remaining)"
                         },
                         {
                             "type": "out",
@@ -340,7 +239,7 @@
                         },
                         {
                             "type": "out",
-                            "value": "\n28/30 (7 seconds remaining)"
+                            "value": "\n26/30 (3 seconds remaining)"
                         },
                         {
                             "type": "out",
@@ -348,7 +247,7 @@
                         },
                         {
                             "type": "out",
-                            "value": "\n27/30 (5 seconds remaining)"
+                            "value": "\n25/30 (1 seconds remaining)"
                         },
                         {
                             "type": "out",
@@ -356,7 +255,7 @@
                         },
                         {
                             "type": "out",
-                            "value": "\n26/30 (2 seconds remaining)"
+                            "value": "\n29/30 (10 seconds remaining)"
                         },
                         {
                             "type": "out",
@@ -364,7 +263,7 @@
                         },
                         {
                             "type": "out",
-                            "value": "\n29/30 (10 seconds remaining)"
+                            "value": "\n28/30 (8 seconds remaining)"
                         },
                         {
                             "type": "out",
@@ -372,22 +271,406 @@
                         },
                         {
                             "type": "out",
+                            "value": "\n27/30 (5 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\ncity index = 1"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n26/30 (4 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n17767"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 0\n25/30 (1 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 1"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n29/30 (10 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 2"
+                        },
+                        {
+                            "type": "out",
                             "value": "\n28/30 (7 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 3"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n27/30 (4 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 4"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n26/30 (1 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 5"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n29/30 (10 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 6"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n28/30 (7 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 7"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n27/30 (4 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 8"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n26/30 (1 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 9"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n29/30 (10 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 10"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n28/30 (7 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 11"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n27/30 (4 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 12"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n26/30 (1 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 13"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n29/30 (10 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 14"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n28/30 (7 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 15"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n27/30 (4 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 16"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n26/30 (1 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 17"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n29/30 (10 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 18"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n28/30 (7 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 19"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n27/30 (4 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 20"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n26/30 (0 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 21"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n29/30 (10 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 22"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n28/30 (7 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 23"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n27/30 (3 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 24"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n29/30 (10 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 25"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n28/30 (7 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 26"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n27/30 (4 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 27"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n26/30 (0 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 28"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n29/30 (10 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 29"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n28/30 (7 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 30"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n27/30 (4 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 31"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n26/30 (1 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 32"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n29/30 (10 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 33"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n28/30 (7 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 34"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n27/30 (4 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 35"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n26/30 (0 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 36"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n29/30 (10 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 37"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n28/30 (7 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 38"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n27/30 (4 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 39"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n26/30 (0 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 40"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n29/30 (10 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 41"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n28/30 (7 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 42"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n27/30 (4 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 43"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n29/30 (10 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 44"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n28/30 (7 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 45"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n27/30 (3 seconds remaining)"
                         },
                         {
                             "type": "out",
                             "value": "\n"
                         }
-                    ]
+                    ],
+                    "payload": {
+                        "type": "BeakerDisplay",
+                        "innertype": "Error",
+                        "object": [
+                            "&apos;KeyError&apos; object has no attribute &apos;message&apos;",
+                            "&apos;KeyError&apos; object has no attribute &apos;message&apos;<br><span  class=\"ansired\">---------------------------------------------------------------------------</span><br><span  class=\"ansired\">KeyError</span>                                  Traceback (most recent call last)<br><span  class=\"ansigreen\">&lt;ipython-input-1-edcfa2ee4395&gt;</span> in <span  class=\"ansicyan\">&lt;module&gt;<span  class=\"ansiblue\">()</span>\n<span  class=\"ansigreen\">     25</span>                     <span  class=\"ansigreen\">try</span><span  class=\"ansiyellow\">:</span><span  class=\"ansiyellow\"></span>\n<span  class=\"ansigreen\">---&gt; 26<span  class=\"ansiyellow\">                         <span  class=\"ansigreen\">for</span> topic <span  class=\"ansigreen\">in</span> group<span  class=\"ansiyellow\">[</span><span  class=\"ansiblue\">&quot;topics&quot;</span><span  class=\"ansiyellow\">]</span><span  class=\"ansiyellow\">:</span><span  class=\"ansiyellow\"></span>\n<span  class=\"ansigreen\">     27</span>                             topic_name <span  class=\"ansiyellow\">=</span> topic<span  class=\"ansiyellow\">[</span><span  class=\"ansiblue\">&quot;name&quot;</span><span  class=\"ansiyellow\">]</span><span  class=\"ansiyellow\">.</span>lower<span  class=\"ansiyellow\">(</span><span  class=\"ansiyellow\">)</span><span  class=\"ansiyellow\"></span>\n<br><span  class=\"ansired\">KeyError</span>: &apos;topics&apos;<br>\nDuring handling of the above exception, another exception occurred:\n<br><span  class=\"ansired\">AttributeError</span>                            Traceback (most recent call last)<br><span  class=\"ansigreen\">&lt;ipython-input-1-edcfa2ee4395&gt;</span> in <span  class=\"ansicyan\">&lt;module&gt;<span  class=\"ansiblue\">()</span>\n<span  class=\"ansigreen\">     43</span>                                                                                  &quot;lon&quot;:group[&quot;lon&quot;]}]\n<span  class=\"ansigreen\">     44</span>                     <span  class=\"ansigreen\">except</span> KeyError <span  class=\"ansigreen\">as</span> e<span  class=\"ansiyellow\">:</span><span  class=\"ansiyellow\"></span>\n<span  class=\"ansigreen\">---&gt; 45<span  class=\"ansiyellow\">                             </span>print<span  class=\"ansiyellow\">(</span>e<span  class=\"ansiyellow\">.</span>message<span  class=\"ansiyellow\">)</span><span  class=\"ansiyellow\"></span>\n<span  class=\"ansigreen\">     46</span> <span  class=\"ansiyellow\"></span>\n<span  class=\"ansigreen\">     47</span> <span  class=\"ansiyellow\"></span>\n<br><span  class=\"ansired\">AttributeError</span>: &apos;KeyError&apos; object has no attribute &apos;message&apos;"
+                        ]
+                    }
                 },
                 "selectedType": "Results",
-                "height": 1735,
+                "height": 4275,
                 "pluginName": "Python3",
-                "shellId": "AF0A61BA004C49FFACDAA8979C744D17",
-                "elapsedTime": 73164
+                "shellId": "0805E2233C5F40D28BC450D58B81ACC7",
+                "elapsedTime": 177098
             },
             "evaluatorReader": true,
-            "lineCount": 46
+            "lineCount": 49
         },
         {
             "id": "code1WAXGA",
@@ -436,8 +719,8 @@
                 "state": {},
                 "selectedType": "Hidden",
                 "pluginName": "Python3",
-                "shellId": "CE61E3313DB54087A0B9C32DE021E64C",
-                "elapsedTime": 27165,
+                "shellId": "0805E2233C5F40D28BC450D58B81ACC7",
+                "elapsedTime": 27260,
                 "height": 55
             },
             "evaluatorReader": true,
@@ -872,7 +1155,7 @@
                 "shellId": "D81B69DB96C84B728C6A6E82D426B061",
                 "elapsedTime": 549,
                 "dataresult": 0,
-                "height": 99
+                "height": 136
             },
             "evaluatorReader": true,
             "lineCount": 4
@@ -904,7 +1187,7 @@
                 "shellId": "4A113148F93F47018B7F2E0C6FCBEB30",
                 "elapsedTime": 491,
                 "dataresult": 5679,
-                "height": 71
+                "height": 108
             },
             "evaluatorReader": true,
             "lineCount": 2
@@ -3553,7 +3836,7 @@
                 "pluginName": "Python3",
                 "shellId": "D81B69DB96C84B728C6A6E82D426B061",
                 "elapsedTime": 792,
-                "height": 794
+                "height": 831
             },
             "evaluatorReader": true,
             "lineCount": 2

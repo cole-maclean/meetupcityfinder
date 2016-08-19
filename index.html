@@ -51,7 +51,6 @@
 .svg-content-responsive {
     display: inline-block;
     position: absolute;
-    top: 10px;
     left: 0;
 }
 
@@ -93,7 +92,7 @@ Click List Item to Remove:
 
 var width = 1350,
     height = 630,
-    globe_height = 650,
+    globe_height = 600,
     globe_width = 680;
 
 var projection = d3.geo.orthographic()
@@ -115,15 +114,15 @@ svg = d3.select("body")
 var legend = svg.append("g")
               .attr("height",500)
               .attr("width",55)
-              .attr("transform", "translate(50,75) rotate(90)");
+              .attr("transform", "translate(50,40) rotate(90)");
 
 svg.append("text")
           .text("Lowest Rank")
-          .attr("y",75)
+          .attr("y",25)
 
 svg.append("text")
           .text("Highest Rank")
-          .attr("y",500+75+15)
+          .attr("y",500+40+15)
 
 var colorScale = d3.scale.quantize()
     .range(colorbrewer.YlGn[8])

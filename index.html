@@ -47,6 +47,7 @@ ul > li {
     zoom:1;
     *display:inline;
     /* this fix is needed for IE7- */
+    border: 1px solid black;
 
 }
 
@@ -76,7 +77,7 @@ Click List Item to Remove:
 <script>
 
 var width = 1300,
-    height = 680,
+    height = 600,
     globe_height = 650,
     globe_width = 680;
 
@@ -93,18 +94,22 @@ svg = d3.select("body").append("svg")
 var legend = svg.append("g")
               .attr("height",500)
               .attr("width",55)
-              .attr("transform", "translate(50,-100) rotate(90)");
+              .attr("transform", "translate(50,75) rotate(90)");
 
-legend.append("text")
+svg.append("text")
           .text("Lowest Rank")
-          .attr("transform", "translate(0,15)");
+          .attr("y",75)
 
-legend.append("text")
+svg.append("text")
           .text("Highest Rank")
-          .attr("transform", "translate(0,415)");
+          .attr("y",500+75+15)
 
 var colorScale = d3.scale.quantize()
     .range(colorbrewer.YlGn[8])
+
+var top_ten_colorScale = d3.scale.quantize()
+    .range(colorbrewer.YlGn[8])
+    .domain([10,0])
 
 //Append a defs (for definition) element to your SVG
 var defs = legend.append("defs");
@@ -134,9 +139,24 @@ legend.append("rect")
 var globe_svg = svg.append("svg")
     .attr("width", globe_width)
     .attr("height", globe_height)
-    .attr("x",55)
+    .attr("x",90)
+    .style("pointer-events","none");
 
-d3.select("body").append("ul").append("li").text("test")
+var top_ten_rect = svg.append("rect")
+                 .attr("width",200)
+                 .attr("height",200)
+                 .attr("transform", "translate(900,75)")
+                 .style("fill", "#A98B6F")
+
+var top_ten_text = svg.append("g")
+                      .attr("width",200)
+                      .attr("height",200)
+                      .attr("transform", "translate(900,70)")
+
+
+top_ten_text.append("text")
+            .text("Top 10 Cities")
+            .style("font-weight","bold")
 
 var zoom = d3.behavior.zoom()
         .scaleExtent([1,6])
@@ -149,7 +169,7 @@ var drag = d3.behavior.drag()
           .origin(function() { var r = projection.rotate(); return {x: r[0], y: -r[1]}; })
           .on("drag", dragged)
           .on("dragstart", dragstarted)
-          .on("dragend", dragended);
+          .on("dragend", dragended)
 
 var path = d3.geo.path()
     .projection(projection)
@@ -157,14 +177,12 @@ var path = d3.geo.path()
 
 var graticule = d3.geo.graticule();
 
-var pathG = globe_svg.append("g");
-
-globe_svg.append("rect")
-        .attr("class", "overlay")
-        .attr("width", globe_width)
-        .attr("height", globe_height)
-        .attr("transform", "translate(0,30)")
-        .call(zoomEnhanced)
+var pathG = globe_svg.append("g")
+                    .attr("width", globe_width)
+                    .attr("height", globe_height)
+                    .attr("transform", "translate(0,30)")
+                    .attr("class","overlay")
+                    .call(zoomEnhanced)
 
 pathG.append("defs").append("path")
     .datum({type: "Sphere"})
@@ -192,6 +210,73 @@ function handleTopicAdd(event){
     return false;
 }
 
+function handleDetailsClick(city){
+  city_topic_members = {};
+  detail_data = [];
+
+  loaded_topic_data.forEach(function(d) { //loaded topic data is pre-sorted so resulting object also sorted largest to smallest membership
+    if (d.city === city){
+        city_topic_members[d.topic] = d.members
+      }
+  });
+  i = 0;
+  for(var key in city_topic_members) {
+    if ((topic_list.indexOf(key) != -1) || (i < 3)){
+      rank = loaded_topic_members[key].indexOf(city_topic_members[key]) + 1
+      detail_data.push({"topic":key,"rank":rank,"percentile":(1-rank/loaded_topic_members[key].length),"members":city_topic_members[key]})
+    }
+    i = i + 1;
+  }
+
+  svg.selectAll(".detail").remove();
+  var detail_plot = svg.append("g")
+                       .attr("width",200)
+                       .attr("height",500)
+                       .attr("transform", "translate(800,350)")
+                       .selectAll(".detail")
+                       .data(detail_data).enter()
+
+  detail_plot.append("text")
+             .text(city)
+             .attr("class","detail")
+             .style("font-weight","bold")
+
+  detail_plot.append("text")
+             .attr("height",25)
+             .attr("y",function(d,i){return (i+1)*30})
+             .text(function(d){return d.topic})
+             .attr("class","detail")
+             .attr("dominant-baseline", "central")
+
+  var rect_width = 200
+  detail_plot.append("rect")
+           .attr("fill","none")
+           .attr("width",rect_width)
+           .attr("height",25)
+           .style("stroke","black")
+           .attr("y",function(d,i){return (i+1)*30})
+           .attr("x",150)
+           .attr("class","detail")
+           .attr("transform", "translate(0,-10)")
+
+  detail_plot.append("rect")
+         .attr("fill",function(d){return colorScale(d.rank)})
+         .attr("width",function(d){return rect_width*d.percentile})
+         .attr("height",25)
+         .attr("y",function(d,i){return (i+1)*30})
+         .attr("x",150)
+         .attr("class","detail")
+         .attr("transform", "translate(0,-10)")
+
+ detail_plot.append("text")
+             .attr("height",25)
+             .attr("y",function(d,i){return (i+1)*30})
+             .text(function(d){return "#" + d.rank})
+             .attr("class","detail")
+             .attr("dominant-baseline", "central")
+             .attr("x",380)
+}
+
 function add_topic(val){
     d3.select("body").select("#topic-list").append("li");
     topic_list.push(val);
@@ -200,55 +285,107 @@ function add_topic(val){
     .text(function(d){return d;})
     .style("background-color", "#cccccc")
     .style("color","#222222;")
-    .on('click',function(d){
-        d3.select(this).remove();
-        indx = topic_list.indexOf(d);
-        topic_list.splice(indx, 1);
-        update_city_points(loaded_topic_data);
-    });
+    .on({
+          "mouseover": function(d) {
+            d3.select(this).style("cursor", "pointer")
+          },
+          "mouseout": function(d) {
+            d3.select(this).style("cursor", "default")
+          },
+          "click": function(d) {
+            d3.select(this).remove();
+            indx = topic_list.indexOf(d);
+            topic_list.splice(indx, 1);
+            update(loaded_topic_data);
+          }
+        });
 
-    update_city_points(loaded_topic_data)
+    update(loaded_topic_data)
 }
 
 var loaded_topic_data;
+var loaded_topic_members = {};
 
 d3.json("grouped_topic_data.json",function(topic_data) {
   loaded_topic_data = topic_data;
-  update_city_points(loaded_topic_data);
+  loaded_topic_data.forEach(function(d){ //loaded topic data is pre-sorted so resulting object also sorted largest to smallest membership
+    if (d.topic in loaded_topic_members){
+      loaded_topic_members[d.topic].push(d.members)
+    }
+    else {
+      loaded_topic_members[d.topic] = [d.members]
+    }
+  });
+  update(loaded_topic_data);
 });
 
 
-function update_city_points(topic_data){
+function update(topic_data){
     var cities = {};
     pathG.selectAll("path.point").remove();
     var city_points = pathG.selectAll("path.point")
                         .data(topic_data.filter(function(d){
                          if (topic_list.indexOf(d.topic) != -1) {
                               if (d.city in cities) {
-                                cities[d.city] = cities[d.city] + d.members
+                                cities[d.city] = [cities[d.city][0] + d.members,d.lat,d.lon]
                               }
                               else {
-                                cities[d.city] = d.members
+                                cities[d.city] = [d.members,d.lat,d.lon]
                               }
                           return d;
                          }
-                       }));
+                       }))
+                        .enter().append("g")
+                            .on({
+                                "mouseover": function(d) {
+                                  d3.select(this).style("cursor", "pointer")
+                                },
+                                "mouseout": function(d) {
+                                  d3.select(this).style("cursor", "default")
+                                },
+                                "click": function(d) {
+                                  handleDetailsClick(d.city)
+                                }
+                              });
+
+
     ordered_cities = []; for(var key in cities) ordered_cities.push(key);
-    ordered_cities.sort(function(a,b){return cities[a]-cities[b]});
+    ordered_cities.sort(function(b,a){return cities[a][0]-cities[b][0]});
 
-    colorScale.domain([0,ordered_cities.length])
+    colorScale.domain([ordered_cities.length,0])
 
-    city_points.enter().append("path")
-      .attr("fill",function(d){return colorScale(ordered_cities.indexOf(d.city))})
+    city_points.append("path")
+      .style("fill",function(d){return colorScale(ordered_cities.indexOf(d.city))})
       .datum(function(d) {
          return {type: "Point", coordinates: [d.lon, d.lat], radius: 5};
       })
       .attr("class", "point")
-      .attr("d", path)
+      .attr("d", path)   
 
     var members = Object.keys(cities).map(function(key){
-      return cities[key];
+      return cities[key][0];
     });
+
+    top_ten_list = ordered_cities.slice(0,10)
+    d3.selectAll(".top-ten").remove();
+    top_ten_text.selectAll("top-ten")
+           .data(top_ten_list).enter()
+           .append("text")
+           .attr("class","top-ten")
+           .attr("y",function(d,i){return (i+1)*20})
+           .text(function(d,i){return (i+1) + ". " + d})
+           .style("fill",function(d,i){return top_ten_colorScale(i)})
+            .on({
+                  "mouseover": function(d) {
+                    d3.select(this).style("cursor", "pointer")
+                  },
+                  "mouseout": function(d) {
+                    d3.select(this).style("cursor", "default")
+                  },
+                  "click": function(d) {
+                            handleDetailsClick(d)           
+                  }
+                });  
 }
 
 
@@ -260,7 +397,7 @@ d3.json("worldTopo.json", function(error, world) {
       .attr("d", path)
 
   pathG.insert("path", ".graticule")
-      .datum(topojson.mesh(world, world.objects.countries, function(a, b) { return a !== b; }))
+      .datum(topojson.mesh(world, world.objects.countries, function(a, b) {return a !== b; }))
       .attr("class", "boundary")
       .attr("d", path);
 });
@@ -281,12 +418,13 @@ d3.json("worldTopo.json", function(error, world) {
 
   function dragstarted(d) 
   {
+
     //stopPropagation prevents dragging to "bubble up" which triggers same event for all elements below this object
     d3.event.sourceEvent.stopPropagation();
     d3.select(this).classed("dragging", true);
   }
 
-  function dragged() {
+  function dragged(d) {
           projection.rotate([d3.event.x, -d3.event.y]);
           pathG.selectAll("path").attr("d", path);
   }

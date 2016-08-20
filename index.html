@@ -57,6 +57,8 @@
 ul > li {
     display: inline-block;
     padding: 10px 40px;
+    height: 8px;
+    line-height: 8px;
     /* You can also add some margins here to make it look prettier */
     zoom:1;
     *display:inline;
@@ -65,6 +67,15 @@ ul > li {
 
 }
 
+header { border-bottom: 1px solid #000; }
+header > h1 {
+    padding: 0px;
+    margin: 0px;
+     }
+header > h4 {
+    padding: 0px;
+    margin: 0px;
+     }
 input[type=text]
 {
     border:solid 1px #BFBDBD;
@@ -76,6 +87,13 @@ input[type=text]
 </style>
 <body>
 
+<header>
+  <h1 align="center" margin-bottom = "1px"><a href= "https://www.meetup.com/">Meetup.com</a> City Finder</h1>
+  <h4 align="center">Find your ideal city from meetup.com group topics</h4>
+  <h4 align="center"><a href="www.google.com">The Build</a></h4>
+</header>
+
+<span
 <form name="topic-list" onSubmit="return handleTopicAdd()">
   <input type="text" id="topic-list-input" placeholder="Add a topic...">
 </form>
@@ -91,8 +109,8 @@ Click List Item to Remove:
 <script>
 
 var width = 1350,
-    height = 630,
-    globe_height = 600,
+    height = 550,
+    globe_height = 520,
     globe_width = 680;
 
 var projection = d3.geo.orthographic()
@@ -107,22 +125,22 @@ svg = d3.select("body")
    .append("svg")
    //responsive SVG needs these 2 attributes and no width and height attr
    .attr("preserveAspectRatio", "xMinYMin meet")
-   .attr("viewBox", "0 0 1350 630")
+   .attr("viewBox", "0 0 1350 " + height)
    //class to make it responsive
    .classed("svg-content-responsive", true)
 
 var legend = svg.append("g")
-              .attr("height",500)
+              .attr("height",globe_height*0.8)
               .attr("width",55)
-              .attr("transform", "translate(50,40) rotate(90)");
+              .attr("transform", "translate(50,50) rotate(90)");
 
 svg.append("text")
           .text("Lowest Rank")
-          .attr("y",25)
+          .attr("y",35)
 
 svg.append("text")
           .text("Highest Rank")
-          .attr("y",500+40+15)
+          .attr("y",globe_height*0.8+50+15)
 
 var colorScale = d3.scale.quantize()
     .range(colorbrewer.YlGn[8])
@@ -152,7 +170,7 @@ linearGradient.selectAll("stop")
     .attr("stop-color", function(d) { return d; });
 
 legend.append("rect")
-  .attr("width", 500)
+  .attr("width", globe_height*0.8)
   .attr("height", 20)
   .style("fill", "url(#linear-gradient)");
 
@@ -224,6 +242,12 @@ pathG.append("path")
 
 var topic_list = [];
 
+d3.selection.prototype.moveToFront = function() {
+  return this.each(function(){
+    this.parentNode.appendChild(this);
+  });
+};
+
 function handleTopicAdd(event){
     console.log(document.getElementById("topic-list-input").value)
     add_topic(document.getElementById("topic-list-input").value.toLowerCase())
@@ -247,7 +271,7 @@ function handleDetailsClick(city){
 
     return (a-b)
   })
-  top_three = rank_order.slice(0,3);
+  top_three = rank_order.slice(0,5);
 
   top_three.forEach(function(d){
       rank = loaded_topic_members[d].indexOf(city_topic_members[d])
@@ -269,9 +293,10 @@ function handleDetailsClick(city){
                        .selectAll(".detail")
                        .data(detail_data).enter()
 
+  svg.selectAll(".detail-city").remove();
   detail_plot.append("text")
              .text(city)
-             .attr("class","detail")
+             .attr("class","detail-city")
              .style("font-weight","bold")
 
   detail_plot.append("text")
@@ -280,7 +305,7 @@ function handleDetailsClick(city){
              .text(function(d){
                     //trim the string to the maximum length
                     topic_string = d.topic + " "
-                    var trimmedTopic = topic_string.substr(0,75);
+                    var trimmedTopic = topic_string.substr(0,30);
                     //re-trim if we are in the middle of a word
                     trimmedTopic = trimmedTopic.substr(0, Math.min(trimmedTopic.length, trimmedTopic.lastIndexOf(" ")))
                     return trimmedTopic
@@ -317,6 +342,17 @@ format = d3.format("0,000");
              .attr("class","detail")
              .attr("dominant-baseline", "central")
              .attr("x",410)
+
+  pathG.selectAll("path.point")
+    .style("stroke", function(d){
+      if (d.city === d3.select(".detail-city").text()){
+        return "red"
+        d3.selet(this).moveToFront();
+      }else{
+        return "none"
+      }
+    })
+    .style("stroke-width",3)
 }
 
 function add_topic(val){
@@ -348,7 +384,7 @@ function add_topic(val){
 var loaded_topic_data;
 var loaded_topic_members = {};
 
-d3.json("grouped_topic_data.json",function(topic_data) {
+d3.json("meetup_data.json",function(topic_data) {
   loaded_topic_data = topic_data;
   loaded_topic_data.forEach(function(d){ //loaded topic data is pre-sorted so resulting object also sorted largest to smallest membership
     if (d.topic in loaded_topic_members){
@@ -358,7 +394,8 @@ d3.json("grouped_topic_data.json",function(topic_data) {
       loaded_topic_members[d.topic] = [d.members]
     }
   });
-  update(loaded_topic_data);
+  add_topic("social")
+  handleDetailsClick("Calgary,AB,CA")
 });
 
 
@@ -390,7 +427,6 @@ function update(topic_data){
                                 }
                               });
 
-
     ordered_cities = []; for(var key in cities) ordered_cities.push(key);
     ordered_cities.sort(function(b,a){return cities[a][0]-cities[b][0]});
 
@@ -399,7 +435,7 @@ function update(topic_data){
     city_points.append("path")
       .style("fill",function(d){return colorScale(ordered_cities.indexOf(d.city))})
       .datum(function(d) {
-         return {type: "Point", coordinates: [d.lon, d.lat], radius: 5};
+         return {type: "Point", coordinates: [d.lon, d.lat], radius: 5, city: d.city};
       })
       .attr("class", "point")
       .attr("d", path)   
@@ -425,9 +461,12 @@ function update(topic_data){
                     d3.select(this).style("cursor", "default")
                   },
                   "click": function(d) {
-                            handleDetailsClick(d)           
+                    handleDetailsClick(d)           
                   }
-                });  
+                });
+    if (d3.select(".detail-city").empty() != true) {
+      handleDetailsClick(d3.select(".detail-city").text())
+    }
 }
 
 

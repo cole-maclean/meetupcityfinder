@@ -55,8 +55,13 @@
                 "state": {},
                 "selectedType": "Hidden",
                 "pluginName": "Python3",
+<<<<<<< HEAD
                 "shellId": "4D610D1302A24C85AE11A7F84C1EEC7A",
                 "elapsedTime": 401
+=======
+                "shellId": "0805E2233C5F40D28BC450D58B81ACC7",
+                "elapsedTime": 360
+>>>>>>> 26e37bfd64fdf88bb55e051c9489c8775095f08a
             },
             "evaluatorReader": true,
             "lineCount": 11
@@ -107,7 +112,11 @@
                 "selectedType": "Hidden",
                 "pluginName": "Python3",
                 "shellId": "0805E2233C5F40D28BC450D58B81ACC7",
+<<<<<<< HEAD
                 "elapsedTime": 332
+=======
+                "elapsedTime": 355
+>>>>>>> 26e37bfd64fdf88bb55e051c9489c8775095f08a
             },
             "evaluatorReader": true,
             "lineCount": 5
@@ -122,6 +131,11 @@
                     "groups_per_page = 200",
                     "city_topic_data = {}",
                     "",
+<<<<<<< HEAD
+=======
+                    "city_country_list = [\"Kyoto, Japan\",\"Calgary, Canada\", \"Barcelona, Spain\"]",
+                    "",
+>>>>>>> 26e37bfd64fdf88bb55e051c9489c8775095f08a
                     "for j,city_country in enumerate(city_country_list):",
                     "    print(\"city index = \" + str(j))",
                     "    geo = gmaps.geocode(city_country)",
@@ -153,6 +167,11 @@
                     "                                members = city_topic_data[key][\"members\"]",
                     "                                city_topic_data[key] = {\"topic\":topic_name,",
                     "                                                         \"city\":city,",
+<<<<<<< HEAD
+=======
+                    "                                                         \"state\":state,",
+                    "                                                         \"country\":group[\"country\"],",
+>>>>>>> 26e37bfd64fdf88bb55e051c9489c8775095f08a
                     "                                                         \"members\": members + group[\"members\"],",
                     "                                                         \"lat\":group[\"lat\"],",
                     "                                                         \"lon\":group[\"lon\"]}",
@@ -160,6 +179,11 @@
                     "                                city_topic_data[key] = {\"topic\":topic_name,",
                     "                                                         \"city\":city,",
                     "                                                         \"state\":state,",
+<<<<<<< HEAD
+=======
+                    "                                                         \"country\":group[\"country\"],",
+                    "                                                         \"members\":group[\"members\"],",
+>>>>>>> 26e37bfd64fdf88bb55e051c9489c8775095f08a
                     "                                                         \"lat\":group[\"lat\"],",
                     "                                                         \"lon\":group[\"lon\"]}",
                     "",
@@ -174,6 +198,7 @@
             "output": {
                 "state": {},
                 "result": {
+<<<<<<< HEAD
                     "type": "BeakerDisplay",
                     "innertype": "Error",
                     "object": [
@@ -186,16 +211,367 @@
                 "pluginName": "Python3",
                 "shellId": "0805E2233C5F40D28BC450D58B81ACC7",
                 "elapsedTime": 371
+=======
+                    "type": "Results",
+                    "outputdata": [
+                        {
+                            "type": "out",
+                            "value": "city index = 0\n29/30 (10 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n2205"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 0\n28/30 (8 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 1"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n27/30 (5 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 2"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n26/30 (2 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 3"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n29/30 (10 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 4"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n28/30 (7 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 5"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n27/30 (5 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 6"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n26/30 (2 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 7"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n29/30 (10 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 8"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n28/30 (7 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 9"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n27/30 (4 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 10"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n26/30 (1 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 11"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n29/30 (10 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\ncity index = 1"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n28/30 (8 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n17758"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 0\n27/30 (3 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 1"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n29/30 (10 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 2"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n28/30 (5 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 3"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n27/30 (1 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 4"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n29/30 (10 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 5"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n28/30 (6 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 6"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n27/30 (3 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 7"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n29/30 (10 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 8"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n28/30 (6 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 9"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n27/30 (2 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 10"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n29/30 (10 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\npage 11"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n28/30 (6 seconds remaining)"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n"
+                        }
+                    ],
+                    "payload": {
+                        "type": "BeakerDisplay",
+                        "innertype": "Error",
+                        "object": [
+                            "Interrupted"
+                        ]
+                    }
+                },
+                "selectedType": "Results",
+                "height": 1759,
+                "pluginName": "Python3",
+                "shellId": "0805E2233C5F40D28BC450D58B81ACC7",
+                "elapsedTime": 90996
+            },
+            "evaluatorReader": true,
+            "lineCount": 57
+        },
+        {
+            "id": "code1WAXGA",
+            "type": "code",
+            "evaluator": "Python3",
+            "input": {
+                "body": [
+                    "grouped_topic_data = []",
+                    "",
+                    "with open('meetup_data.json', 'r') as infile:",
+                    "    meetup_data = json.load(infile)",
+                    "    ",
+                    "min_members = 100",
+                    "topic_count = len(meetup_data.keys())",
+                    "print(topic_count)",
+                    "perc_done = 0",
+                    "for i,topic in enumerate(list(meetup_data.keys())):",
+                    "    if round(i/topic_count,2) != perc_done:",
+                    "        perc_done = round(i/topic_count,2)",
+                    "        print(str(perc_done) + \"% done\")",
+                    "    else:",
+                    "        perc_done = round(i/topic_count,2)",
+                    "    topic_data = [data for data in meetup_data[topic] if data[\"members\"] >= min_members]",
+                    "    if topic_data:",
+                    "        df = pd.DataFrame.from_dict(topic_data)",
+                    "        grouped_data = df.groupby(by=['city','state','country'])['members'].sum()",
+                    "        for indx,total_members in grouped_data.iteritems():",
+                    "                if indx[1] == \"00\":",
+                    "                    city = indx[0] + \",\" + indx[2]",
+                    "                else:",
+                    "                    city = indx[0] + \",\" + indx[1] + \",\" + indx[2]",
+                    "                with open('city_gps_cache.json', 'r') as infile:",
+                    "                    city_gps_data = json.load(infile)",
+                    "                if city in city_gps_data.keys():",
+                    "                    lat = city_gps_data[city][0]",
+                    "                    lon = city_gps_data[city][1]",
+                    "                else:",
+                    "                    geo = gmaps.geocode(city)",
+                    "                    try:",
+                    "                        lat = geo[0]['geometry']['location'][\"lat\"]",
+                    "                        lon = geo[0]['geometry']['location'][\"lng\"]",
+                    "                    except IndexError:",
+                    "                        lat = 0",
+                    "                        lon = 0",
+                    "                    city_gps_data[city] = [lat,lon]",
+                    "                    with open('city_gps_cache.json', 'w') as outfile:",
+                    "                        json.dump(city_gps_data, outfile)",
+                    "                grouped_topic_data.append({\"topic\":topic,",
+                    "                                           \"city\":city,",
+                    "                                           \"members\":int(total_members),",
+                    "                                           \"lat\":lat,",
+                    "                                           \"lon\":lon})",
+                    "grouped_topic_data =sorted(grouped_topic_data, key=lambda k: k['members'],reverse=True)",
+                    "",
+                    "with open('grouped_topic_data.json', 'w') as outfile:",
+                    "    json.dump(grouped_topic_data, outfile)"
+                ]
+            },
+            "output": {
+                "state": {},
+                "selectedType": "Results",
+                "pluginName": "Python3",
+                "shellId": "0805E2233C5F40D28BC450D58B81ACC7",
+                "elapsedTime": 388369,
+                "height": 383,
+                "result": {
+                    "type": "Results",
+                    "outputdata": [
+                        {
+                            "type": "out",
+                            "value": "12664\n0.01% done"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n0.02% done"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n0.03% done"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n0.04% done"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n0.05% done"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n0.06% done"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n0.07% done"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n0.08% done"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n0.09% done"
+                        },
+                        {
+                            "type": "out",
+                            "value": "\n"
+                        }
+                    ],
+                    "payload": {
+                        "type": "BeakerDisplay",
+                        "innertype": "Error",
+                        "object": [
+                            "Interrupted"
+                        ]
+                    }
+                }
+>>>>>>> 26e37bfd64fdf88bb55e051c9489c8775095f08a
             },
             "evaluatorReader": true,
             "lineCount": 51
         },
         {
+<<<<<<< HEAD
             "id": "codespUl4U",
+=======
+            "id": "codeo5MhI7",
+>>>>>>> 26e37bfd64fdf88bb55e051c9489c8775095f08a
             "type": "code",
             "evaluator": "Python3",
             "input": {
                 "body": [
+<<<<<<< HEAD
                     "min_members = 110",
                     "with open('meetup_data.json', 'r') as infile:",
                     "    data = json.load(infile)",
@@ -204,17 +580,120 @@
                     "with open('grouped_topic_data.json', 'w') as outfile:",
                     "    json.dump(filtered_data, outfile)",
                     ""
+=======
+                    "",
+                    "def rollup(dataset, group_by_key, sum_value_keys):",
+                    "    dic = defaultdict(Counter)",
+                    "    for item in dataset:",
+                    "        key = item[group_by_key]",
+                    "        vals = {k:item[k] for k in sum_value_keys}",
+                    "        dic[key].update(vals)",
+                    "    return dic"
+                ]
+            },
+            "output": {
+                "state": {}
+            },
+            "evaluatorReader": true,
+            "lineCount": 8
+        },
+        {
+            "id": "code1Bu5Ql",
+            "type": "code",
+            "evaluator": "Python3",
+            "input": {
+                "body": [
+                    "def test_build_topic_data():",
+                    "    grouped_topic_data = []",
+                    "",
+                    "    with open('meetup_data.json', 'r') as infile:",
+                    "        meetup_data = json.load(infile)",
+                    "",
+                    "    min_members = 100",
+                    "    topic_data = [data for data in meetup_data[\"social\"] if data[\"members\"] >= min_members]",
+                    "    if topic_data:",
+                    "        df = pd.DataFrame.from_dict(topic_data)",
+                    "        grouped_data = df.groupby(by=['city','state','country'])['members'].sum()",
+                    "        for indx,total_members in grouped_data.iteritems():",
+                    "                if indx[1] == \"00\":",
+                    "                    city = indx[0] + \",\" + indx[2]",
+                    "                else:",
+                    "                    city = indx[0] + \",\" + indx[1] + \",\" + indx[2]",
+                    "                with open('city_gps_cache.json', 'r') as infile:",
+                    "                    city_gps_data = json.load(infile)",
+                    "                if city in city_gps_data.keys():",
+                    "                    lat = city_gps_data[city][0]",
+                    "                    lon = city_gps_data[city][1]",
+                    "                else:",
+                    "                    geo = gmaps.geocode(city)",
+                    "                    try:",
+                    "                        lat = geo[0]['geometry']['location'][\"lat\"]",
+                    "                        lon = geo[0]['geometry']['location'][\"lng\"]",
+                    "                    except IndexError:",
+                    "                        lat = 0",
+                    "                        lon = 0",
+                    "                    city_gps_data[city] = [lat,lon]",
+                    "                    with open('city_gps_cache.json', 'w') as outfile:",
+                    "                        json.dump(city_gps_data, outfile)",
+                    "                grouped_topic_data.append({\"topic\":topic,",
+                    "                                           \"city\":city,",
+                    "                                           \"members\":int(total_members),",
+                    "                                           \"lat\":lat,",
+                    "                                           \"lon\":lon})",
+                    "    grouped_topic_data =sorted(grouped_topic_data, key=lambda k: k['members'],reverse=True)",
+                    "",
+                    "    with open('grouped_topic_data.json', 'w') as outfile:",
+                    "        json.dump(grouped_topic_data, outfile)"
+>>>>>>> 26e37bfd64fdf88bb55e051c9489c8775095f08a
                 ]
             },
             "output": {
                 "state": {},
                 "selectedType": "Hidden",
                 "pluginName": "Python3",
+<<<<<<< HEAD
                 "shellId": "4D610D1302A24C85AE11A7F84C1EEC7A",
                 "elapsedTime": 34212
             },
             "evaluatorReader": true,
             "lineCount": 8
+=======
+                "shellId": "0805E2233C5F40D28BC450D58B81ACC7",
+                "elapsedTime": 355
+            },
+            "evaluatorReader": true,
+            "lineCount": 41
+        },
+        {
+            "id": "codeAMn6he",
+            "type": "code",
+            "evaluator": "Python3",
+            "input": {
+                "body": [
+                    "import cProfile",
+                    "cProfile.run('test_build_topic_data()')"
+                ]
+            },
+            "output": {
+                "state": {},
+                "result": {
+                    "type": "Results",
+                    "outputdata": [
+                        {
+                            "type": "out",
+                            "value": "         226013 function calls (225982 primitive calls) in 47.196 seconds\n\n   Ordered by: standard name\n\n   ncalls  tottime  percall  cumtime  percall filename:lineno(function)\n       46    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:996(_handle_fromlist)\n        1    2.660    2.660   46.877   46.877 <ipython-input-1-62ed1a04f13d>:1(test_build_topic_data)\n     1154    0.000    0.000    0.000    0.000 <ipython-input-1-62ed1a04f13d>:38(<lambda>)\n        1    0.003    0.003    0.003    0.003 <ipython-input-1-62ed1a04f13d>:8(<listcomp>)\n        1    0.319    0.319   47.196   47.196 <string>:1(<module>)\n        1    0.010    0.010    0.083    0.083 __init__.py:119(dump)\n        9    0.000    0.000    0.000    0.000 __init__.py:126(iteritems)\n     1155    0.223    0.000   43.932    0.038 __init__.py:243(load)\n     1155    0.010    0.000   40.889    0.035 __init__.py:271(loads)\n     1156    0.003    0.000    0.011    0.000 _bootlocale.py:11(getpreferredencoding)\n        2    0.000    0.000    0.000    0.000 _methods.py:34(_prod)\n        1    0.000    0.000    0.000    0.000 _methods.py:37(_any)\n        8    0.000    0.000    0.000    0.000 _methods.py:40(_all)\n        1    0.000    0.000    0.000    0.000 _weakrefset.py:70(__contains__)\n        1    0.000    0.000    0.000    0.000 abc.py:178(__instancecheck__)\n        3    0.001    0.000    0.004    0.001 algorithms.py:153(factorize)\n        3    0.000    0.000    0.000    0.000 algorithms.py:472(_get_data_algo)\n        2    0.000    0.000    0.000    0.000 base.py:102(_reset_cache)\n        6    0.000    0.000    0.000    0.000 base.py:242(__getitem__)\n        3    0.000    0.000    0.000    0.000 base.py:305(_shallow_copy)\n        2    0.000    0.000    0.000    0.000 base.py:342(ndim)\n        3    0.000    0.000    0.000    0.000 base.py:391(_values)\n        1    0.000    0.000    0.000    0.000 codecs.py:185(__init__)\n     1155    0.003    0.000    0.003    0.000 codecs.py:259(__init__)\n        3    0.000    0.000    0.000    0.000 common.py:1057(_maybe_promote)\n        1    0.000    0.000    0.001    0.001 common.py:1247(_possibly_downcast_to_dtype)\n        2    0.000    0.000    0.000    0.000 common.py:1255(<lambda>)\n        5    0.000    0.000    0.000    0.000 common.py:139(isnull)\n        8    0.000    0.000    0.000    0.000 common.py:1526(_possibly_castable)\n       13    0.000    0.000    0.001    0.000 common.py:1551(_possibly_cast_to_datetime)\n        5    0.000    0.000    0.000    0.000 common.py:160(_isnull_new)\n       11    0.000    0.000    0.001    0.000 common.py:1641(_possibly_infer_to_datetimelike)\n        1    0.000    0.000    0.000    0.000 common.py:1755(_default_index)\n        5    0.000    0.000    0.000    0.000 common.py:1983(_asarray_tuplesafe)\n        1    0.000    0.000    0.000    0.000 common.py:2079(is_datetimelike)\n       33    0.000    0.000    0.000    0.000 common.py:2111(_get_dtype_type)\n        5    0.000    0.000    0.000    0.000 common.py:2148(is_integer_dtype)\n        6    0.000    0.000    0.000    0.000 common.py:2162(is_datetime64_dtype)\n       33    0.000    0.000    0.000    0.000 common.py:2169(is_datetime64tz_dtype)\n        6    0.000    0.000    0.000    0.000 common.py:2182(is_timedelta64_dtype)\n        5    0.000    0.000    0.000    0.000 common.py:2192(is_datetime_or_timedelta_dtype)\n        4    0.000    0.000    0.000    0.000 common.py:2241(<lambda>)\n        2    0.000    0.000    0.000    0.000 common.py:2252(is_numeric_dtype)\n        3    0.000    0.000    0.000    0.000 common.py:2258(is_float_dtype)\n        6    0.000    0.000    0.000    0.000 common.py:2268(is_bool_dtype)\n       13    0.000    0.000    0.000    0.000 common.py:2276(is_sparse)\n       29    0.000    0.000    0.000    0.000 common.py:2280(is_datetimetz)\n        6    0.000    0.000    0.000    0.000 common.py:2284(is_internal_type)\n       15    0.000    0.000    0.000    0.000 common.py:2297(is_categorical)\n        1    0.000    0.000    0.000    0.000 common.py:230(_isnull_ndarraylike)\n       34    0.000    0.000    0.000    0.000 common.py:2301(is_categorical_dtype)\n       18    0.000    0.000    0.000    0.000 common.py:2327(is_list_like)\n        1    0.000    0.000    0.000    0.000 common.py:2331(is_named_tuple)\n        1    0.000    0.000    0.000    0.000 common.py:295(notnull)\n        1    0.000    0.000    0.000    0.000 common.py:334(array_equivalent)\n        5    0.000    0.000    0.000    0.000 common.py:665(_get_take_nd_function)\n      120    0.000    0.000    0.000    0.000 common.py:69(_check)\n        5    0.000    0.000    0.000    0.000 common.py:697(take_nd)\n        3    0.000    0.000    0.000    0.000 common.py:938(_coerce_indexer_dtype)\n    25389    0.011    0.000    0.020    0.000 cp1252.py:18(encode)\n     1155    0.006    0.000    1.472    0.001 cp1252.py:22(decode)\n     1155    0.014    0.000   40.876    0.035 decoder.py:334(decode)\n     1155   40.844    0.035   40.844    0.035 decoder.py:345(raw_decode)\n        5    0.000    0.000    0.000    0.000 dtypes.py:111(construct_from_string)\n       67    0.000    0.000    0.000    0.000 dtypes.py:68(is_dtype)\n        1    0.000    0.000    0.000    0.000 encoder.py:204(iterencode)\n     2306    0.001    0.000    0.005    0.000 encoder.py:223(floatstr)\n        1    0.000    0.000    0.000    0.000 encoder.py:259(_make_iterencode)\n    25390    0.007    0.000    0.030    0.000 encoder.py:276(_iterencode_list)\n    25388    0.013    0.000    0.022    0.000 encoder.py:332(_iterencode_dict)\n    25390    0.004    0.000    0.035    0.000 encoder.py:411(_iterencode)\n        4    0.000    0.000    0.001    0.000 frame.py:1946(__getitem__)\n        4    0.000    0.000    0.001    0.000 frame.py:1971(_getitem_column)\n        1    0.000    0.000    0.023    0.023 frame.py:212(__init__)\n        4    0.000    0.000    0.000    0.000 frame.py:2274(_box_item_values)\n        4    0.000    0.000    0.000    0.000 frame.py:2281(_box_col_values)\n        1    0.000    0.000    0.004    0.004 frame.py:5151(_arrays_to_mgr)\n        1    0.000    0.000    0.018    0.018 frame.py:5257(_to_arrays)\n        1    0.000    0.000    0.018    0.018 frame.py:5399(_list_of_dict_to_arrays)\n     4226    0.006    0.000    0.006    0.000 frame.py:5401(<genexpr>)\n        1    0.002    0.002    0.002    0.002 frame.py:5406(<listcomp>)\n        1    0.000    0.000    0.006    0.006 frame.py:5413(_convert_object_array)\n        7    0.000    0.000    0.006    0.001 frame.py:5423(convert)\n        1    0.000    0.000    0.006    0.006 frame.py:5429(<listcomp>)\n        1    0.000    0.000    0.001    0.001 frame.py:5452(_homogenize)\n        1    0.002    0.002    0.025    0.025 frame.py:772(from_dict)\n        6    0.000    0.000    0.000    0.000 fromnumeric.py:1973(all)\n        2    0.000    0.000    0.000    0.000 fromnumeric.py:2395(prod)\n        4    0.000    0.000    0.001    0.000 generic.py:1086(_get_item_cache)\n        4    0.000    0.000    0.000    0.000 generic.py:1100(_set_as_cached)\n       10    0.000    0.000    0.000    0.000 generic.py:2362(__setattr__)\n        2    0.000    0.000    0.000    0.000 generic.py:2399(_protect_consolidate)\n        2    0.000    0.000    0.000    0.000 generic.py:2407(_consolidate_inplace)\n        2    0.000    0.000    0.000    0.000 generic.py:2409(f)\n        3    0.000    0.000    0.000    0.000 generic.py:304(_get_axis_number)\n        1    0.000    0.000    0.000    0.000 generic.py:317(_get_axis_name)\n        1    0.000    0.000    0.000    0.000 generic.py:330(_get_axis)\n        1    0.000    0.000    0.002    0.002 generic.py:3383(groupby)\n        1    0.000    0.000    0.000    0.000 generic.py:378(_info_axis)\n        1    0.000    0.000    0.000    0.000 generic.py:719(__contains__)\n        6    0.000    0.000    0.000    0.000 generic.py:93(__init__)\n        1    0.000    0.000    0.007    0.007 groupby.py:108(f)\n        1    0.000    0.000    0.001    0.001 groupby.py:1167(_try_cast)\n        1    0.000    0.000    0.007    0.007 groupby.py:1201(_cython_agg_general)\n        1    0.000    0.000    0.002    0.002 groupby.py:1302(groupby)\n        1    0.000    0.000    0.000    0.000 groupby.py:1337(__init__)\n        2    0.000    0.000    0.000    0.000 groupby.py:1342(shape)\n        8    0.000    0.000    0.000    0.000 groupby.py:1344(<genexpr>)\n        1    0.000    0.000    0.000    0.000 groupby.py:1431(names)\n        1    0.000    0.000    0.000    0.000 groupby.py:1433(<listcomp>)\n        1    0.000    0.000    0.001    0.001 groupby.py:1473(group_info)\n        1    0.000    0.000    0.001    0.001 groupby.py:1482(_get_compressed_labels)\n        1    0.000    0.000    0.000    0.000 groupby.py:1483(<listcomp>)\n        1    0.000    0.000    0.005    0.005 groupby.py:1492(ngroups)\n        1    0.000    0.000    0.001    0.001 groupby.py:1496(recons_labels)\n        1    0.000    0.000    0.000    0.000 groupby.py:1499(<genexpr>)\n        1    0.000    0.000    0.005    0.005 groupby.py:1503(result_index)\n        1    0.000    0.000    0.004    0.004 groupby.py:1508(<listcomp>)\n        2    0.000    0.000    0.000    0.000 groupby.py:1559(_get_cython_function)\n        2    0.000    0.000    0.000    0.000 groupby.py:1563(get_func)\n        1    0.000    0.000    0.006    0.006 groupby.py:1600(_cython_operation)\n        1    0.000    0.000    0.006    0.006 groupby.py:1692(aggregate)\n        1    0.000    0.000    0.000    0.000 groupby.py:1698(_aggregate)\n        3    0.000    0.000    0.000    0.000 groupby.py:1989(__init__)\n        6    0.000    0.000    0.000    0.000 groupby.py:2126(ngroups)\n        3    0.000    0.000    0.000    0.000 groupby.py:2134(labels)\n        9    0.000    0.000    0.004    0.000 groupby.py:2140(group_index)\n        3    0.000    0.000    0.004    0.001 groupby.py:2146(_make_labels)\n        1    0.000    0.000    0.002    0.002 groupby.py:2157(_get_grouper)\n        4    0.000    0.000    0.000    0.000 groupby.py:2211(<genexpr>)\n        4    0.000    0.000    0.000    0.000 groupby.py:2212(<genexpr>)\n        4    0.000    0.000    0.000    0.000 groupby.py:2213(<genexpr>)\n        4    0.000    0.000    0.000    0.000 groupby.py:2218(<genexpr>)\n        3    0.000    0.000    0.000    0.000 groupby.py:2241(is_in_axis)\n        3    0.000    0.000    0.000    0.000 groupby.py:2251(is_in_obj)\n        3    0.000    0.000    0.000    0.000 groupby.py:2287(_is_label_like)\n        3    0.000    0.000    0.000    0.000 groupby.py:2291(_convert_grouper)\n        1    0.000    0.000    0.000    0.000 groupby.py:2481(_wrap_output)\n        1    0.000    0.000    0.000    0.000 groupby.py:2493(_wrap_aggregated_output)\n        1    0.000    0.000    0.000    0.000 groupby.py:3466(__getitem__)\n        1    0.000    0.000    0.000    0.000 groupby.py:3835(get_group_index)\n        1    0.000    0.000    0.000    0.000 groupby.py:3862(_int64_cut_off)\n        1    0.000    0.000    0.000    0.000 groupby.py:3870(loop)\n        2    0.000    0.000    0.000    0.000 groupby.py:3913(_int64_overflow_possible)\n        1    0.000    0.000    0.000    0.000 groupby.py:3921(decons_group_index)\n        2    0.000    0.000    0.002    0.001 groupby.py:394(__init__)\n        1    0.000    0.000    0.000    0.000 groupby.py:3941(decons_obs_group_ids)\n        1    0.000    0.000    0.000    0.000 groupby.py:4124(_compress_group_index)\n        1    0.000    0.000    0.000    0.000 groupby.py:4145(_reorder_by_uniques)\n        3    0.000    0.000    0.000    0.000 groupby.py:496(name)\n        1    0.000    0.000    0.000    0.000 groupby.py:509(_selected_obj)\n        1    0.000    0.000    0.000    0.000 groupby.py:519(_set_selection_from_grouper)\n        1    0.000    0.000    0.000    0.000 groupby.py:550(__getattr__)\n        2    0.000    0.000    0.000    0.000 groupby.py:731(_iterate_slices)\n        1    0.000    0.000    0.000    0.000 index.py:1031(_engine)\n        1    0.000    0.000    0.000    0.000 index.py:1034(<lambda>)\n        1    0.000    0.000    0.002    0.002 index.py:1074(__iter__)\n        8    0.000    0.000    0.000    0.000 index.py:1118(__contains__)\n       11    0.000    0.000    0.000    0.000 index.py:1132(__getitem__)\n        5    0.000    0.000    0.001    0.000 index.py:116(__new__)\n        1    0.000    0.000    0.000    0.000 index.py:1352(equals)\n        8    0.000    0.000    0.000    0.000 index.py:1730(get_loc)\n        9    0.000    0.000    0.000    0.000 index.py:212(_simple_new)\n        4    0.000    0.000    0.000    0.000 index.py:240(is_)\n       10    0.000    0.000    0.000    0.000 index.py:259(_reset_identity)\n       26    0.000    0.000    0.000    0.000 index.py:264(__len__)\n        1    0.000    0.000    0.000    0.000 index.py:285(dtype)\n       10    0.000    0.000    0.000    0.000 index.py:295(values)\n        2    0.000    0.000    0.000    0.000 index.py:300(get_values)\n        1    0.000    0.000    0.000    0.000 index.py:344(_coerce_to_ndarray)\n        3    0.000    0.000    0.000    0.000 index.py:359(_get_attributes_dict)\n        3    0.000    0.000    0.000    0.000 index.py:361(<listcomp>)\n        1    0.000    0.000    0.000    0.000 index.py:3698(__new__)\n        4    0.000    0.000    0.000    0.000 index.py:3735(is_all_dates)\n        3    0.000    0.000    0.000    0.000 index.py:3742(equals)\n        3    0.000    0.000    0.000    0.000 index.py:375(_shallow_copy)\n        1    0.000    0.000    0.000    0.000 index.py:3999(__new__)\n        8    0.000    0.000    0.000    0.000 index.py:4060(_get_levels)\n        1    0.000    0.000    0.000    0.000 index.py:4063(_set_levels)\n        4    0.000    0.000    0.000    0.000 index.py:4076(<genexpr>)\n        4    0.000    0.000    0.000    0.000 index.py:4167(_get_labels)\n        1    0.000    0.000    0.000    0.000 index.py:4170(_set_labels)\n        4    0.000    0.000    0.000    0.000 index.py:4179(<genexpr>)\n        3    0.000    0.000    0.000    0.000 index.py:4351(__len__)\n        1    0.000    0.000    0.000    0.000 index.py:4354(_get_names)\n        1    0.000    0.000    0.000    0.000 index.py:4355(<genexpr>)\n        1    0.000    0.000    0.000    0.000 index.py:4357(_set_names)\n        1    0.000    0.000    0.002    0.002 index.py:4439(values)\n        1    0.000    0.000    0.000    0.000 index.py:4680(is_all_dates)\n        2    0.000    0.000    0.000    0.000 index.py:4845(nlevels)\n       14    0.000    0.000    0.000    0.000 index.py:6067(_ensure_index)\n        3    0.000    0.000    0.000    0.000 index.py:6097(_ensure_frozen)\n        3    0.000    0.000    0.000    0.000 index.py:671(_set_names)\n        3    0.000    0.000    0.000    0.000 index.py:679(set_names)\n        3    0.000    0.000    0.000    0.000 index.py:737(rename)\n        1    0.000    0.000    0.000    0.000 index.py:809(is_unique)\n        1    0.000    0.000    0.000    0.000 internals.py:122(external_values)\n        4    0.000    0.000    0.000    0.000 internals.py:126(internal_values)\n       14    0.000    0.000    0.000    0.000 internals.py:150(mgr_locs)\n        4    0.000    0.000    0.000    0.000 internals.py:1621(__init__)\n        4    0.000    0.000    0.000    0.000 internals.py:171(make_block_same_class)\n        8    0.000    0.000    0.000    0.000 internals.py:184(mgr_locs)\n        8    0.000    0.000    0.001    0.000 internals.py:2421(make_block)\n        1    0.000    0.000    0.001    0.001 internals.py:2516(__init__)\n        1    0.000    0.000    0.000    0.000 internals.py:2517(<listcomp>)\n        3    0.000    0.000    0.000    0.000 internals.py:2557(shape)\n        9    0.000    0.000    0.000    0.000 internals.py:2559(<genexpr>)\n        3    0.000    0.000    0.000    0.000 internals.py:2561(ndim)\n        1    0.000    0.000    0.001    0.001 internals.py:2611(_rebuild_blknos_and_blklocs)\n        3    0.000    0.000    0.000    0.000 internals.py:263(shape)\n        9    0.000    0.000    0.000    0.000 internals.py:2632(_get_items)\n       12    0.000    0.000    0.000    0.000 internals.py:271(dtype)\n        1    0.000    0.000    0.000    0.000 internals.py:2737(_verify_integrity)\n        4    0.000    0.000    0.000    0.000 internals.py:2739(<genexpr>)\n        3    0.000    0.000    0.000    0.000 internals.py:275(ftype)\n        2    0.000    0.000    0.000    0.000 internals.py:2920(is_consolidated)\n        1    0.000    0.000    0.000    0.000 internals.py:2928(_consolidate_check)\n        1    0.000    0.000    0.000    0.000 internals.py:2929(<listcomp>)\n        4    0.000    0.000    0.000    0.000 internals.py:301(iget)\n        2    0.000    0.000    0.000    0.000 internals.py:3181(consolidate)\n        1    0.000    0.000    0.000    0.000 internals.py:3197(_consolidate_inplace)\n        4    0.000    0.000    0.001    0.000 internals.py:3204(get)\n        4    0.000    0.000    0.000    0.000 internals.py:3232(iget)\n        5    0.000    0.000    0.000    0.000 internals.py:3696(__init__)\n       14    0.000    0.000    0.000    0.000 internals.py:3743(_block)\n        9    0.000    0.000    0.000    0.000 internals.py:3806(dtype)\n        1    0.000    0.000    0.000    0.000 internals.py:3830(external_values)\n        4    0.000    0.000    0.000    0.000 internals.py:3833(internal_values)\n        1    0.000    0.000    0.000    0.000 internals.py:3848(is_consolidated)\n        1    0.000    0.000    0.003    0.003 internals.py:3908(create_block_manager_from_arrays)\n        1    0.000    0.000    0.002    0.002 internals.py:3919(form_blocks)\n        1    0.000    0.000    0.001    0.001 internals.py:4039(_simple_blockify)\n        2    0.000    0.000    0.001    0.000 internals.py:4053(_multi_blockify)\n        4    0.000    0.000    0.000    0.000 internals.py:4057(<lambda>)\n        3    0.000    0.000    0.001    0.000 internals.py:4087(_stack_arrays)\n        7    0.000    0.000    0.000    0.000 internals.py:4090(_asarray_compat)\n        3    0.000    0.000    0.000    0.000 internals.py:4096(_shape_compat)\n        8    0.000    0.000    0.001    0.000 internals.py:74(__init__)\n       16    0.000    0.000    0.000    0.000 numeric.py:2064(isscalar)\n        2    0.000    0.000    0.000    0.000 numeric.py:2310(allclose)\n        2    0.000    0.000    0.000    0.000 numeric.py:2375(isclose)\n        2    0.000    0.000    0.000    0.000 numeric.py:2434(within_tol)\n        4    0.000    0.000    0.000    0.000 numeric.py:2576(seterr)\n        4    0.000    0.000    0.000    0.000 numeric.py:2676(geterr)\n        2    0.000    0.000    0.000    0.000 numeric.py:2963(__init__)\n        2    0.000    0.000    0.000    0.000 numeric.py:2967(__enter__)\n        2    0.000    0.000    0.000    0.000 numeric.py:2972(__exit__)\n       23    0.000    0.000    0.000    0.000 numeric.py:414(asarray)\n        6    0.000    0.000    0.000    0.000 numeric.py:484(asanyarray)\n        3    0.000    0.000    0.000    0.000 numeric.py:607(require)\n        6    0.000    0.000    0.000    0.000 numeric.py:676(<genexpr>)\n        2    0.000    0.000    0.000    0.000 numeric.py:86(zeros_like)\n        1    0.000    0.000    0.000    0.000 series.py:1033(__iter__)\n        1    0.000    0.000    0.002    0.002 series.py:1042(iteritems)\n        5    0.000    0.000    0.001    0.000 series.py:123(__init__)\n        4    0.000    0.000    0.000    0.000 series.py:234(from_array)\n        5    0.000    0.000    0.000    0.000 series.py:268(_set_axis)\n        8    0.000    0.000    0.001    0.000 series.py:2758(_sanitize_array)\n        8    0.000    0.000    0.001    0.000 series.py:2773(_try_cast)\n        5    0.000    0.000    0.000    0.000 series.py:289(_set_subtyp)\n        9    0.000    0.000    0.000    0.000 series.py:300(dtype)\n        1    0.000    0.000    0.000    0.000 series.py:320(values)\n        4    0.000    0.000    0.000    0.000 series.py:352(_values)\n       10    0.000    0.000    0.000    0.000 {built-in method __new__ of type object at 0x000000005B8AAB40}\n     1155    1.466    0.001    1.466    0.001 {built-in method _codecs.charmap_decode}\n    25389    0.009    0.000    0.009    0.000 {built-in method _codecs.charmap_encode}\n     8078    0.002    0.000    0.002    0.000 {built-in method _json.encode_basestring_ascii}\n     1156    0.008    0.000    0.008    0.000 {built-in method _locale._getdefaultlocale}\n        4    0.000    0.000    0.000    0.000 {built-in method builtins.abs}\n        1    0.000    0.000    0.000    0.000 {built-in method builtins.all}\n        4    0.000    0.000    0.000    0.000 {built-in method builtins.any}\n        3    0.000    0.000    0.000    0.000 {built-in method builtins.callable}\n        1    0.000    0.000   47.196   47.196 {built-in method builtins.exec}\n      151    0.000    0.000    0.000    0.000 {built-in method builtins.getattr}\n      149    0.000    0.000    0.000    0.000 {built-in method builtins.hasattr}\n        8    0.000    0.000    0.000    0.000 {built-in method builtins.hash}\n     1158    0.000    0.000    0.000    0.000 {built-in method builtins.id}\n    24859    0.004    0.000    0.004    0.000 {built-in method builtins.isinstance}\n      146    0.000    0.000    0.000    0.000 {built-in method builtins.issubclass}\n      4/2    0.000    0.000    0.002    0.001 {built-in method builtins.iter}\n1346/1317    0.001    0.000    0.001    0.000 {built-in method builtins.len}\n       12    0.000    0.000    0.000    0.000 {built-in method builtins.min}\n     2306    0.003    0.000    0.003    0.000 {built-in method builtins.repr}\n        1    0.000    0.000    0.001    0.001 {built-in method builtins.sorted}\n        1    0.000    0.000    0.000    0.000 {built-in method builtins.sum}\n     1156    0.146    0.000    0.160    0.000 {built-in method io.open}\n        9    0.000    0.000    0.000    0.000 {built-in method numpy.core.multiarray.arange}\n       57    0.000    0.000    0.000    0.000 {built-in method numpy.core.multiarray.array}\n        2    0.000    0.000    0.000    0.000 {built-in method numpy.core.multiarray.copyto}\n        2    0.000    0.000    0.000    0.000 {built-in method numpy.core.multiarray.empty_like}\n       15    0.001    0.000    0.001    0.000 {built-in method numpy.core.multiarray.empty}\n        7    0.000    0.000    0.000    0.000 {built-in method numpy.core.multiarray.putmask}\n        2    0.000    0.000    0.000    0.000 {built-in method numpy.core.multiarray.result_type}\n        3    0.000    0.000    0.000    0.000 {built-in method numpy.core.multiarray.zeros}\n        8    0.000    0.000    0.000    0.000 {built-in method numpy.core.umath.geterrobj}\n        4    0.000    0.000    0.000    0.000 {built-in method numpy.core.umath.seterrobj}\n        1    0.000    0.000    0.000    0.000 {built-in method pandas.algos.ensure_float64}\n        1    0.000    0.000    0.000    0.000 {built-in method pandas.algos.ensure_int16}\n       12    0.000    0.000    0.000    0.000 {built-in method pandas.algos.ensure_int64}\n        2    0.000    0.000    0.000    0.000 {built-in method pandas.algos.ensure_int8}\n        5    0.000    0.000    0.000    0.000 {built-in method pandas.algos.ensure_object}\n        3    0.000    0.000    0.000    0.000 {built-in method pandas.algos.ensure_platform_int}\n        1    0.000    0.000    0.000    0.000 {built-in method pandas.lib.array_equivalent_object}\n        4    0.000    0.000    0.000    0.000 {built-in method pandas.lib.checknull}\n        6    0.000    0.000    0.000    0.000 {function FrozenList.__getitem__ at 0x0000024B7ED5C378}\n        8    0.000    0.000    0.000    0.000 {method 'all' of 'numpy.ndarray' objects}\n        1    0.000    0.000    0.000    0.000 {method 'any' of 'numpy.ndarray' objects}\n     1182    0.001    0.000    0.001    0.000 {method 'append' of 'list' objects}\n        4    0.001    0.000    0.001    0.000 {method 'argsort' of 'numpy.ndarray' objects}\n        4    0.000    0.000    0.000    0.000 {method 'astype' of 'numpy.ndarray' objects}\n        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}\n     2310    0.001    0.000    0.001    0.000 {method 'end' of '_sre.SRE_Match' objects}\n        3    0.000    0.000    0.000    0.000 {method 'extend' of 'list' objects}\n        3    0.000    0.000    0.000    0.000 {method 'fill' of 'numpy.ndarray' objects}\n       14    0.000    0.000    0.000    0.000 {method 'get' of 'dict' objects}\n        3    0.002    0.001    0.002    0.001 {method 'get_labels' of 'pandas.hashtable.PyObjectHashTable' objects}\n        1    0.000    0.000    0.000    0.000 {method 'get_labels_groupby' of 'pandas.hashtable.Int64HashTable' objects}\n        8    0.000    0.000    0.000    0.000 {method 'get_loc' of 'pandas.index.IndexEngine' objects}\n     1163    0.000    0.000    0.000    0.000 {method 'items' of 'dict' objects}\n     5379    0.001    0.000    0.001    0.000 {method 'keys' of 'dict' objects}\n        1    0.000    0.000    0.000    0.000 {method 'lower' of 'str' objects}\n     2310    0.016    0.000    0.016    0.000 {method 'match' of '_sre.SRE_Pattern' objects}\n        2    0.000    0.000    0.000    0.000 {method 'pop' of 'dict' objects}\n        4    0.000    0.000    0.000    0.000 {method 'put' of 'numpy.ndarray' objects}\n        3    0.000    0.000    0.000    0.000 {method 'ravel' of 'numpy.ndarray' objects}\n     1155    1.348    0.001    2.820    0.002 {method 'read' of '_io.TextIOWrapper' objects}\n       11    0.000    0.000    0.000    0.000 {method 'reduce' of 'numpy.ufunc' objects}\n     1155    0.003    0.000    0.003    0.000 {method 'startswith' of 'str' objects}\n        6    0.000    0.000    0.000    0.000 {method 'take' of 'numpy.ndarray' objects}\n        3    0.000    0.000    0.000    0.000 {method 'to_array' of 'pandas.hashtable.ObjectVector' objects}\n        3    0.000    0.000    0.000    0.000 {method 'update' of 'dict' objects}\n        3    0.000    0.000    0.000    0.000 {method 'upper' of 'str' objects}\n       16    0.000    0.000    0.000    0.000 {method 'view' of 'numpy.ndarray' objects}\n    25389    0.019    0.000    0.039    0.000 {method 'write' of '_io.TextIOWrapper' objects}\n        1    0.000    0.000    0.000    0.000 {pandas.algos.group_add_float64}\n        2    0.000    0.000    0.000    0.000 {pandas.algos.take_1d_int64_int64}\n        3    0.000    0.000    0.000    0.000 {pandas.algos.take_1d_object_object}\n        1    0.000    0.000    0.000    0.000 {pandas.lib.clean_index_list}\n        1    0.003    0.003    0.003    0.003 {pandas.lib.dicts_to_array}\n        1    0.001    0.001    0.008    0.008 {pandas.lib.fast_unique_multiple_list_gen}\n        1    0.001    0.001    0.001    0.001 {pandas.lib.fast_zip}\n       16    0.000    0.000    0.000    0.000 {pandas.lib.infer_dtype}\n        3    0.000    0.000    0.000    0.000 {pandas.lib.is_float}\n        3    0.000    0.000    0.000    0.000 {pandas.lib.is_integer}\n        5    0.000    0.000    0.000    0.000 {pandas.lib.isscalar}\n        7    0.005    0.001    0.005    0.001 {pandas.lib.maybe_convert_objects}\n       10    0.000    0.000    0.000    0.000 {pandas.lib.values_from_object}\n\n\n"
+                        }
+                    ]
+                },
+                "selectedType": "Results",
+                "pluginName": "Python3",
+                "shellId": "0805E2233C5F40D28BC450D58B81ACC7",
+                "elapsedTime": 47379,
+                "height": 5703
+            },
+            "evaluatorReader": true,
+            "lineCount": 2
+>>>>>>> 26e37bfd64fdf88bb55e051c9489c8775095f08a
         },
         {
             "id": "codeePcD9b",
@@ -619,7 +1098,7 @@
                 "shellId": "D81B69DB96C84B728C6A6E82D426B061",
                 "elapsedTime": 549,
                 "dataresult": 0,
-                "height": 136
+                "height": 99
             },
             "evaluatorReader": true,
             "lineCount": 4
@@ -651,7 +1130,7 @@
                 "shellId": "4A113148F93F47018B7F2E0C6FCBEB30",
                 "elapsedTime": 491,
                 "dataresult": 5679,
-                "height": 108
+                "height": 71
             },
             "evaluatorReader": true,
             "lineCount": 2
@@ -3300,7 +3779,7 @@
                 "pluginName": "Python3",
                 "shellId": "D81B69DB96C84B728C6A6E82D426B061",
                 "elapsedTime": 792,
-                "height": 831
+                "height": 794
             },
             "evaluatorReader": true,
             "lineCount": 2

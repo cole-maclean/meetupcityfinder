@@ -98,6 +98,10 @@ label {
   <h4 align="center"><a href="www.google.com">The Build</a></h4>
 </header>
 
+<<<<<<< HEAD
+=======
+<span
+>>>>>>> 26e37bfd64fdf88bb55e051c9489c8775095f08a
 <form name="topic-list" onSubmit="return handleTopicAdd()">
   <input type="text" id="topic-list-input" placeholder="Add a topic...">
   <label>Click topic to remove:</label>
@@ -113,7 +117,11 @@ label {
 <script>
 
 var width = 1350,
+<<<<<<< HEAD
     height = 1503,
+=======
+    height = 550,
+>>>>>>> 26e37bfd64fdf88bb55e051c9489c8775095f08a
     globe_height = 520,
     globe_width = 680;
 
@@ -279,7 +287,11 @@ function handleDetailsClick(city){
 
     return (a-b)
   })
+<<<<<<< HEAD
   top_five = rank_order.slice(0,5);
+=======
+  top_three = rank_order.slice(0,5);
+>>>>>>> 26e37bfd64fdf88bb55e051c9489c8775095f08a
 
   top_five.forEach(function(d){
       rank = loaded_topic_members[d].indexOf(city_topic_members[d])
@@ -392,7 +404,7 @@ function add_topic(val){
 var loaded_topic_data;
 var loaded_topic_members = {};
 
-d3.json("grouped_topic_data.json",function(topic_data) {
+d3.json("meetup_data.json",function(topic_data) {
   loaded_topic_data = topic_data;
   loaded_topic_data.forEach(function(d){ //loaded topic data is pre-sorted so resulting object also sorted largest to smallest membership
     if (d.topic in loaded_topic_members){

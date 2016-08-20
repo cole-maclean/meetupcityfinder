@@ -6,4 +6,8 @@ need to sort grouped_data --Done
 fix gps coordinates bug --Done
 Build and manage topic list selector --Done
 make topic data keys and inout list topics all lowercase --Done
+<<<<<<< HEAD
 Add title and meetup link --Done
+=======
+Add title and meetup graphic
+>>>>>>> 26e37bfd64fdf88bb55e051c9489c8775095f08a

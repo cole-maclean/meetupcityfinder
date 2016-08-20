@@ -51,13 +51,14 @@
 .svg-content-responsive {
     display: inline-block;
     position: absolute;
-    top: 10px;
     left: 0;
 }
 
 ul > li {
     display: inline-block;
     padding: 10px 40px;
+    height: 8px;
+    line-height: 8px;
     /* You can also add some margins here to make it look prettier */
     zoom:1;
     *display:inline;
@@ -66,6 +67,15 @@ ul > li {
 
 }
 
+header { border-bottom: 1px solid #000; }
+header > h1 {
+    padding: 0px;
+    margin: 0px;
+     }
+header > h4 {
+    padding: 0px;
+    margin: 0px;
+     }
 input[type=text]
 {
     border:solid 1px #BFBDBD;
@@ -74,30 +84,41 @@ input[type=text]
     width: 191px;
     box-shadow: 2px 2px 0 #828181 inset;
 }
+
+label {
+  display: inline-block;
+}​
+
 </style>
 <body>
 
+<header>
+  <h1 align="center" margin-bottom = "1px"><a href= "https://www.meetup.com/">Meetup.com</a> City Finder</h1>
+  <h4 align="center">Find your ideal city from meetup.com group topics</h4>
+  <h4 align="center"><a href="www.google.com">The Build</a></h4>
+</header>
+
 <form name="topic-list" onSubmit="return handleTopicAdd()">
   <input type="text" id="topic-list-input" placeholder="Add a topic...">
+  <label>Click topic to remove:</label>
 </form>
 
-Click List Item to Remove:
 
 <ul id="topic-list"></ul>
-<script src="http://d3js.org/d3.v3.min.js"></script>
-<script src="http://d3js.org/topojson.v1.min.js"></script>
+<script src="https://d3js.org/d3.v3.min.js"></script>
+<script src="https://d3js.org/topojson.v1.min.js"></script>
 <script src="d3.geo.zoom.js"></script>
 <script src="colorbrewer.js"></script>
 
 <script>
 
 var width = 1350,
-    height = 630,
-    globe_height = 650,
+    height = 1503,
+    globe_height = 520,
     globe_width = 680;
 
 var projection = d3.geo.orthographic()
-    .scale(270)
+    .scale(210)
     .translate([globe_width / 2, globe_height / 2])
     .clipAngle(90)
     .precision(.1)
@@ -108,22 +129,22 @@ svg = d3.select("body")
    .append("svg")
    //responsive SVG needs these 2 attributes and no width and height attr
    .attr("preserveAspectRatio", "xMinYMin meet")
-   .attr("viewBox", "0 0 1350 630")
+   .attr("viewBox", "0 0 1350 " + height)
    //class to make it responsive
    .classed("svg-content-responsive", true)
 
 var legend = svg.append("g")
-              .attr("height",500)
+              .attr("height",globe_height*0.8)
               .attr("width",55)
-              .attr("transform", "translate(50,75) rotate(90)");
+              .attr("transform", "translate(50,50) rotate(90)");
 
 svg.append("text")
           .text("Lowest Rank")
-          .attr("y",75)
+          .attr("y",35)
 
 svg.append("text")
           .text("Highest Rank")
-          .attr("y",500+75+15)
+          .attr("y",globe_height*0.8+50+15)
 
 var colorScale = d3.scale.quantize()
     .range(colorbrewer.YlGn[8])
@@ -131,6 +152,10 @@ var colorScale = d3.scale.quantize()
 var top_ten_colorScale = d3.scale.quantize()
     .range(colorbrewer.YlGn[8])
     .domain([10,0])
+
+var percentile_colorScale = d3.scale.quantize()
+    .range(colorbrewer.YlGn[8])
+    .domain([0,1])
 
 //Append a defs (for definition) element to your SVG
 var defs = legend.append("defs");
@@ -153,7 +178,7 @@ linearGradient.selectAll("stop")
     .attr("stop-color", function(d) { return d; });
 
 legend.append("rect")
-  .attr("width", 500)
+  .attr("width", globe_height*0.8)
   .attr("height", 20)
   .style("fill", "url(#linear-gradient)");
 
@@ -225,6 +250,12 @@ pathG.append("path")
 
 var topic_list = [];
 
+d3.selection.prototype.moveToFront = function() {
+  return this.each(function(){
+    this.parentNode.appendChild(this);
+  });
+};
+
 function handleTopicAdd(event){
     console.log(document.getElementById("topic-list-input").value)
     add_topic(document.getElementById("topic-list-input").value.toLowerCase())
@@ -248,15 +279,15 @@ function handleDetailsClick(city){
 
     return (a-b)
   })
-  top_three = rank_order.slice(0,3);
+  top_five = rank_order.slice(0,5);
 
-  top_three.forEach(function(d){
+  top_five.forEach(function(d){
       rank = loaded_topic_members[d].indexOf(city_topic_members[d])
       detail_data.push({"topic":d,"rank":rank,"percentile":(1-rank/loaded_topic_members[d].length),"members":city_topic_members[d]})
   });
 
   for(var key in city_topic_members) {
-    if (topic_list.indexOf(key) != -1){
+    if (topic_list.indexOf(key) != -1 && top_five.indexOf(key) === -1){
       rank = loaded_topic_members[key].indexOf(city_topic_members[key])
       detail_data.push({"topic":key,"rank":rank,"percentile":(1-rank/loaded_topic_members[key].length),"members":city_topic_members[key]})
     }
@@ -266,13 +297,14 @@ function handleDetailsClick(city){
   var detail_plot = svg.append("g")
                        .attr("width",300)
                        .attr("height",500)
-                       .attr("transform", "translate(800,280)")
+                       .attr("transform", "translate(780,280)")
                        .selectAll(".detail")
                        .data(detail_data).enter()
 
+  svg.selectAll(".detail-city").remove();
   detail_plot.append("text")
              .text(city)
-             .attr("class","detail")
+             .attr("class","detail-city")
              .style("font-weight","bold")
 
   detail_plot.append("text")
@@ -281,7 +313,7 @@ function handleDetailsClick(city){
              .text(function(d){
                     //trim the string to the maximum length
                     topic_string = d.topic + " "
-                    var trimmedTopic = topic_string.substr(0,75);
+                    var trimmedTopic = topic_string.substr(0,30);
                     //re-trim if we are in the middle of a word
                     trimmedTopic = trimmedTopic.substr(0, Math.min(trimmedTopic.length, trimmedTopic.lastIndexOf(" ")))
                     return trimmedTopic
@@ -301,7 +333,7 @@ function handleDetailsClick(city){
            .attr("transform", "translate(0,-10)")
 
   detail_plot.append("rect")
-         .attr("fill",function(d){return colorScale(d.rank)})
+         .attr("fill",function(d){return percentile_colorScale(d.percentile)})
          .attr("width",function(d){return rect_width*d.percentile})
          .attr("height",25)
          .attr("y",function(d,i){return (i+1)*30})
@@ -318,6 +350,17 @@ format = d3.format("0,000");
              .attr("class","detail")
              .attr("dominant-baseline", "central")
              .attr("x",410)
+
+  pathG.selectAll("path.point")
+    .style("stroke", function(d){
+      if (d.city === d3.select(".detail-city").text()){
+        return "red"
+        d3.selet(this).moveToFront();
+      }else{
+        return "none"
+      }
+    })
+    .style("stroke-width",3)
 }
 
 function add_topic(val){
@@ -359,7 +402,8 @@ d3.json("grouped_topic_data.json",function(topic_data) {
       loaded_topic_members[d.topic] = [d.members]
     }
   });
-  update(loaded_topic_data);
+  add_topic("social")
+  handleDetailsClick("Calgary,AB,CA")
 });
 
 
@@ -369,11 +413,12 @@ function update(topic_data){
     var city_points = pathG.selectAll("path.point")
                         .data(topic_data.filter(function(d){
                          if (topic_list.indexOf(d.topic) != -1) {
-                              if (d.city in cities) {
-                                cities[d.city] = [cities[d.city][0] + d.members,d.lat,d.lon]
-                              }
+                              topic_rank = loaded_topic_members[d.topic].indexOf(d.members)
+                              if (d.city in cities) {                               
+                                  cities[d.city].push(topic_rank)
+                                }
                               else {
-                                cities[d.city] = [d.members,d.lat,d.lon]
+                                  cities[d.city] = [topic_rank]
                               }
                           return d;
                          }
@@ -391,16 +436,31 @@ function update(topic_data){
                                 }
                               });
 
-
     ordered_cities = []; for(var key in cities) ordered_cities.push(key);
-    ordered_cities.sort(function(b,a){return cities[a][0]-cities[b][0]});
+    ordered_cities.sort(function(a,b){
+                          a_missing_topics = topic_list.length - cities[a].length
+                          if(a_missing_topics === 0){
+                            a_val = cities[a].reduce(function(c, d) { return c + d; }, 0);
+                          }else{
+                            a_val = cities[a].reduce(function(c, d) { return c + d; }, 0);
+                            a_val = a_val + 100*a_missing_topics// 100 rank penalty for not having topic
+                          }
+                          b_missing_topics = topic_list.length - cities[b].length
+                          if(b_missing_topics === 0){
+                            b_val = cities[b].reduce(function(c, d) { return c + d; }, 0);
+                          }else{
+                            b_val = cities[b].reduce(function(c, d) { return c + d; }, 0);
+                            b_val = b_val + 100*b_missing_topics// 100 rank penalty for not having topic
+                          }
+                          return a_val-b_val
+                        })
 
     colorScale.domain([ordered_cities.length,0])
 
     city_points.append("path")
       .style("fill",function(d){return colorScale(ordered_cities.indexOf(d.city))})
       .datum(function(d) {
-         return {type: "Point", coordinates: [d.lon, d.lat], radius: 5};
+         return {type: "Point", coordinates: [d.lon, d.lat], radius: 5, city: d.city};
       })
       .attr("class", "point")
       .attr("d", path)   
@@ -426,9 +486,12 @@ function update(topic_data){
                     d3.select(this).style("cursor", "default")
                   },
                   "click": function(d) {
-                            handleDetailsClick(d)           
+                    handleDetailsClick(d)           
                   }
-                });  
+                });
+    if (d3.select(".detail-city").empty() != true) {
+      handleDetailsClick(d3.select(".detail-city").text())
+    }
 }
 
 

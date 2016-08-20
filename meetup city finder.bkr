@@ -47,6 +47,7 @@
                     "import json",
                     "import geohash",
                     "import pandas as pd",
+                    "from collections import defaultdict, Counter",
                     "os.chdir(\"C:/Users/macle/Desktop/Data Journalism/meetup city finder\")"
                 ]
             },
@@ -54,11 +55,11 @@
                 "state": {},
                 "selectedType": "Hidden",
                 "pluginName": "Python3",
-                "shellId": "0805E2233C5F40D28BC450D58B81ACC7",
-                "elapsedTime": 406
+                "shellId": "4D610D1302A24C85AE11A7F84C1EEC7A",
+                "elapsedTime": 401
             },
             "evaluatorReader": true,
-            "lineCount": 10
+            "lineCount": 11
         },
         {
             "id": "code6pDBG3",
@@ -106,7 +107,7 @@
                 "selectedType": "Hidden",
                 "pluginName": "Python3",
                 "shellId": "0805E2233C5F40D28BC450D58B81ACC7",
-                "elapsedTime": 306
+                "elapsedTime": 332
             },
             "evaluatorReader": true,
             "lineCount": 5
@@ -118,613 +119,102 @@
             "input": {
                 "body": [
                     "group_list = []",
-                    "tag_dict = {}",
                     "groups_per_page = 200",
+                    "city_topic_data = {}",
+                    "",
                     "for j,city_country in enumerate(city_country_list):",
                     "    print(\"city index = \" + str(j))",
                     "    geo = gmaps.geocode(city_country)",
                     "    lat = geo[0]['geometry']['location'][\"lat\"]",
                     "    lon = geo[0]['geometry']['location'][\"lng\"]",
-                    "    groups = client.GetGroups(lat=lat, lon=lon,radius=100,fields=['primary_topic'])",
+                    "    groups = client.GetGroups(lat=lat, lon=lon,radius=100)",
                     "    time.sleep(1)",
                     "    pages = int(groups.meta['total_count']/groups_per_page)",
                     "    print(groups.meta['total_count'])",
                     "    for i in range(0,pages + 1):",
                     "        print(\"page \" + str(i))",
                     "        groups = client.GetGroups(lat=lat, lon=lon,radius=100,fields=['topics'],pages=groups_per_page,offset=i)",
-                    "        time.sleep(1)",
+                    "        time.sleep(1.5)",
                     "        if \"results\" in groups.__dict__.keys():",
                     "            for group in groups.results:",
                     "                if group[\"id\"] not in group_list:",
                     "                    group_list.append(group[\"id\"])",
                     "                    if \"state\" in group.keys():",
                     "                        state = group[\"state\"]",
+                    "                        city = group[\"city\"] + \",\" + state + \",\" + group[\"country\"]",
                     "                    else:",
                     "                        state = \"00\"",
+                    "                        city = group[\"city\"] + \",\" + group[\"country\"]",
                     "                    try:",
                     "                        for topic in group[\"topics\"]:",
                     "                            topic_name = topic[\"name\"].lower()",
-                    "                            if topic_name in tag_dict.keys():",
-                    "                                tag_dict[topic_name].append({\"group_id\":group[\"id\"],",
-                    "                                                                                 \"city\":group[\"city\"],",
-                    "                                                                                 \"state\":state,",
-                    "                                                                                 \"country\":group[\"country\"],",
-                    "                                                                                 \"members\":group[\"members\"],",
-                    "                                                                                 \"lat\":group[\"lat\"],",
-                    "                                                                                 \"lon\":group[\"lon\"]})",
+                    "                            key = topic_name + \"-\" + city",
+                    "                            if key in city_topic_data.keys():",
+                    "                                members = city_topic_data[key][\"members\"]",
+                    "                                city_topic_data[key] = {\"topic\":topic_name,",
+                    "                                                         \"city\":city,",
+                    "                                                         \"members\": members + group[\"members\"],",
+                    "                                                         \"lat\":group[\"lat\"],",
+                    "                                                         \"lon\":group[\"lon\"]}",
                     "                            else:",
-                    "                                tag_dict[topic_name] = [{\"group_id\":group[\"id\"],",
-                    "                                                                                 \"city\":group[\"city\"],",
-                    "                                                                                 \"state\":state,",
-                    "                                                                                 \"country\":group[\"country\"],",
-                    "                                                                                 \"members\":group[\"members\"],",
-                    "                                                                                 \"lat\":group[\"lat\"],",
-                    "                                                                                 \"lon\":group[\"lon\"]}]",
+                    "                                city_topic_data[key] = {\"topic\":topic_name,",
+                    "                                                         \"city\":city,",
+                    "                                                         \"state\":state,",
+                    "                                                         \"lat\":group[\"lat\"],",
+                    "                                                         \"lon\":group[\"lon\"]}",
+                    "",
                     "                    except KeyError as e:",
                     "                            print(e)",
-                    "         ",
-                    "                            ",
+                    "topic_data = sorted([city_topic_data[record_key] for record_key in city_topic_data.keys()], key=lambda k: k['members'],reverse=True)",
+                    "",
                     "with open('meetup_data.json', 'w') as outfile:",
-                    "    json.dump(tag_dict, outfile)"
+                    "    json.dump(topic_data, outfile)"
                 ]
             },
             "output": {
                 "state": {},
                 "result": {
-                    "type": "Results",
-                    "outputdata": [
-                        {
-                            "type": "out",
-                            "value": "city index = 0\n29/30 (10 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n2203"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 0\n28/30 (8 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 1"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n27/30 (6 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 2"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n26/30 (3 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 3"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n25/30 (1 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 4"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n29/30 (10 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 5"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n28/30 (8 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 6"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n27/30 (6 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 7"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n26/30 (3 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 8"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n25/30 (1 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 9"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n29/30 (10 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 10"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n28/30 (8 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 11"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n27/30 (5 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\ncity index = 1"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n26/30 (4 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n17767"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 0\n25/30 (1 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 1"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n29/30 (10 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 2"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n28/30 (7 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 3"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n27/30 (4 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 4"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n26/30 (1 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 5"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n29/30 (10 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 6"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n28/30 (7 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 7"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n27/30 (4 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 8"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n26/30 (1 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 9"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n29/30 (10 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 10"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n28/30 (7 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 11"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n27/30 (4 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 12"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n26/30 (1 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 13"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n29/30 (10 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 14"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n28/30 (7 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 15"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n27/30 (4 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 16"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n26/30 (1 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 17"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n29/30 (10 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 18"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n28/30 (7 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 19"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n27/30 (4 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 20"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n26/30 (0 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 21"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n29/30 (10 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 22"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n28/30 (7 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 23"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n27/30 (3 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 24"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n29/30 (10 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 25"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n28/30 (7 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 26"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n27/30 (4 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 27"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n26/30 (0 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 28"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n29/30 (10 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 29"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n28/30 (7 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 30"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n27/30 (4 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 31"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n26/30 (1 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 32"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n29/30 (10 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 33"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n28/30 (7 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 34"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n27/30 (4 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 35"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n26/30 (0 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 36"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n29/30 (10 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 37"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n28/30 (7 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 38"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n27/30 (4 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 39"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n26/30 (0 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 40"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n29/30 (10 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 41"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n28/30 (7 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 42"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n27/30 (4 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 43"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n29/30 (10 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 44"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n28/30 (7 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\npage 45"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n27/30 (3 seconds remaining)"
-                        },
-                        {
-                            "type": "out",
-                            "value": "\n"
-                        }
-                    ],
-                    "payload": {
-                        "type": "BeakerDisplay",
-                        "innertype": "Error",
-                        "object": [
-                            "&apos;KeyError&apos; object has no attribute &apos;message&apos;",
-                            "&apos;KeyError&apos; object has no attribute &apos;message&apos;<br><span  class=\"ansired\">---------------------------------------------------------------------------</span><br><span  class=\"ansired\">KeyError</span>                                  Traceback (most recent call last)<br><span  class=\"ansigreen\">&lt;ipython-input-1-edcfa2ee4395&gt;</span> in <span  class=\"ansicyan\">&lt;module&gt;<span  class=\"ansiblue\">()</span>\n<span  class=\"ansigreen\">     25</span>                     <span  class=\"ansigreen\">try</span><span  class=\"ansiyellow\">:</span><span  class=\"ansiyellow\"></span>\n<span  class=\"ansigreen\">---&gt; 26<span  class=\"ansiyellow\">                         <span  class=\"ansigreen\">for</span> topic <span  class=\"ansigreen\">in</span> group<span  class=\"ansiyellow\">[</span><span  class=\"ansiblue\">&quot;topics&quot;</span><span  class=\"ansiyellow\">]</span><span  class=\"ansiyellow\">:</span><span  class=\"ansiyellow\"></span>\n<span  class=\"ansigreen\">     27</span>                             topic_name <span  class=\"ansiyellow\">=</span> topic<span  class=\"ansiyellow\">[</span><span  class=\"ansiblue\">&quot;name&quot;</span><span  class=\"ansiyellow\">]</span><span  class=\"ansiyellow\">.</span>lower<span  class=\"ansiyellow\">(</span><span  class=\"ansiyellow\">)</span><span  class=\"ansiyellow\"></span>\n<br><span  class=\"ansired\">KeyError</span>: &apos;topics&apos;<br>\nDuring handling of the above exception, another exception occurred:\n<br><span  class=\"ansired\">AttributeError</span>                            Traceback (most recent call last)<br><span  class=\"ansigreen\">&lt;ipython-input-1-edcfa2ee4395&gt;</span> in <span  class=\"ansicyan\">&lt;module&gt;<span  class=\"ansiblue\">()</span>\n<span  class=\"ansigreen\">     43</span>                                                                                  &quot;lon&quot;:group[&quot;lon&quot;]}]\n<span  class=\"ansigreen\">     44</span>                     <span  class=\"ansigreen\">except</span> KeyError <span  class=\"ansigreen\">as</span> e<span  class=\"ansiyellow\">:</span><span  class=\"ansiyellow\"></span>\n<span  class=\"ansigreen\">---&gt; 45<span  class=\"ansiyellow\">                             </span>print<span  class=\"ansiyellow\">(</span>e<span  class=\"ansiyellow\">.</span>message<span  class=\"ansiyellow\">)</span><span  class=\"ansiyellow\"></span>\n<span  class=\"ansigreen\">     46</span> <span  class=\"ansiyellow\"></span>\n<span  class=\"ansigreen\">     47</span> <span  class=\"ansiyellow\"></span>\n<br><span  class=\"ansired\">AttributeError</span>: &apos;KeyError&apos; object has no attribute &apos;message&apos;"
-                        ]
-                    }
+                    "type": "BeakerDisplay",
+                    "innertype": "Error",
+                    "object": [
+                        "name &apos;error&apos; is not defined",
+                        "name &apos;error&apos; is not defined<br><span  class=\"ansired\">---------------------------------------------------------------------------</span><br><span  class=\"ansired\">NameError</span>                                 Traceback (most recent call last)<br><span  class=\"ansigreen\">&lt;ipython-input-1-564ad6db8a45&gt;</span> in <span  class=\"ansicyan\">&lt;module&gt;<span  class=\"ansiblue\">()</span>\n<span  class=\"ansigreen\">----&gt; 1<span  class=\"ansiyellow\"> </span>error<span  class=\"ansiyellow\"></span>\n<span  class=\"ansigreen\">      2</span> group_list <span  class=\"ansiyellow\">=</span> <span  class=\"ansiyellow\">[</span><span  class=\"ansiyellow\">]</span><span  class=\"ansiyellow\"></span>\n<span  class=\"ansigreen\">      3</span> groups_per_page <span  class=\"ansiyellow\">=</span> <span  class=\"ansicyan\">200</span><span  class=\"ansiyellow\"></span>\n<span  class=\"ansigreen\">      4</span> city_topic_data <span  class=\"ansiyellow\">=</span> <span  class=\"ansiyellow\">{</span><span  class=\"ansiyellow\">}</span><span  class=\"ansiyellow\"></span>\n<span  class=\"ansigreen\">      5</span> <span  class=\"ansiyellow\"></span>\n<br><span  class=\"ansired\">NameError</span>: name &apos;error&apos; is not defined"
+                    ]
                 },
-                "selectedType": "Results",
-                "height": 4275,
+                "selectedType": "BeakerDisplay",
+                "height": 81,
                 "pluginName": "Python3",
                 "shellId": "0805E2233C5F40D28BC450D58B81ACC7",
-                "elapsedTime": 177098
+                "elapsedTime": 371
             },
             "evaluatorReader": true,
-            "lineCount": 49
+            "lineCount": 51
         },
         {
-            "id": "code1WAXGA",
+            "id": "codespUl4U",
             "type": "code",
             "evaluator": "Python3",
             "input": {
                 "body": [
-                    "grouped_topic_data = []",
-                    "",
+                    "min_members = 110",
                     "with open('meetup_data.json', 'r') as infile:",
-                    "    meetup_data = json.load(infile)",
-                    "",
-                    "for topic in meetup_data.keys():",
-                    "    topic_data = meetup_data[topic]",
-                    "    df = pd.DataFrame.from_dict(topic_data)",
-                    "    grouped_data = df.groupby(by=['city','state','country'])['members'].sum()",
-                    "    for indx,total_members in grouped_data.iteritems():",
-                    "        if indx[1] == \"00\":",
-                    "            city = indx[0] + \",\" + indx[2]",
-                    "        else:",
-                    "            city = indx[0] + \",\" + indx[1] + \",\" + indx[2]",
-                    "        with open('city_gps_cache.json', 'r') as infile:",
-                    "            city_gps_data = json.load(infile)",
-                    "        if city in city_gps_data.keys():",
-                    "            lat = city_gps_data[city][0]",
-                    "            lon = city_gps_data[city][1]",
-                    "        else:",
-                    "            geo = gmaps.geocode(city)",
-                    "            lat = geo[0]['geometry']['location'][\"lat\"]",
-                    "            lon = geo[0]['geometry']['location'][\"lng\"]",
-                    "            city_gps_data[city] = [lat,lon]",
-                    "            with open('city_gps_cache.json', 'w') as outfile:",
-                    "                json.dump(city_gps_data, outfile)",
-                    "        grouped_topic_data.append({\"topic\":topic,",
-                    "                                   \"city\":city,",
-                    "                                   \"members\":int(total_members),",
-                    "                                   \"lat\":lat,",
-                    "                                   \"lon\":lon})",
-                    "grouped_topic_data =sorted(grouped_topic_data, key=lambda k: k['members'],reverse=True)",
+                    "    data = json.load(infile)",
+                    "filtered_data = [datum for datum in data if datum[\"members\"] >= min_members]",
                     "",
                     "with open('grouped_topic_data.json', 'w') as outfile:",
-                    "    json.dump(grouped_topic_data, outfile)"
+                    "    json.dump(filtered_data, outfile)",
+                    ""
                 ]
             },
             "output": {
                 "state": {},
                 "selectedType": "Hidden",
                 "pluginName": "Python3",
-                "shellId": "0805E2233C5F40D28BC450D58B81ACC7",
-                "elapsedTime": 27260,
-                "height": 55
+                "shellId": "4D610D1302A24C85AE11A7F84C1EEC7A",
+                "elapsedTime": 34212
             },
             "evaluatorReader": true,
-            "lineCount": 35
+            "lineCount": 8
         },
         {
             "id": "codeePcD9b",
@@ -887,8 +377,7 @@
             "evaluator": "Python3",
             "input": {
                 "body": [
-                    "groups = client.GetGroups(lat=lat, lon=lon,radius=50,fields=['primary_topic'])",
-                    "groups.results[5]"
+                    "groups = client.GetGroups(lat=lat, lon=lon,radius=50,fields=['primary_topic'])"
                 ]
             },
             "output": {
@@ -907,7 +396,7 @@
                 "pluginName": "Python3",
                 "shellId": "4A113148F93F47018B7F2E0C6FCBEB30",
                 "elapsedTime": 1509,
-                "height": 583,
+                "height": 620,
                 "dataresult": {
                     "rating": 4.49,
                     "primary_topic": {
@@ -963,7 +452,7 @@
                 }
             },
             "evaluatorReader": true,
-            "lineCount": 2
+            "lineCount": 1
         },
         {
             "id": "codeQY80ok",
@@ -979,7 +468,8 @@
                 "selectedType": "Hidden",
                 "pluginName": "Python3",
                 "shellId": "AF0A61BA004C49FFACDAA8979C744D17",
-                "elapsedTime": 531
+                "elapsedTime": 531,
+                "height": 51
             },
             "evaluatorReader": true,
             "lineCount": 1
@@ -994,33 +484,7 @@
                 ]
             },
             "output": {
-                "state": {
-                    "datatablestate": {
-                        "pagination": {
-                            "use": true,
-                            "rowsToDisplay": 50,
-                            "fixLeft": 0,
-                            "fixRight": 0
-                        },
-                        "columnNames": [
-                            "Key",
-                            "Value"
-                        ],
-                        "actualalign": [
-                            "L",
-                            "L"
-                        ],
-                        "colorder": [
-                            0,
-                            1,
-                            2
-                        ],
-                        "getCellSho": [
-                            true,
-                            true
-                        ]
-                    }
-                },
+                "state": {},
                 "result": {
                     "values": [
                         [
@@ -1114,7 +578,7 @@
                         ]
                     }
                 ],
-                "height": 129
+                "height": 166
             },
             "evaluatorReader": true,
             "lineCount": 1

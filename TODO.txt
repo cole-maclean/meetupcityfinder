@@ -1,9 +1,9 @@
 Link final product to and credit https://gist.github.com/serdaradali/11346541
 Need to download all topics, not just primary topic --Done
 Pull data with state if exisits --Done
-re-pull meetup.com data
+re-pull meetup.com data  --Done
 need to sort grouped_data --Done
 fix gps coordinates bug --Done
-Build and manage topic list selector
+Build and manage topic list selector --Done
 make topic data keys and inout list topics all lowercase --Done
-Add title
+Add title and meetup link --Done

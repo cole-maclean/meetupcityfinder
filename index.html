@@ -192,12 +192,13 @@ var top_ten_rect = svg.append("rect")
                  .attr("width",200)
                  .attr("height",200)
                  .attr("transform", "translate(900,35)")
-                 .style("fill", "#A98B6F")
+                 .style("stroke", "black")
+                 .style("fill","none")
 
 var top_ten_text = svg.append("g")
                       .attr("width",200)
                       .attr("height",200)
-                      .attr("transform", "translate(900,30)")
+                      .attr("transform", "translate(910,30)")
 
 
 top_ten_text.append("text")
@@ -478,7 +479,7 @@ function update(topic_data){
            .attr("class","top-ten")
            .attr("y",function(d,i){return (i+1)*20})
            .text(function(d,i){return (i+1) + ". " + d})
-           .style("fill",function(d,i){return top_ten_colorScale(i)})
+           //.style("fill",function(d,i){return top_ten_colorScale(i)})
             .on({
                   "mouseover": function(d) {
                     d3.select(this).style("cursor", "pointer")

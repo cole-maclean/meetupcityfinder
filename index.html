@@ -98,10 +98,6 @@ label {
   <h4 align="center"><a href="www.google.com">The Build</a></h4>
 </header>
 
-<<<<<<< HEAD
-=======
-<span
->>>>>>> 26e37bfd64fdf88bb55e051c9489c8775095f08a
 <form name="topic-list" onSubmit="return handleTopicAdd()">
   <input type="text" id="topic-list-input" placeholder="Add a topic...">
   <label>Click topic to remove:</label>
@@ -117,11 +113,7 @@ label {
 <script>
 
 var width = 1350,
-<<<<<<< HEAD
     height = 1503,
-=======
-    height = 550,
->>>>>>> 26e37bfd64fdf88bb55e051c9489c8775095f08a
     globe_height = 520,
     globe_width = 680;
 
@@ -287,11 +279,8 @@ function handleDetailsClick(city){
 
     return (a-b)
   })
-<<<<<<< HEAD
+
   top_five = rank_order.slice(0,5);
-=======
-  top_three = rank_order.slice(0,5);
->>>>>>> 26e37bfd64fdf88bb55e051c9489c8775095f08a
 
   top_five.forEach(function(d){
       rank = loaded_topic_members[d].indexOf(city_topic_members[d])
@@ -414,7 +403,7 @@ d3.json("meetup_data.json",function(topic_data) {
       loaded_topic_members[d.topic] = [d.members]
     }
   });
-  add_topic("social")
+  add_topic("data science")
   handleDetailsClick("Calgary,AB,CA")
 });
 
@@ -455,14 +444,14 @@ function update(topic_data){
                             a_val = cities[a].reduce(function(c, d) { return c + d; }, 0);
                           }else{
                             a_val = cities[a].reduce(function(c, d) { return c + d; }, 0);
-                            a_val = a_val + 100*a_missing_topics// 100 rank penalty for not having topic
+                            a_val = a_val + 150*a_missing_topics// 150 rank penalty for not having topic
                           }
                           b_missing_topics = topic_list.length - cities[b].length
                           if(b_missing_topics === 0){
                             b_val = cities[b].reduce(function(c, d) { return c + d; }, 0);
                           }else{
                             b_val = cities[b].reduce(function(c, d) { return c + d; }, 0);
-                            b_val = b_val + 100*b_missing_topics// 100 rank penalty for not having topic
+                            b_val = b_val + 150*b_missing_topics// 150 rank penalty for not having topic
                           }
                           return a_val-b_val
                         })

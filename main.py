@@ -7,6 +7,8 @@ import time
 import json
 import geohash
 import pandas as pd
+from collections import defaultdict, Counter
+os.chdir("C:/Users/macle/Desktop/Data Journalism/meetup city finder")
 
 config = configparser.ConfigParser()
 config.read('secrets.ini')
@@ -18,98 +20,74 @@ gmaps = googlemaps.Client(key=gmaps_api_key)
 
 client = meetup.api.Client(meetup_api_key)
 
-def build_grouped_topic_data():
-    grouped_topic_data = []
+city_country_list = []
+with open('cities.csv', 'r') as csvfile:
+    reader = csv.reader(csvfile, delimiter=',', quotechar='|')
+    for row in reader:
+        city_country_list.append(', '.join([row[1],row[2]]))
 
-    with open('meetup_data.json', 'r') as infile:
-        meetup_data = json.load(infile)
-        
-    min_members = 100
-    topic_count = len(meetup_data.keys())
-    print(topic_count)
-    perc_done = 0
-    for i,topic in enumerate(list(meetup_data.keys())):
-        if round(i/topic_count,2) != perc_done:
-            perc_done = round(i/topic_count,2)
-            print(str(perc_done) + "% done")
-        else:
-            perc_done = round(i/topic_count,2)
-        topic_data = [data for data in meetup_data[topic] if data["members"] >= min_members]
-        if topic_data:
-            df = pd.DataFrame.from_dict(topic_data)
-            grouped_data = df.groupby(by=['city','state','country'])['members'].sum()
-            for indx,total_members in grouped_data.iteritems():
-                    if indx[1] == "00":
-                        city = indx[0] + "," + indx[2]
-                    else:
-                        city = indx[0] + "," + indx[1] + "," + indx[2]
-                    with open('city_gps_cache.json', 'r') as infile:
-                        city_gps_data = json.load(infile)
-                    if city in city_gps_data.keys():
-                        lat = city_gps_data[city][0]
-                        lon = city_gps_data[city][1]
-                    else:
-                        geo = gmaps.geocode(city)
+def get_meetup_data():   
+
+    group_list = []
+    groups_per_page = 200
+    city_topic_data = {}
+
+    for j,city_country in enumerate(city_country_list):
+        print("city index = " + str(j))
+        geo = gmaps.geocode(city_country)
+        lat = geo[0]['geometry']['location']["lat"]
+        lon = geo[0]['geometry']['location']["lng"]
+        groups = client.GetGroups(lat=lat, lon=lon,radius=300)
+        time.sleep(1)
+        pages = int(groups.meta['total_count']/groups_per_page)
+        print(groups.meta['total_count'])
+        for i in range(0,pages + 1):
+            print("page " + str(i))
+            groups = client.GetGroups(lat=lat, lon=lon,radius=300,fields=['topics'],pages=groups_per_page,offset=i)
+            time.sleep(1.5)
+            if "results" in groups.__dict__.keys():
+                for group in groups.results:
+                    if group["id"] not in group_list:
+                        group_list.append(group["id"])
+                        if "state" in group.keys():
+                            state = group["state"]
+                            city = group["city"] + "," + state + "," + group["country"]
+                        else:
+                            state = "00"
+                            city = group["city"] + "," + group["country"]
                         try:
-                            lat = geo[0]['geometry']['location']["lat"]
-                            lon = geo[0]['geometry']['location']["lng"]
-                        except IndexError:
-                            lat = 0
-                            lon = 0
-                        city_gps_data[city] = [lat,lon]
-                        with open('city_gps_cache.json', 'w') as outfile:
-                            json.dump(city_gps_data, outfile)
-                    grouped_topic_data.append({"topic":topic,
-                                               "city":city,
-                                               "members":int(total_members),
-                                               "lat":lat,
-                                               "lon":lon})
-    grouped_topic_data =sorted(grouped_topic_data, key=lambda k: k['members'],reverse=True)
+                            for topic in group["topics"]:
+                                topic_name = topic["name"].lower()
+                                key = topic_name + "-" + city
+                                if key in city_topic_data.keys():
+                                    members = city_topic_data[key]["members"]
+                                    city_topic_data[key] = {"topic":topic_name,
+                                                             "city":city,
+                                                             "members": members + group["members"],
+                                                             "lat":group["lat"],
+                                                             "lon":group["lon"]}
+                                else:
+                                    city_topic_data[key] = {"topic":topic_name,
+                                                             "city":city,
+                                                             "members": group["members"],
+                                                             "lat":group["lat"],
+                                                             "lon":group["lon"]}
 
-    with open('grouped_topic_data.json', 'w') as outfile:
-        json.dump(grouped_topic_data, outfile)
+                        except KeyError as e:
+                                print(e)
+    topic_data = sorted([city_topic_data[record_key] for record_key in city_topic_data.keys()], key=lambda k: k['members'],reverse=True)
 
-def test_build_topic_data():
-    grouped_topic_data = []
+    with open('meetup_data.json', 'w') as outfile:
+        json.dump(topic_data, outfile)
 
+def filter_grouped_topic_data():
+    min_members = 110
     with open('meetup_data.json', 'r') as infile:
-        meetup_data = json.load(infile)
-
-    min_members = 100
-    topic = 'social'
-    topic_data = [data for data in meetup_data[topic] if data["members"] >= min_members]
-    if topic_data:
-        df = pd.DataFrame.from_dict(topic_data)
-        grouped_data = df.groupby(by=['city','state','country'])['members'].sum()
-        for indx,total_members in grouped_data.iteritems():
-                if indx[1] == "00":
-                    city = indx[0] + "," + indx[2]
-                else:
-                    city = indx[0] + "," + indx[1] + "," + indx[2]
-                with open('city_gps_cache.json', 'r') as infile:
-                    city_gps_data = json.load(infile)
-                if city in city_gps_data.keys():
-                    lat = city_gps_data[city][0]
-                    lon = city_gps_data[city][1]
-                else:
-                    geo = gmaps.geocode(city)
-                    try:
-                        lat = geo[0]['geometry']['location']["lat"]
-                        lon = geo[0]['geometry']['location']["lng"]
-                    except IndexError:
-                        lat = 0
-                        lon = 0
-                    city_gps_data[city] = [lat,lon]
-                    with open('city_gps_cache.json', 'w') as outfile:
-                        json.dump(city_gps_data, outfile)
-                grouped_topic_data.append({"topic":topic,
-                                           "city":city,
-                                           "members":int(total_members),
-                                           "lat":lat,
-                                           "lon":lon})
-    grouped_topic_data =sorted(grouped_topic_data, key=lambda k: k['members'],reverse=True)
+        data = json.load(infile)
+    filtered_data = [datum for datum in data if datum["members"] >= min_members]
 
     with open('grouped_topic_data.json', 'w') as outfile:
-        json.dump(grouped_topic_data, outfile)
+        json.dump(filtered_data, outfile)
 
-build_grouped_topic_data()
+get_meetup_data()
+filter_grouped_topic_data()

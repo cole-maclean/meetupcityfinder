@@ -44,7 +44,7 @@ def get_meetup_data():
         for i in range(0,pages + 1):
             print("page " + str(i))
             groups = client.GetGroups(lat=lat, lon=lon,radius=300,fields=['topics'],pages=groups_per_page,offset=i)
-            time.sleep(1.5)
+            time.sleep(2)
             if "results" in groups.__dict__.keys():
                 for group in groups.results:
                     if group["id"] not in group_list:

@@ -322,6 +322,17 @@ function handleDetailsClick(city){
                   })
              .attr("class","detail")
              .attr("dominant-baseline", "central")
+             .on({
+                    "mouseover": function(d) {
+                      d3.select(this).style("cursor", "pointer")
+                    },
+                    "mouseout": function(d) {
+                      d3.select(this).style("cursor", "default")
+                    },
+                    "click": function(d) {
+                      add_topic(d3.select(this).text());
+                    }
+                  });
 
   var rect_width = 200
   detail_plot.append("rect")

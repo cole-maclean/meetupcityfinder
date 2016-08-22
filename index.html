@@ -393,7 +393,7 @@ function add_topic(val){
 var loaded_topic_data;
 var loaded_topic_members = {};
 
-d3.json("meetup_data.json",function(topic_data) {
+d3.json("grouped_topic_data.json",function(topic_data) {
   loaded_topic_data = topic_data;
   loaded_topic_data.forEach(function(d){ //loaded topic data is pre-sorted so resulting object also sorted largest to smallest membership
     if (d.topic in loaded_topic_members){

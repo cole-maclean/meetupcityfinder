@@ -146,13 +146,11 @@ svg.append("text")
           .text("Highest Rank")
           .attr("y",globe_height*0.8+50+15)
 
+//color scale for city points on globe
 var colorScale = d3.scale.quantize()
     .range(colorbrewer.YlGn[8])
 
-var top_ten_colorScale = d3.scale.quantize()
-    .range(colorbrewer.YlGn[8])
-    .domain([10,0])
-
+//color scale for each city topic rankins
 var percentile_colorScale = d3.scale.quantize()
     .range(colorbrewer.YlGn[8])
     .domain([0,1])
@@ -249,13 +247,8 @@ pathG.append("path")
     .attr("class", "graticule")
     .attr("d", path);
 
+//storage variable for user inputed topics
 var topic_list = [];
-
-d3.selection.prototype.moveToFront = function() {
-  return this.each(function(){
-    this.parentNode.appendChild(this);
-  });
-};
 
 function handleTopicAdd(event){
     console.log(document.getElementById("topic-list-input").value)
@@ -264,6 +257,7 @@ function handleTopicAdd(event){
 }
 
 function handleDetailsClick(city){
+  //when user clicks city point on globe, display cities details by loading the membership data for topic and sorting
   city_topic_members = {};
   detail_data = [];
 
@@ -272,15 +266,18 @@ function handleDetailsClick(city){
         city_topic_members[d.topic] = d.members
       }
   });
+  //order each topic in the selected city by searching the index of that topics membership count in the loaded city_topic_members dict, and order by lowest - highest rank,
+  //if 2 or more topics tie for the selected city, tie breaker is by that topics total membership
   rank_order = []; for(var key in city_topic_members) rank_order.push(key);
   rank_order.sort(function(a,b){
-    normalizer = 1000000
+    normalizer = 1000000 //large normalizer used to ensure fractional membership count only used for tie breaking a rank order sort
     a = (loaded_topic_members[a].indexOf(city_topic_members[a])) - city_topic_members[a]/normalizer
     b = (loaded_topic_members[b].indexOf(city_topic_members[b])) - city_topic_members[b]/normalizer
 
     return (a-b)
   })
 
+  //select and build top five selected city topics data details
   top_five = rank_order.slice(0,5);
 
   top_five.forEach(function(d){
@@ -288,6 +285,7 @@ function handleDetailsClick(city){
       detail_data.push({"topic":d,"rank":rank,"percentile":(1-rank/loaded_topic_members[d].length),"members":city_topic_members[d]})
   });
 
+  //add topic details for each topic in topic_list that have been selected by the user
   for(var key in city_topic_members) {
     if (topic_list.indexOf(key) != -1 && top_five.indexOf(key) === -1){
       rank = loaded_topic_members[key].indexOf(city_topic_members[key])
@@ -330,7 +328,7 @@ function handleDetailsClick(city){
                       d3.select(this).style("cursor", "default")
                     },
                     "click": function(d) {
-                      add_topic(d3.select(this).text());
+                      add_topic(d3.select(this).text()); //add topic to topic list if user clicks paticular cities topic
                     }
                   });
 
@@ -377,6 +375,7 @@ format = d3.format("0,000");
 }
 
 function add_topic(val){
+    //display user entered topic to viz and add topic to topic_list and update viz
     d3.select("body").select("#topic-list").append("li");
     topic_list.push(val);
     var p = d3.select("body").selectAll("li")
@@ -402,12 +401,15 @@ function add_topic(val){
     update(loaded_topic_data)
 }
 
+
+//variables to push loaded data into memory for future use
 var loaded_topic_data;
 var loaded_topic_members = {};
 
 d3.json("grouped_topic_data.json",function(topic_data) {
   loaded_topic_data = topic_data;
   loaded_topic_data.forEach(function(d){ //loaded topic data is pre-sorted so resulting object also sorted largest to smallest membership
+    //build dictionary of {topic:[members]} key, list pairs to use as sorted rank lookup for each cities topic member counts
     if (d.topic in loaded_topic_members){
       loaded_topic_members[d.topic].push(d.members)
     }
@@ -421,12 +423,13 @@ d3.json("grouped_topic_data.json",function(topic_data) {
 
 
 function update(topic_data){
-    var cities = {};
+    var cities = {}; //dictionary of {city:[topic-rank]} key, list pairs
     pathG.selectAll("path.point").remove();
     var city_points = pathG.selectAll("path.point")
                         .data(topic_data.filter(function(d){
-                         if (topic_list.indexOf(d.topic) != -1) {
+                         if (topic_list.indexOf(d.topic) != -1) {//add data if topic in topic_list
                               topic_rank = loaded_topic_members[d.topic].indexOf(d.members)
+                              //build dict of {city:[topic-rank]} key, list pairs
                               if (d.city in cities) {                               
                                   cities[d.city].push(topic_rank)
                                 }
@@ -448,7 +451,8 @@ function update(topic_data){
                                   handleDetailsClick(d.city)
                                 }
                               });
-
+    //calculation for determining the top cities for a list of user selected topics. The ranking is done by summing all of the topic-ranks a city has for each topic,
+    //if a city does not have a user selected topic it is penalized by having an assumed rank of 150. Cities are sorted by lowest total ranking to highest.
     ordered_cities = []; for(var key in cities) ordered_cities.push(key);
     ordered_cities.sort(function(a,b){
                           a_missing_topics = topic_list.length - cities[a].length
@@ -470,6 +474,7 @@ function update(topic_data){
 
     colorScale.domain([ordered_cities.length,0])
 
+    //add city points to globe
     city_points.append("path")
       .style("fill",function(d){return colorScale(ordered_cities.indexOf(d.city))})
       .datum(function(d) {
@@ -490,7 +495,6 @@ function update(topic_data){
            .attr("class","top-ten")
            .attr("y",function(d,i){return (i+1)*20})
            .text(function(d,i){return (i+1) + ". " + d})
-           //.style("fill",function(d,i){return top_ten_colorScale(i)})
             .on({
                   "mouseover": function(d) {
                     d3.select(this).style("cursor", "pointer")

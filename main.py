@@ -20,6 +20,7 @@ gmaps = googlemaps.Client(key=gmaps_api_key)
 
 client = meetup.api.Client(meetup_api_key)
 
+#load top 250 cities list by population
 city_country_list = []
 with open('cities.csv', 'r') as csvfile:
     reader = csv.reader(csvfile, delimiter=',', quotechar='|')
@@ -28,23 +29,27 @@ with open('cities.csv', 'r') as csvfile:
 
 def get_meetup_data():   
 
-    group_list = []
-    groups_per_page = 200
-    city_topic_data = {}
+    with open('group_list.json', 'r') as infile:
+        group_list = json.load(infile) #load group list from data cache
+    with open('meetup_data.json', 'r') as infile:
+        city_topic_data = json.load(infile) #load topic data from data cache
 
-    for j,city_country in enumerate(city_country_list):
-        print("city index = " + str(j))
-        geo = gmaps.geocode(city_country)
+    groups_per_page = 200 #max results per page from meetup.com api
+
+    for j,city_country in enumerate(city_country_list): #enumerate over each city in city list to use a centroids for meetup.com API requests
+        print(str(round(j/len(city_country_list)*100,1)) + " percent complete")
+        print("city " + str(j))
+        geo = gmaps.geocode(city_country) #get GPS coords from city using gmaps API
         lat = geo[0]['geometry']['location']["lat"]
         lon = geo[0]['geometry']['location']["lng"]
         groups = client.GetGroups(lat=lat, lon=lon,radius=300)
         time.sleep(1)
-        pages = int(groups.meta['total_count']/groups_per_page)
+        pages = int(groups.meta['total_count']/groups_per_page) #get total pages needed to iterate over total request dataset
         print(groups.meta['total_count'])
         for i in range(0,pages + 1):
-            print("page " + str(i))
+            print("page " + str(i) + "/" + str(pages))
             groups = client.GetGroups(lat=lat, lon=lon,radius=300,fields=['topics'],pages=groups_per_page,offset=i)
-            time.sleep(2)
+            time.sleep(1)
             if "results" in groups.__dict__.keys():
                 for group in groups.results:
                     if group["id"] not in group_list:
@@ -58,36 +63,38 @@ def get_meetup_data():
                         try:
                             for topic in group["topics"]:
                                 topic_name = topic["name"].lower()
-                                key = topic_name + "-" + city
-                                if key in city_topic_data.keys():
+                                key = topic_name + "-" + city #data is uniquely keyed on topic and city
+                                if key in city_topic_data.keys(): #if topic-city key exists in dict, then add new groups membership to existing memebers in topic-city key
                                     members = city_topic_data[key]["members"]
                                     city_topic_data[key] = {"topic":topic_name,
                                                              "city":city,
                                                              "members": members + group["members"],
                                                              "lat":group["lat"],
                                                              "lon":group["lon"]}
-                                else:
+                                else: #else initialize unique city-topic key with current groups members
                                     city_topic_data[key] = {"topic":topic_name,
                                                              "city":city,
                                                              "members": group["members"],
                                                              "lat":group["lat"],
                                                              "lon":group["lon"]}
-
                         except KeyError as e:
                                 print(e)
-    topic_data = sorted([city_topic_data[record_key] for record_key in city_topic_data.keys()], key=lambda k: k['members'],reverse=True)
+        with open('group_list.json', 'w') as outfile:
+            json.dump(group_list, outfile)
+        with open('meetup_data.json', 'w') as outfile:
+            json.dump(city_topic_data, outfile)
 
-    with open('meetup_data.json', 'w') as outfile:
-        json.dump(topic_data, outfile)
+    
 
 def filter_grouped_topic_data():
-    min_members = 110
+    min_members = 100
     with open('meetup_data.json', 'r') as infile:
         data = json.load(infile)
-    filtered_data = [datum for datum in data if datum["members"] >= min_members]
+    topic_data = sorted([data[record_key] for record_key in data.keys()], key=lambda k: k['members'],reverse=True)
+    filtered_data = [datum for datum in topic_data if datum["members"] >= min_members]
 
     with open('grouped_topic_data.json', 'w') as outfile:
         json.dump(filtered_data, outfile)
 
-get_meetup_data()
+#get_meetup_data()
 filter_grouped_topic_data()
